@@ -15,12 +15,16 @@ import uuid
 import copy
 import os
 
+
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
-    parser.add_argument('--device_id', type=int, default=7 , help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='OfficeHome',  # Digits,PACS PACScomb OfficeHome
+    parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
+    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome
                         choices=Priv_NAMES, help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
+
+    parser.add_argument('--task', type=str, default='OOD')
+    parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
     Whether Conduct OOD Experiments NONE
@@ -31,12 +35,12 @@ def parse_args():
     # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
     # OfficeHome 'Art', 'Clipart', 'Product', 'Real_World'
     # DomainNet 'clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'
-    parser.add_argument('--OOD', type=str, default='Art', help='Whether conduct OOD Experiments')
+    parser.add_argument('--OOD', type=str, default='MNIST', help='Whether conduct OOD Experiments')
 
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='MOONCOSAddGlobal',
+    parser.add_argument('--method', type=str, default='FedAVG',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
     '''
@@ -47,9 +51,9 @@ def parse_args():
 
     # parser.add_argument('--note', type=str,default='DKDWeight', help='Something extra')
 
-    parser.add_argument('--csv_log', action='store_true',default=False, help='Enable csv logging')
+    parser.add_argument('--csv_log', action='store_true', default=False, help='Enable csv logging')
     parser.add_argument('--csv_name', type=str, default=None, help='Predefine the csv name')
-    parser.add_argument('--save_checkpoint', action='store_true',default=False)
+    parser.add_argument('--save_checkpoint', action='store_true', default=False)
     # parser.add_argument('--use_random_domain', action='store_true',default=False)
 
     parser.add_argument("opts", default=None, nargs=argparse.REMAINDER)
@@ -67,7 +71,7 @@ def main(args=None):
     args.conf_host = socket.gethostname()
 
     # 整合方法的超参数
-    cfg_dataset_path = os.path.join(config_path(), args.dataset, 'Default.yaml')
+    cfg_dataset_path = os.path.join(config_path(), args.task, args.dataset, 'Default.yaml')
     cfg.merge_from_file(cfg_dataset_path)
 
     cfg_method_path = os.path.join(config_path(), args.dataset, args.method + '.yaml')
@@ -85,33 +89,37 @@ def main(args=None):
     Loading the Private Digits
     '''
     private_dataset = get_prive_dataset(args, particial_cfg)
-    '''
-    Define clients domain
-    '''
-    in_domain_list = copy.deepcopy(private_dataset.domain_list)
-    if args.OOD != "NONE":
-        in_domain_list.remove(args.OOD)
-        private_dataset.in_domain_list = in_domain_list
 
-    private_dataset.in_domain_list = in_domain_list  # 参与者能够从哪几个Domain中获取数据
+    if args.task == 'OOD':
+        '''
+        Define clients domain
+        '''
+        in_domain_list = copy.deepcopy(private_dataset.domain_list)
+        if args.OOD != "NONE":
+            in_domain_list.remove(args.OOD)
+            private_dataset.in_domain_list = in_domain_list
 
-    # 先生成再删
-    # 随机采样
-    temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+        private_dataset.in_domain_list = in_domain_list  # 参与者能够从哪几个Domain中获取数据
 
-    # 均分
-    # temp_client_domain_list = copy.deepcopy(private_dataset.domain_list) * (particial_cfg.DATASET.parti_num // len(private_dataset.domain_list))
+        # 先生成再删
+        # 随机采样
+        temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
 
-    # 是否用随机 如果不随机 那么均分 注意整除
-    # if args.use_random_domain:
-    #     temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
-    # else:
-    #     temp_client_domain_list = copy.deepcopy(private_dataset.domain_list) * (particial_cfg.DATASET.parti_num//len(private_dataset.domain_list))
+        # 均分
+        # temp_client_domain_list = copy.deepcopy(private_dataset.domain_list) * (particial_cfg.DATASET.parti_num // len(private_dataset.domain_list))
 
-    client_domain_list = []
-    for i in range(len(temp_client_domain_list)):
-        if temp_client_domain_list[i] != args.OOD:
-            client_domain_list.append(temp_client_domain_list[i])
+        # 是否用随机 如果不随机 那么均分 注意整除
+        # if args.use_random_domain:
+        #     temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+        # else:
+        #     temp_client_domain_list = copy.deepcopy(private_dataset.domain_list) * (particial_cfg.DATASET.parti_num//len(private_dataset.domain_list))
+
+        client_domain_list = []
+        for i in range(len(temp_client_domain_list)):
+            if temp_client_domain_list[i] != args.OOD:
+                client_domain_list.append(temp_client_domain_list[i])
+    else:
+        client_domain_list = private_dataset.domain_list
 
     # 只用改一次 因为不是deepcopy
     particial_cfg.DATASET.parti_num = len(client_domain_list)
@@ -129,15 +137,9 @@ def main(args=None):
     '''
     Loading the Federated Optimizer
     '''
+
     fed_method = get_fed_method(priv_backbones, client_domain_list, args, particial_cfg)
-
-    '''
-    Loading the Aggregations Solution
-    '''
-    fed_aggregation = get_fed_aggregation(args)
-
-    # 绑定聚合策略进方法
-    fed_method.fed_aggregation = fed_aggregation
+    assert args.structure in fed_method.COMPATIBILITY
 
     # 加权数据集分配给method
     fed_method.train_eval_loaders = private_dataset.train_eval_loaders
@@ -146,9 +148,8 @@ def main(args=None):
         setproctitle.setproctitle('{}_{}'.format(args.method, args.OOD))
     else:
         setproctitle.setproctitle('{}_{}_{}'.format(args.method, args.OOD, args.csv_name))
-    train(fed_method, private_dataset, args, particial_cfg,client_domain_list)
+    train(fed_method, private_dataset, args, particial_cfg, client_domain_list)
+
 
 if __name__ == '__main__':
     main()
-
-

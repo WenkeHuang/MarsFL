@@ -101,8 +101,8 @@ def train(fed_method: FederatedMethod, private_dataset: FederatedDataset,
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
         fed_method.epoch_index = epoch_index
-        if hasattr(fed_method, 'loc_update'):
-            fed_method.loc_update(private_dataset.train_loaders)
+        if hasattr(fed_method, 'update'):
+            fed_method.update(private_dataset.train_loaders)
         '''
         测试分为三种：
         person_domain_accs: 私有模型在本地Domain的精度测试 + 提供mean的值

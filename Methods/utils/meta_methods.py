@@ -1,3 +1,6 @@
+from Aggregations import get_fed_aggregation
+from Global import get_global_method
+from Local import get_local_method
 from utils.conf import get_device, checkpoint_path, net_path
 from utils.utils import create_if_not_exists
 from argparse import Namespace
@@ -30,8 +33,16 @@ class FederatedMethod(nn.Module):
         self.global_net = None
         self.device = get_device(device_id=self.args.device_id)
 
-        # 用于聚合的策略
-        self.fed_aggregation = None
+        # 本地和全局模型更新
+        self.local_model = get_local_method(args, cfg)
+        self.global_model = get_global_method(args, cfg)
+
+        # 用于同构聚合的策略
+        if args.structure == 'homogeneity':
+            self.fed_aggregation = get_fed_aggregation(args)
+        else:
+            self.fed_aggregation = None
+
         self.epoch_index = 0
 
         # 模型路径
@@ -71,12 +82,11 @@ class FederatedMethod(nn.Module):
         pass
 
     def save_checkpoint(self):
-        global_net_path=os.path.join(self.net_folder,f'global_net_{self.cfg.DATASET.backbone}_{self.epoch_index}.pth')
+        global_net_path = os.path.join(self.net_folder, f'global_net_{self.cfg.DATASET.backbone}_{self.epoch_index}.pth')
         torch.save(self.global_net.state_dict(), global_net_path)
         print('save global_net over')
 
-
-    def loc_update(self, priloader_list):
+    def update(self, priloader_list):
         pass
 
     def get_gt_mask(self, logits, target):
