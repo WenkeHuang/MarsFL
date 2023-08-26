@@ -41,3 +41,9 @@ CFG.OPTIMIZER.local_train_lr = 1e-3
 CFG.FedAVG = CN()
 CFG.FedAVG.local_method = 'BaseLocal'
 CFG.FedAVG.global_method = 'BaseGlobal'
+
+# FedProx
+CFG.FedProx = CN()
+CFG.FedProx.local_method = 'FedProxLocal'
+CFG.FedProx.global_method = 'BaseGlobal'
+CFG.FedProx.mu = 0.01

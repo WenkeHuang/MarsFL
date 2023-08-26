@@ -23,6 +23,6 @@ class LocalMethod(nn.Module):
     def loc_update(self, **kwargs):
         pass
 
-    def train_net(self, index, net, train_loader):
+    def train_net(self, *args,**kwargs):
         pass
 
