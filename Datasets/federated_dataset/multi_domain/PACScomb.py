@@ -1,9 +1,8 @@
 import numpy as np
-
-from Datasets.utils.federated_dataset import FederatedDataset, TwoCropsTransform, dataloader_kwargs
-from Datasets.transforms.denormalization import DeNormalize
+from Datasets.transforms.transforms import TwoCropsTransform
+from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
+from Datasets.transforms.transforms import DeNormalize
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
 from utils.conf import data_path
 import torch.utils.data as data
 from PIL import Image
@@ -69,7 +68,7 @@ def source_to_target_freq(src_img, amp_trg, L=0.1, ratio=1.0):
 
 # The PACS Domain Digits Definition
 class MyPACS(data.Dataset):
-    def __init__(self, root, train='train', transform=None,
+    def __init__(self, root, train='train', transform=None, use_style=[],
                  target_transform=None, data_name=None, use_fft=False, prob_domain_name=[]) -> None:
         # self.not_aug_transform = transforms.Compose([transforms.ToTensor()])
         self.data_name = data_name
@@ -79,6 +78,7 @@ class MyPACS(data.Dataset):
         self.target_transform = target_transform
 
         self.prob_domain_name = prob_domain_name
+        self.use_style = use_style
         self.use_fft = use_fft
 
         # 找到其他数据集的路径
@@ -110,6 +110,22 @@ class MyPACS(data.Dataset):
     def __build_truncated_dataset__(self):
         self.split_file = os.path.join(self.root, 'label', f'{self.data_name}_{split_dict[self.train]}_kfold' + '.txt')
         self.imgs, self.labels = MyPACS.read_txt(self.split_file, self.root + 'raw_images/')
+
+        # 使用其他风格生成的
+        if self.use_style:
+            self.style_imgs = []
+            self.style_labels = []
+            for style in self.use_style:
+                for i in range(len(self.imgs)):
+                    path = self.imgs[i].replace(self.data_name, self.data_name + '/' + style).replace('.', '_' + style + '.')
+                    labels = self.labels[i]
+                    self.style_imgs.append(path)
+                    self.style_labels.append(labels)
+
+            self.imgs += self.style_imgs
+            self.labels += self.style_labels
+
+        return
 
     @staticmethod
     def read_txt(txt_path, root_path):
@@ -156,8 +172,8 @@ class MyPACS(data.Dataset):
         return len(self.imgs)
 
 
-class FLPACS(FederatedDataset):
-    NAME = 'PACS'
+class FLPACScomb(MultiDomainDataset):
+    NAME = 'PACScomb'
     SETTING = 'Domain'
     N_CLASS = 7
 
@@ -166,10 +182,8 @@ class FLPACS(FederatedDataset):
         self.domain_list = ['photo', 'art_painting', 'cartoon', 'sketch']
         self.domain_ratio = {'photo': cfg.DATASET.domain_ratio, 'art_painting': cfg.DATASET.domain_ratio,
                              'cartoon': cfg.DATASET.domain_ratio, 'sketch': cfg.DATASET.domain_ratio}
-
         self.train_eval_domain_ratio = {'photo': cfg.DATASET.train_eval_domain_ratio, 'art_painting': cfg.DATASET.train_eval_domain_ratio,
                                         'cartoon': cfg.DATASET.train_eval_domain_ratio, 'sketch': cfg.DATASET.train_eval_domain_ratio}
-
         self.train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
              transforms.RandomHorizontalFlip(),
@@ -192,16 +206,12 @@ class FLPACS(FederatedDataset):
         domain_training_dataset_dict = {}
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
-        # ood_dataset = None
+        ood_dataset = None
         # 是否使用两个数据相同的数据增强
-
-        train_transform = self.train_transform
-
-        if self.cfg.DATASET.use_two_crop == 'WEAK':
-            # 构造非对称aug
-            train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
+        if self.cfg.DATASET.use_two_crop:
+            train_transform = TwoCropsTransform(self.train_transform)
         else:
-            train_val_transform = self.test_transform
+            train_transform = self.train_transform
 
         # 对于feddg 使用fft
         if 'FedDG' in self.cfg:
@@ -216,11 +226,13 @@ class FLPACS(FederatedDataset):
             else:
                 prob_domain_name = []
 
-            domain_training_dataset_dict[domain] = MyPACS(data_path() + 'PACS/', train='train', transform=train_transform, data_name=domain,
+            use_style = [self.domain_list[i] for i in range(len(self.domain_list)) if domain != self.domain_list[i]]
+
+            domain_training_dataset_dict[domain] = MyPACS(data_path() + 'PACS/', train='train', transform=train_transform, use_style=use_style, data_name=domain,
                                                           use_fft=use_fft, prob_domain_name=prob_domain_name)
             domain_testing_dataset_dict[domain] = MyPACS(data_path() + 'PACS/', train='test', transform=self.test_transform, data_name=domain)
 
-            domain_train_eval_dataset_dict[domain] = MyPACS(data_path() + 'PACS/', train='val', transform=train_val_transform, data_name=domain)
+            domain_train_eval_dataset_dict[domain] = MyPACS(data_path() + 'PACS/', train='test', transform=train_transform, data_name=domain)
 
         self.partition_domain_loaders(client_domain_name_list, domain_training_dataset_dict, domain_testing_dataset_dict, domain_train_eval_dataset_dict)
 

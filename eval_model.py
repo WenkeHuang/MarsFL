@@ -1,5 +1,4 @@
 import numpy as np
-import setproctitle
 import torch
 
 from Datasets import Priv_NAMES, get_prive_dataset

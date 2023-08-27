@@ -1,7 +1,14 @@
-# Copyright 2020-present, Pietro Buzzega, Matteo Boschini, Angelo Porrello, Davide Abati, Simone Calderara.
-# All rights reserved.
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
+class TwoCropsTransform:
+    """Take two random crops of one image as the query and key."""
+
+    def __init__(self, base_transform_left, base_transform_right):
+        self.base_transform_left = base_transform_left
+        self.base_transform_right = base_transform_right
+
+    def __call__(self, x):
+        q = self.base_transform_left(x)
+        k = self.base_transform_right(x)
+        return [q, k]
 
 
 class DeNormalize(object):

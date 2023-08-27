@@ -1,9 +1,9 @@
-from Global.utils.global_methods import GlobalMethod
+from Sever.utils.sever_methods import SeverMethod
 
 from utils.utils import cal_client_weight
 
 
-class BaseGlobal(GlobalMethod):
+class BaseGlobal(SeverMethod):
     NAME = 'BaseGlobal'
 
     def __init__(self, args, cfg):

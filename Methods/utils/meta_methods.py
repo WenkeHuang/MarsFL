@@ -1,5 +1,7 @@
+import copy
+
 from Aggregations import get_fed_aggregation
-from Global import get_global_method
+from Sever import get_sever_method
 from Local import get_local_method
 from utils.conf import get_device, checkpoint_path, net_path
 from utils.utils import create_if_not_exists
@@ -35,7 +37,7 @@ class FederatedMethod(nn.Module):
 
         # 本地和全局模型更新
         self.local_model = get_local_method(args, cfg)
-        self.global_model = get_global_method(args, cfg)
+        self.sever_model = get_sever_method(args, cfg)
 
         # 用于同构聚合的策略
         if args.structure == 'homogeneity':
@@ -46,7 +48,6 @@ class FederatedMethod(nn.Module):
         self.epoch_index = 0
 
         # 模型路径
-
         self.base_net_folder = os.path.join(net_path(), self.args.dataset, self.args.OOD,
                                             self.args.averaging, self.args.method)
         create_if_not_exists(self.base_net_folder)
@@ -76,7 +77,12 @@ class FederatedMethod(nn.Module):
         return
 
     def ini(self):
-        pass
+        self.global_net = copy.deepcopy(self.nets_list[0])
+        self.global_net = self.global_net.to(self.device)
+
+        global_w = self.nets_list[0].state_dict()
+        for _, net in enumerate(self.nets_list):
+            net.load_state_dict(global_w)
 
     def col_update(self, publoader):
         pass

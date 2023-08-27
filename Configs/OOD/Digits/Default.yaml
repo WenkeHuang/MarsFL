@@ -2,7 +2,7 @@ DATASET:
   dataset : "Digits"
   communication_epoch : 50
   n_classes: 10
-  parti_num: 4 #
+  parti_num: 6 #
   online_ratio: 1.0
   domain_ratio: 0.5 # 扩大了到1.0
   train_eval_domain_ratio: 0.1

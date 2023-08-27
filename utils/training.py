@@ -1,5 +1,4 @@
 from Methods.utils.meta_methods import FederatedMethod
-from Datasets.utils.federated_dataset import FederatedDataset
 from utils.logger import CsvWriter
 from argparse import Namespace
 import torch
@@ -78,8 +77,8 @@ def global_out_evaluation(optimizer: FederatedMethod, test_loader: dict, out_dom
     return out_acc
 
 
-def train(fed_method: FederatedMethod, private_dataset: FederatedDataset,
-          args: Namespace, cfg, client_domain_list) -> None:
+def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
+
     if args.csv_log:
         csv_writer = CsvWriter(args, cfg)
 

@@ -1,6 +1,7 @@
-from Datasets.utils.federated_dataset import FederatedDataset, TwoCropsTransform
+from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
+from Datasets.transforms.transforms import TwoCropsTransform
 from torchvision.datasets import MNIST, SVHN, ImageFolder, DatasetFolder, USPS
-from Datasets.transforms.denormalization import DeNormalize
+from Datasets.transforms.transforms import DeNormalize
 import torchvision.transforms as transforms
 from utils.conf import data_path
 # from utils.aug_lib import TrivialAugment
@@ -74,7 +75,7 @@ class ImageFolder_Custom(DatasetFolder):
         return len(self.samples)
 
 
-class FLDigits(FederatedDataset):
+class FLDigits(MultiDomainDataset):
     NAME = 'Digits'
     SETTING = 'Domain'
     N_CLASS = 10

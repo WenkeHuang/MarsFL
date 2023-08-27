@@ -1,9 +1,7 @@
-import numpy as np
-
-from Datasets.utils.federated_dataset import FederatedDataset, TwoCropsTransform, dataloader_kwargs
-from Datasets.transforms.denormalization import DeNormalize
+from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
+from Datasets.transforms.transforms import TwoCropsTransform
+from Datasets.transforms.transforms import DeNormalize
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
 from utils.conf import data_path
 import torch.utils.data as data
 from PIL import Image
@@ -60,7 +58,7 @@ class MyDomainNet(data.Dataset):
         return len(self.imgs)
 
 
-class FLDomainNet(FederatedDataset):
+class FLDomainNet(MultiDomainDataset):
     NAME = 'DomainNet'
     SETTING = 'Domain'
     N_CLASS = 345

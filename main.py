@@ -1,7 +1,7 @@
-from Aggregations import Aggregation_NAMES, get_fed_aggregation
+from Aggregations import Aggregation_NAMES
 from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
-from Datasets import Priv_NAMES, get_prive_dataset
+from Datasets.federated_dataset.multi_domain import Priv_NAMES, get_multi_domain_dataset
 from Backbones import get_private_backbones
 from utils.cfg import CFG as cfg, show_cfg
 from utils.utils import ini_client_domain
@@ -88,7 +88,7 @@ def main(args=None):
     '''
     Loading the Private Digits
     '''
-    private_dataset = get_prive_dataset(args, particial_cfg)
+    private_dataset = get_multi_domain_dataset(args, particial_cfg)
 
     if args.task == 'OOD':
         '''

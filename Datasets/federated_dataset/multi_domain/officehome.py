@@ -1,12 +1,9 @@
+from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
+from Datasets.transforms.transforms import DeNormalize
 import torchvision.transforms as transforms
 from utils.conf import data_path
-from Datasets.utils.federated_dataset import FederatedDataset, TwoCropsTransform
-from torchvision.datasets import ImageFolder, DatasetFolder
-from Datasets.transforms.denormalization import DeNormalize
-import torchvision.transforms as transforms
-from utils.conf import data_path
-from torchvision.datasets import ImageFolder, DatasetFolder
-
+from torchvision.datasets import ImageFolder
+from Datasets.transforms.transforms import TwoCropsTransform
 
 class ImageFolder_Custom():
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
@@ -57,7 +54,7 @@ class ImageFolder_Custom():
         return img, target
 
 
-class FLOfficeHome(FederatedDataset):
+class FLOfficeHome(MultiDomainDataset):
     NAME = 'OfficeHome'
     SETTING = 'Domain'
     N_CLASS = 65

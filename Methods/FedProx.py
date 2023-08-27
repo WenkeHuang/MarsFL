@@ -12,12 +12,7 @@ class FedProx(FederatedMethod):
         super(FedProx, self).__init__(nets_list, client_domain_list, args, cfg)
 
     def ini(self):
-        self.global_net = copy.deepcopy(self.nets_list[0])
-        self.global_net = self.global_net.to(self.device)
-
-        global_w = self.nets_list[0].state_dict()
-        for _, net in enumerate(self.nets_list):
-            net.load_state_dict(global_w)
+        super.ini()
 
     def update(self, priloader_list):
         total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者

@@ -7,14 +7,14 @@ import torch
 import os
 
 
-class GlobalMethod(nn.Module):
+class SeverMethod(nn.Module):
     """
     Federated learning Methods.
     """
     NAME = None
 
     def __init__(self, args, cfg) -> None:
-        super(GlobalMethod, self).__init__()
+        super(SeverMethod, self).__init__()
 
         self.args = args
         self.cfg = cfg

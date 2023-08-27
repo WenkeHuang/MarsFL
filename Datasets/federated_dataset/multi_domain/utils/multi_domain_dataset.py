@@ -12,20 +12,7 @@ import numpy as np
 dataloader_kwargs = {'num_workers': 2, 'pin_memory': True}
 
 
-class TwoCropsTransform:
-    """Take two random crops of one image as the query and key."""
-
-    def __init__(self, base_transform_left, base_transform_right):
-        self.base_transform_left = base_transform_left
-        self.base_transform_right = base_transform_right
-
-    def __call__(self, x):
-        q = self.base_transform_left(x)
-        k = self.base_transform_right(x)
-        return [q, k]
-
-
-class FederatedDataset:
+class MultiDomainDataset:
     """
     Federated Learning Setting.
     """
@@ -80,8 +67,8 @@ class FederatedDataset:
         """
         pass
 
-    def partition_domain_loaders(self, client_domain_name_list: list, domain_training_dataset_dict: dict,
-                                 domain_testing_dataset_dict: dict, domain_train_eval_dataset_dict):
+    def partition_domain_loaders(self, client_domain_name_list, domain_training_dataset_dict,
+                                 domain_testing_dataset_dict, domain_train_eval_dataset_dict):
 
         '''
         Initialize Each Domain Index
@@ -189,56 +176,55 @@ class FederatedDataset:
                                      batch_size=self.cfg.OPTIMIZER.local_test_batch, shuffle=False, **dataloader_kwargs)
             self.test_loader[key] = test_loader
 
-def partition_label_skew_loaders(train_dataset: datasets, test_dataset: datasets,
-                                 setting: FederatedDataset) -> Tuple[list, DataLoader, dict]:
-    n_class = setting.N_CLASS
-    n_participants = setting.args.parti_num
-    n_class_sample = setting.N_SAMPLES_PER_Class
-    min_size = 0
-    min_require_size = 10
-    y_train = train_dataset.targets
-    N = len(y_train)
-    net_dataidx_map = {}
+    def partition_label_skew_loaders(self, train_dataset, test_dataset) -> Tuple[list, DataLoader, dict]:
+        n_class = self.N_CLASS
+        n_participants = self.args.parti_num
+        n_class_sample = self.N_SAMPLES_PER_Class
+        min_size = 0
+        min_require_size = 10
+        y_train = train_dataset.targets
+        N = len(y_train)
+        net_dataidx_map = {}
 
-    while min_size < min_require_size:
-        idx_batch = [[] for _ in range(n_participants)]
-        for k in range(n_class):
-            idx_k = [i for i, j in enumerate(y_train) if j == k]
-            np.random.shuffle(idx_k)
+        while min_size < min_require_size:
+            idx_batch = [[] for _ in range(n_participants)]
+            for k in range(n_class):
+                idx_k = [i for i, j in enumerate(y_train) if j == k]
+                np.random.shuffle(idx_k)
+                if n_class_sample != None:
+                    idx_k = idx_k[0:n_class_sample * n_participants]
+                beta = self.args.beta
+                if beta == 0:  # beta为0，不能用狄利克雷，均分？
+                    idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.array_split(idx_k, n_participants))]
+                else:
+                    proportions = np.random.dirichlet(np.repeat(a=beta, repeats=n_participants))
+                    proportions = np.array([p * (len(idx_j) < N / n_participants) for p, idx_j in zip(proportions, idx_batch)])
+                    proportions = proportions / proportions.sum()
+                    proportions = (np.cumsum(proportions) * len(idx_k)).astype(int)[:-1]
+                    idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.split(idx_k, proportions))]
+                min_size = min([len(idx_j) for idx_j in idx_batch])
+        for j in range(n_participants):
+            np.random.shuffle(idx_batch[j])
             if n_class_sample != None:
-                idx_k = idx_k[0:n_class_sample * n_participants]
-            beta = setting.args.beta
-            if beta == 0:  # beta为0，不能用狄利克雷，均分？
-                idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.array_split(idx_k, n_participants))]
-            else:
-                proportions = np.random.dirichlet(np.repeat(a=beta, repeats=n_participants))
-                proportions = np.array([p * (len(idx_j) < N / n_participants) for p, idx_j in zip(proportions, idx_batch)])
-                proportions = proportions / proportions.sum()
-                proportions = (np.cumsum(proportions) * len(idx_k)).astype(int)[:-1]
-                idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.split(idx_k, proportions))]
-            min_size = min([len(idx_j) for idx_j in idx_batch])
-    for j in range(n_participants):
-        np.random.shuffle(idx_batch[j])
-        if n_class_sample != None:
-            idx_batch[j] = idx_batch[j][0:n_class_sample * n_class]
-        net_dataidx_map[j] = idx_batch[j]
-    net_cls_counts = record_net_data_stats(y_train, net_dataidx_map)
-    for j in range(n_participants):
-        train_sampler = SubsetRandomSampler(net_dataidx_map[j])
-        train_loader = DataLoader(train_dataset,
-                                  batch_size=setting.args.local_batch_size, sampler=train_sampler, num_workers=4, drop_last=True)
-        setting.train_loaders.append(train_loader)
+                idx_batch[j] = idx_batch[j][0:n_class_sample * n_class]
+            net_dataidx_map[j] = idx_batch[j]
+        net_cls_counts = record_net_data_stats(y_train, net_dataidx_map)
+        for j in range(n_participants):
+            train_sampler = SubsetRandomSampler(net_dataidx_map[j])
+            train_loader = DataLoader(train_dataset,
+                                      batch_size=self.args.local_batch_size, sampler=train_sampler, num_workers=4, drop_last=True)
+            self.train_loaders.append(train_loader)
 
-    test_loader = DataLoader(test_dataset,
-                             batch_size=setting.args.local_batch_size, shuffle=False, num_workers=4)
-    setting.test_loader = test_loader
+        test_loader = DataLoader(test_dataset,
+                                 batch_size=self.args.local_batch_size, shuffle=False, num_workers=4)
+        self.test_loader = test_loader
 
-    return setting.train_loaders, setting.test_loader, net_cls_counts
+        return self.train_loaders, self.test_loader, net_cls_counts
 
 
 # home数据集
 def partition_office_domain_skew_loaders_new(train_datasets: list, test_datasets: list,
-                                             setting: FederatedDataset) -> Tuple[list, list]:
+                                             setting: MultiDomainDataset) -> Tuple[list, list]:
     ini_len_dict = {}
     not_used_index_dict = {}
     all_labels_list = []
@@ -320,7 +306,7 @@ def partition_office_domain_skew_loaders_new(train_datasets: list, test_datasets
 
 
 def partition_office_domain_skew_loaders(train_datasets: list, test_datasets: list,
-                                         setting: FederatedDataset) -> Tuple[list, list]:
+                                         setting: MultiDomainDataset) -> Tuple[list, list]:
     ini_len_dict = {}
     not_used_index_dict = {}
     # all_labels = []
