@@ -100,8 +100,14 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
         fed_method.epoch_index = epoch_index
-        if hasattr(fed_method, 'update'):
-            fed_method.update(private_dataset.train_loaders)
+        # if hasattr(fed_method, 'update'):
+        #     fed_method.update(private_dataset.train_loaders)
+
+        fed_method.local_update(private_dataset.train_loaders)
+        if args.task=='att':
+            pass
+        fed_method.sever_update(private_dataset.train_loaders)
+
         '''
         测试分为三种：
         person_domain_accs: 私有模型在本地Domain的精度测试 + 提供mean的值
