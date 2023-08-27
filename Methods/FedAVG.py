@@ -20,7 +20,7 @@ class FedAVG(FederatedMethod):
 
         self.local_model.loc_update(online_clients_list=online_clients_list, nets_list=self.nets_list,
                                     priloader_list=priloader_list)
-        self.global_model.global_update(fed_aggregation=self.fed_aggregation, online_clients_list=online_clients_list,
+        self.sever_model.sever_update(fed_aggregation=self.fed_aggregation, online_clients_list=online_clients_list,
                                         priloader_list=priloader_list, client_domain_list=self.client_domain_list,
                                         global_net=self.global_net, nets_list=self.nets_list)
 

@@ -3,13 +3,13 @@ from Sever.utils.sever_methods import SeverMethod
 from utils.utils import cal_client_weight
 
 
-class BaseGlobal(SeverMethod):
+class BaseSever(SeverMethod):
     NAME = 'BaseGlobal'
 
     def __init__(self, args, cfg):
-        super(BaseGlobal, self).__init__(args, cfg)
+        super(BaseSever, self).__init__(args, cfg)
 
-    def global_update(self, **kwargs):
+    def sever_update(self, **kwargs):
         fed_aggregation = kwargs['fed_aggregation']
         online_clients_list = kwargs['online_clients_list']
         priloader_list = kwargs['priloader_list']
