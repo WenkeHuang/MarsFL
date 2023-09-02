@@ -149,10 +149,13 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         elif args.task == 'label_skew':
             top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
             accs_list.append(top1acc)
-            print(log_msg(f'The {epoch_index} Epoch: Out Domain {args.OOD} Acc:{top1acc}'))
+            print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}'))
 
     if args.csv_log:
-        csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
-        csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
-        if args.OOD != "NONE":
-            csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
+        if args.task == 'OOD':
+            csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
+            csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
+            if args.OOD != "NONE":
+                csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
+        elif args.task == 'label_skew':
+            csv_writer.write_acc(accs_list, name='label_skew', mode='ALL')
