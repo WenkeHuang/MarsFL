@@ -1,9 +1,9 @@
 from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
-from Datasets.transforms.transforms import DeNormalize
+from Datasets.utils.transforms import DeNormalize
 import torchvision.transforms as transforms
-from utils.conf import data_path
+from utils.conf import multi_domain_data_path
 from torchvision.datasets import ImageFolder
-from Datasets.transforms.transforms import TwoCropsTransform
+from Datasets.utils.transforms import TwoCropsTransform
 
 class ImageFolder_Custom():
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
@@ -102,11 +102,11 @@ class FLOfficeHome(MultiDomainDataset):
             train_val_transform = self.test_transform
 
         for _, domain in enumerate(self.domain_list):
-            train_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=True,
+            train_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=True,
                                                transform=train_transform)
-            test_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=False,
+            test_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=False,
                                               transform=self.test_transform)
-            train_eval_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=False,
+            train_eval_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=False,
                                                     transform=train_val_transform)
 
             domain_training_dataset_dict[domain] = train_dataset

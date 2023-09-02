@@ -9,6 +9,8 @@ from argparse import Namespace
 from typing import Tuple
 import numpy as np
 
+from Datasets.utils.utils import record_net_data_stats
+
 dataloader_kwargs = {'num_workers': 2, 'pin_memory': True}
 
 
@@ -26,8 +28,8 @@ class SingleDomainDataset:
         :param args: the arguments which contains the hyperparameters
         """
         self.train_loaders = []
-        self.train_eval_loaders = {}
-        self.test_loader = {}
+        # self.train_eval_loaders = {}
+        # self.test_loader = {}
         self.args = args
         self.cfg = cfg
 
@@ -69,8 +71,7 @@ class SingleDomainDataset:
 
     def partition_label_skew_loaders(self, train_dataset, test_dataset) -> Tuple[list, DataLoader, dict]:
         n_class = self.N_CLASS
-        n_participants = self.args.parti_num
-        n_class_sample = self.N_SAMPLES_PER_Class
+        n_participants = self.cfg.DATASET.parti_num
         min_size = 0
         min_require_size = 10
         y_train = train_dataset.targets
@@ -82,9 +83,8 @@ class SingleDomainDataset:
             for k in range(n_class):
                 idx_k = [i for i, j in enumerate(y_train) if j == k]
                 np.random.shuffle(idx_k)
-                if n_class_sample != None:
-                    idx_k = idx_k[0:n_class_sample * n_participants]
-                beta = self.args.beta
+
+                beta = self.cfg.DATASET.beta
                 if beta == 0:  # beta为0，不能用狄利克雷，均分？
                     idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.array_split(idx_k, n_participants))]
                 else:
@@ -96,18 +96,15 @@ class SingleDomainDataset:
                 min_size = min([len(idx_j) for idx_j in idx_batch])
         for j in range(n_participants):
             np.random.shuffle(idx_batch[j])
-            if n_class_sample != None:
-                idx_batch[j] = idx_batch[j][0:n_class_sample * n_class]
+
             net_dataidx_map[j] = idx_batch[j]
-        net_cls_counts = record_net_data_stats(y_train, net_dataidx_map)
+        self.net_cls_counts = record_net_data_stats(y_train, net_dataidx_map)
         for j in range(n_participants):
             train_sampler = SubsetRandomSampler(net_dataidx_map[j])
             train_loader = DataLoader(train_dataset,
-                                      batch_size=self.args.local_batch_size, sampler=train_sampler, num_workers=4, drop_last=True)
+                                      batch_size=self.cfg.OPTIMIZER.local_test_batch, sampler=train_sampler, num_workers=4, drop_last=True)
             self.train_loaders.append(train_loader)
 
         test_loader = DataLoader(test_dataset,
-                                 batch_size=self.args.local_batch_size, shuffle=False, num_workers=4)
+                                 batch_size=self.cfg.OPTIMIZER.local_test_batch, shuffle=False, num_workers=4)
         self.test_loader = test_loader
-
-        return self.train_loaders, self.test_loader, net_cls_counts

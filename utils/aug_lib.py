@@ -263,7 +263,7 @@ solarize = TransformT('Solarize', _solarize_impl)
 
 
 def _enhancer_impl(enhancer, minimum=None, maximum=None):
-    """Sets level to be between 0.1 and 1.8 for ImageEnhance transforms of PIL."""
+    """Sets level to be between 0.1 and 1.8 for ImageEnhance utils of PIL."""
 
     def impl(pil_img, level):
         mini = min_max_vals.enhancer.min if minimum is None else minimum
@@ -300,7 +300,7 @@ gaussian = TransformT(
 
 
 def _mirrored_enhancer_impl(enhancer, minimum=None, maximum=None):
-    """Sets level to be between 0.1 and 1.8 for ImageEnhance transforms of PIL."""
+    """Sets level to be between 0.1 and 1.8 for ImageEnhance utils of PIL."""
 
     def impl(pil_img, level):
         mini = min_max_vals.enhancer.min if minimum is None else minimum
@@ -643,7 +643,7 @@ class TrivialAugmentWide(torch.nn.Module):
     Args:
         num_magnitude_bins (int): The number of different magnitude values.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`torchvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            :class:`torchvision.utils.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
         fill (sequence or number, optional): Pixel fill value for the area outside the transformed
             image. If given a number, the value is used for all bands respectively.

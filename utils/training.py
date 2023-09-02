@@ -78,7 +78,6 @@ def global_out_evaluation(optimizer: FederatedMethod, test_loader: dict, out_dom
 
 
 def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
-
     if args.csv_log:
         csv_writer = CsvWriter(args, cfg)
 
@@ -89,13 +88,12 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         # 要在这一步 把方法的个性化绑定进去
         fed_method.ini()
 
-    in_domain_accs_dict = {}
-    mean_in_domain_acc_list = []
-
-    # personal_domain_accs_dict = {}
-    # mean_personal_domain_acc_list = []
-
-    out_domain_accs_dict = {}
+    if args.task == 'OOD':
+        in_domain_accs_dict = {}
+        mean_in_domain_acc_list = []
+        out_domain_accs_dict = {}
+    elif args.task == 'label_skew':
+        accs_list = []
 
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
@@ -104,60 +102,54 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         #     fed_method.update(private_dataset.train_loaders)
 
         fed_method.local_update(private_dataset.train_loaders)
-        if args.task=='att':
+        if args.task == 'att':
             pass
         fed_method.sever_update(private_dataset.train_loaders)
 
-        '''
-        测试分为三种：
-        person_domain_accs: 私有模型在本地Domain的精度测试 + 提供mean的值
-        in_domain_accs: 全局模型在InDomain的精度测试 + 提供mean的值
-        out_domain_acc: 全局模型在OutDomain的精度测试
-        '''
+        if args.task == 'OOD':
+            '''
+            测试分为三种：
+            person_domain_accs: 私有模型在本地Domain的精度测试 + 提供mean的值
+            in_domain_accs: 全局模型在InDomain的精度测试 + 提供mean的值
+            out_domain_acc: 全局模型在OutDomain的精度测试
+            '''
 
-        '''
-        私有模型在自己Domain上的精度 & 存储 (本次暂不需要）
-        '''
-        # personal_domain_accs, mean_personal_domain_accs = global_personal_evaluation(fed_method, private_dataset.test_loader, private_dataset.client_domain_list)
-        # mean_personal_domain_acc_list.append(mean_personal_domain_accs)
-        # for index, in_domain in enumerate(private_dataset.client_domain_list):
-        #     if in_domain in personal_domain_accs_dict:
-        #         personal_domain_accs_dict[in_domain].append(personal_domain_accs[index])
-        #     else:
-        #         personal_domain_accs_dict[in_domain] = [personal_domain_accs[index]]
-        # print(log_msg(f"The {epoch_index} Epoch: Personal Domain Mean Acc: {mean_personal_domain_accs} Method: {args.method}", "TEST"))
+            '''
+            全局模型在参与者的Domain上的精度 & 存储
+            '''
+            if hasattr(fed_method, 'weight_dict'):
+                weight_dict = fed_method.weight_dict
+                if args.csv_log:
+                    csv_writer.write_weight(weight_dict, epoch_index, client_domain_list)
 
-        '''
-        全局模型在参与者的Domain上的精度 & 存储
-        '''
-        if hasattr(fed_method, 'weight_dict'):
-            weight_dict = fed_method.weight_dict
-            if args.csv_log:
-                csv_writer.write_weight(weight_dict, epoch_index, client_domain_list)
+            in_domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.in_domain_list)
+            mean_in_domain_acc_list.append(mean_in_domain_acc)
+            for index, in_domain in enumerate(private_dataset.in_domain_list):
+                if in_domain in in_domain_accs_dict:
+                    in_domain_accs_dict[in_domain].append(in_domain_accs[index])
+                else:
+                    in_domain_accs_dict[in_domain] = [in_domain_accs[index]]
+            print(log_msg(f"The {epoch_index} Epoch: In Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
+            '''
+            全局模型在未知的Domain上的精度 & 存储
+            '''
+            if args.OOD != "NONE":
+                out_domain_acc = global_out_evaluation(fed_method, private_dataset.test_loader, args.OOD)
+                if args.OOD in out_domain_accs_dict:
+                    out_domain_accs_dict[args.OOD].append(out_domain_acc)
+                else:
+                    out_domain_accs_dict[args.OOD] = [out_domain_acc]
+                print(log_msg(f"The {epoch_index} Epoch: Out Domain {args.OOD} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
 
-        in_domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.in_domain_list)
-        mean_in_domain_acc_list.append(mean_in_domain_acc)
-        for index, in_domain in enumerate(private_dataset.in_domain_list):
-            if in_domain in in_domain_accs_dict:
-                in_domain_accs_dict[in_domain].append(in_domain_accs[index])
-            else:
-                in_domain_accs_dict[in_domain] = [in_domain_accs[index]]
-        print(log_msg(f"The {epoch_index} Epoch: In Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
-        '''
-        全局模型在未知的Domain上的精度 & 存储
-        '''
-        if args.OOD != "NONE":
-            out_domain_acc = global_out_evaluation(fed_method, private_dataset.test_loader, args.OOD)
-            if args.OOD in out_domain_accs_dict:
-                out_domain_accs_dict[args.OOD].append(out_domain_acc)
-            else:
-                out_domain_accs_dict[args.OOD] = [out_domain_acc]
-            print(log_msg(f"The {epoch_index} Epoch: Out Domain {args.OOD} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
+            if args.save_checkpoint:
+                # 每十个交流周期进行一次存储
+                if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+                    fed_method.save_checkpoint()
 
-        if args.save_checkpoint:
-            # 每十个交流周期进行一次存储
-            if (epoch_index) % 10 == 0 or epoch_index == communication_epoch - 1:
-                fed_method.save_checkpoint()
+        elif args.task == 'label_skew':
+            top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
+            accs_list.append(top1acc)
+            print(log_msg(f'The {epoch_index} Epoch: Out Domain {args.OOD} Acc:{top1acc}'))
 
     if args.csv_log:
         csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')

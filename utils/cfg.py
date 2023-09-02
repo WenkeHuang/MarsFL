@@ -17,13 +17,15 @@ CFG.DATASET = CN()
 CFG.DATASET.dataset = "Digits"  #
 CFG.DATASET.communication_epoch = 2
 CFG.DATASET.n_classes = 10
+
 CFG.DATASET.parti_num = 5
 CFG.DATASET.online_ratio = 1.0  # online 参与者的ratio
 CFG.DATASET.domain_ratio = 1.0  # domain 中采样的ratio
 CFG.DATASET.train_eval_domain_ratio = 0.01  # 聚合时每个域采样的ratio
 CFG.DATASET.backbone = "resnet18"
 CFG.DATASET.pretrained = False
-CFG.DATASET.use_two_crop = "ASY"
+CFG.DATASET.aug = "weak"
+CFG.DATASET.beta = 0.5
 
 CFG.OPTIMIZER = CN()
 CFG.OPTIMIZER.type = 'SGD'

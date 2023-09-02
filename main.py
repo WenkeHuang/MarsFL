@@ -1,4 +1,5 @@
 from Aggregations import Aggregation_NAMES
+from Datasets.federated_dataset.single_domain import get_single_domain_dataset
 from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
 from Datasets.federated_dataset.multi_domain import Priv_NAMES, get_multi_domain_dataset
@@ -19,11 +20,11 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome
                         choices=Priv_NAMES, help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
-    parser.add_argument('--task', type=str, default='OOD')
+    parser.add_argument('--task', type=str, default='label_skew')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
@@ -88,12 +89,12 @@ def main(args=None):
     '''
     Loading the Private Digits
     '''
-    private_dataset = get_multi_domain_dataset(args, particial_cfg)
 
     if args.task == 'OOD':
         '''
         Define clients domain
         '''
+        private_dataset = get_multi_domain_dataset(args, particial_cfg)
         in_domain_list = copy.deepcopy(private_dataset.domain_list)
         if args.OOD != "NONE":
             in_domain_list.remove(args.OOD)
@@ -118,16 +119,19 @@ def main(args=None):
         for i in range(len(temp_client_domain_list)):
             if temp_client_domain_list[i] != args.OOD:
                 client_domain_list.append(temp_client_domain_list[i])
-    else:
-        client_domain_list = private_dataset.domain_list
 
-    # 只用改一次 因为不是deepcopy
-    particial_cfg.DATASET.parti_num = len(client_domain_list)
-    # particial_cfg.DATASET.n_classes = private_dataset.N_CLASS
-    cfg.freeze()
+        # 只用改一次 因为不是deepcopy
+        particial_cfg.DATASET.parti_num = len(client_domain_list)
 
-    private_dataset.client_domain_list = client_domain_list  # 参与者具体的Domain选择
-    private_dataset.get_data_loaders(client_domain_list)
+        cfg.freeze()
+
+        private_dataset.client_domain_list = client_domain_list  # 参与者具体的Domain选择
+        private_dataset.get_data_loaders(client_domain_list)
+
+    elif args.task=='label_skew':
+        private_dataset = get_single_domain_dataset(args, particial_cfg)
+        private_dataset.get_data_loaders()
+        client_domain_list=None
 
     '''
     Loading the Private Backbone
@@ -141,8 +145,9 @@ def main(args=None):
     fed_method = get_fed_method(priv_backbones, client_domain_list, args, particial_cfg)
     assert args.structure in fed_method.COMPATIBILITY
 
-    # 加权数据集分配给method
-    fed_method.train_eval_loaders = private_dataset.train_eval_loaders
+    if args.task == 'OOD':
+        # 加权数据集分配给method
+        fed_method.train_eval_loaders = private_dataset.train_eval_loaders
 
     if args.csv_name == None:
         setproctitle.setproctitle('{}_{}'.format(args.method, args.OOD))

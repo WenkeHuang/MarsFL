@@ -9,6 +9,8 @@ from argparse import Namespace
 from typing import Tuple
 import numpy as np
 
+from Datasets.utils.utils import record_net_data_stats
+
 dataloader_kwargs = {'num_workers': 2, 'pin_memory': True}
 
 
@@ -86,7 +88,7 @@ class MultiDomainDataset:
                 y_train = value.labels
             elif key in ['caltech', 'amazon', 'webcam', 'dslr']:
                 y_train = value.imagefolder_obj.targets
-            elif key in ['Art', 'Clipart', 'Product', 'Real World']:
+            elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
                 y_train = value.imagefolder_obj.targets
 
             not_used_index_dict[key] = np.arange(len(y_train))
@@ -345,21 +347,4 @@ def partition_office_domain_skew_loaders(train_datasets: list, test_datasets: li
     return setting.train_loaders, setting.test_loader
 
 
-def record_net_data_stats(y_train, net_dataidx_map):
-    net_cls_counts = {}
-    y_train = np.array(y_train)
-    for net_i, dataidx in net_dataidx_map.items():
-        unq, unq_cnt = np.unique(y_train[dataidx], return_counts=True)
-        tmp = {unq[i]: unq_cnt[i] for i in range(len(unq))}
-        net_cls_counts[net_i] = tmp
 
-    data_list = []
-    for net_id, data in net_cls_counts.items():
-        n_total = 0
-        for class_id, n_data in data.items():
-            n_total += n_data
-        data_list.append(n_total)
-    print('mean:', np.mean(data_list))
-    print('std:', np.std(data_list))
-    print('Data statistics: %s' % str(net_cls_counts))
-    return net_cls_counts

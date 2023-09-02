@@ -1,8 +1,8 @@
 from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
-from Datasets.transforms.transforms import TwoCropsTransform
-from Datasets.transforms.transforms import DeNormalize
+from Datasets.utils.transforms import TwoCropsTransform
+from Datasets.utils.transforms import DeNormalize
 import torchvision.transforms as transforms
-from utils.conf import data_path
+from utils.conf import multi_domain_data_path
 import torch.utils.data as data
 from PIL import Image
 import os
@@ -17,7 +17,7 @@ split_dict = {
 class MyDomainNet(data.Dataset):
     def __init__(self, root, train='train', transform=None,
                  target_transform=None, data_name=None) -> None:
-        # self.not_aug_transform = transforms.Compose([transforms.ToTensor()])
+        # self.not_aug_transform = utils.Compose([utils.ToTensor()])
         self.data_name = data_name
         self.root = root
         self.train = train
@@ -107,11 +107,11 @@ class FLDomainNet(MultiDomainDataset):
             train_val_transform = self.train_transform
 
         for _, domain in enumerate(self.domain_list):
-            domain_training_dataset_dict[domain] = MyDomainNet(data_path() + 'DomainNet/', train='train', transform=train_transform, data_name=domain)
+            domain_training_dataset_dict[domain] = MyDomainNet(multi_domain_data_path() + 'DomainNet/', train='train', transform=train_transform, data_name=domain)
 
-            domain_testing_dataset_dict[domain] = MyDomainNet(data_path() + 'DomainNet/', train='test', transform=self.test_transform, data_name=domain)
+            domain_testing_dataset_dict[domain] = MyDomainNet(multi_domain_data_path() + 'DomainNet/', train='test', transform=self.test_transform, data_name=domain)
 
-            domain_train_eval_dataset_dict[domain] = MyDomainNet(data_path() + 'DomainNet/', train='test', transform=train_val_transform, data_name=domain)
+            domain_train_eval_dataset_dict[domain] = MyDomainNet(multi_domain_data_path() + 'DomainNet/', train='test', transform=train_val_transform, data_name=domain)
 
         self.partition_domain_loaders(client_domain_name_list, domain_training_dataset_dict, domain_testing_dataset_dict, domain_train_eval_dataset_dict)
 

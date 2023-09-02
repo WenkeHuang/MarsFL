@@ -9,12 +9,12 @@ from Backbones.SimpleCNN import SimpleCNN, SimpleCNN_sr
 
 Backbone_NAMES = {
     'simple_cnn': SimpleCNN,
-    'simple_cnn_lora': SimpleCNN_lora,
+    # 'simple_cnn_lora': SimpleCNN_lora,
     # 'simple_cnn_lora_sr': SimpleCNN_lora_sr,
     # 'simple_cnn_sr': SimpleCNN_sr,
     # 'resnet10': resnet10,
     # 'resnet10_lora': resnet10_lora,
-    'resnet18_lora': resnet18_lora,
+    # 'resnet18_lora': resnet18_lora,
     'resnet18': resnet18,
     'resnet18_pretrained':resnet18_pretrained
 }

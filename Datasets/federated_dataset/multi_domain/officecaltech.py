@@ -1,9 +1,9 @@
 from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
 from torchvision.datasets import ImageFolder, DatasetFolder
-from Datasets.transforms.transforms import DeNormalize
+from Datasets.utils.transforms import DeNormalize
 import torchvision.transforms as transforms
-from utils.conf import data_path
-from Datasets.transforms.transforms import TwoCropsTransform
+from utils.conf import multi_domain_data_path
+from Datasets.utils.transforms import TwoCropsTransform
 
 class ImageFolder_Custom(DatasetFolder):
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
@@ -56,12 +56,12 @@ class FLOfficeCaltech(MultiDomainDataset):
 
     # N_CLASS = 65
     N_CLASS = 10
-    # Nor_TRANSFORM = transforms.Compose(
-    #     [transforms.Resize((32, 32)),
-    #      transforms.RandomCrop(32, padding=4),
-    #      transforms.RandomHorizontalFlip(),
-    #      transforms.ToTensor(),
-    #      transforms.Normalize((0.485, 0.456, 0.406),
+    # Nor_TRANSFORM = utils.Compose(
+    #     [utils.Resize((32, 32)),
+    #      utils.RandomCrop(32, padding=4),
+    #      utils.RandomHorizontalFlip(),
+    #      utils.ToTensor(),
+    #      utils.Normalize((0.485, 0.456, 0.406),
     #                           (0.229, 0.224, 0.225))])
 
     def __init__(self, args, cfg) -> None:
@@ -105,11 +105,11 @@ class FLOfficeCaltech(MultiDomainDataset):
             train_val_transform = self.train_transform
 
         for _, domain in enumerate(self.domain_list):
-            train_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=True,
+            train_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=True,
                                                transform=train_transform)
-            test_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=False,
+            test_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=False,
                                               transform=self.test_transform)
-            train_eval_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=False,
+            train_eval_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=False,
                                                     transform=train_val_transform)
 
             domain_training_dataset_dict[domain] = train_dataset
