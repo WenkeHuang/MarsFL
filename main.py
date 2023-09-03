@@ -20,11 +20,11 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome
+    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome
                         choices=Priv_NAMES, help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
-    parser.add_argument('--task', type=str, default='label_skew')
+    parser.add_argument('--task', type=str, default='domain_skew')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
@@ -128,10 +128,14 @@ def main(args=None):
         private_dataset.client_domain_list = client_domain_list  # 参与者具体的Domain选择
         private_dataset.get_data_loaders(client_domain_list)
 
-    elif args.task=='label_skew':
+    elif args.task == 'label_skew':
         private_dataset = get_single_domain_dataset(args, particial_cfg)
         private_dataset.get_data_loaders()
-        client_domain_list=None
+        client_domain_list = None
+    elif args.task == 'domain_skew':
+        private_dataset = get_multi_domain_dataset(args, particial_cfg)
+        client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+        private_dataset.get_data_loaders(client_domain_list)
 
     '''
     Loading the Private Backbone

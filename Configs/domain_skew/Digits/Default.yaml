@@ -1,8 +1,8 @@
 DATASET:
-  dataset : "fl_cifar10"
+  dataset : "Digits"
   communication_epoch : 50
   n_classes: 10
-  parti_num: 3 #
+  parti_num: 5 #
   online_ratio: 1.0
   domain_ratio: 0.5 # 扩大了到1.0
   train_eval_domain_ratio: 0.1

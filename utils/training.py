@@ -94,6 +94,9 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         out_domain_accs_dict = {}
     elif args.task == 'label_skew':
         accs_list = []
+    else:
+        in_domain_accs_dict = {}
+        mean_in_domain_acc_list = []
 
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
@@ -110,7 +113,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             '''
             测试分为三种：
             person_domain_accs: 私有模型在本地Domain的精度测试 + 提供mean的值
-            in_domain_accs: 全局模型在InDomain的精度测试 + 提供mean的值
+            domain_accs: 全局模型在InDomain的精度测试 + 提供mean的值
             out_domain_acc: 全局模型在OutDomain的精度测试
             '''
 
@@ -122,13 +125,13 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 if args.csv_log:
                     csv_writer.write_weight(weight_dict, epoch_index, client_domain_list)
 
-            in_domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.in_domain_list)
+            domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.in_domain_list)
             mean_in_domain_acc_list.append(mean_in_domain_acc)
             for index, in_domain in enumerate(private_dataset.in_domain_list):
                 if in_domain in in_domain_accs_dict:
-                    in_domain_accs_dict[in_domain].append(in_domain_accs[index])
+                    in_domain_accs_dict[in_domain].append(domain_accs[index])
                 else:
-                    in_domain_accs_dict[in_domain] = [in_domain_accs[index]]
+                    in_domain_accs_dict[in_domain] = [domain_accs[index]]
             print(log_msg(f"The {epoch_index} Epoch: In Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
             '''
             全局模型在未知的Domain上的精度 & 存储
@@ -150,6 +153,17 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
             accs_list.append(top1acc)
             print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}'))
+        elif args.task == 'domain_skew':
+            domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
+            mean_in_domain_acc_list.append(mean_in_domain_acc)
+            for index, in_domain in enumerate(private_dataset.domain_list):
+                if in_domain in in_domain_accs_dict:
+                    in_domain_accs_dict[in_domain].append(domain_accs[index])
+                else:
+                    in_domain_accs_dict[in_domain] = [domain_accs[index]]
+
+            print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
+
 
     if args.csv_log:
         if args.task == 'OOD':
@@ -159,3 +173,6 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
         elif args.task == 'label_skew':
             csv_writer.write_acc(accs_list, name='label_skew', mode='ALL')
+        elif args.task == 'domain_skew':
+            csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
+            csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
