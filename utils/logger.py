@@ -19,7 +19,7 @@ class CsvWriter:
         print(self.para_path)
 
     def model_folder_path(self):
-        model_path = os.path.join(log_path(), self.args.dataset, self.args.OOD, self.args.averaging, self.args.method)
+        model_path = os.path.join(log_path(), self.args.task, self.args.dataset, self.args.OOD, self.args.averaging, self.args.method)
         create_if_not_exists(model_path)
         return model_path
 

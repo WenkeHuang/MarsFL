@@ -172,7 +172,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             if args.OOD != "NONE":
                 csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
         elif args.task == 'label_skew':
-            csv_writer.write_acc(accs_list, name='label_skew', mode='ALL')
+            csv_writer.write_acc(accs_list, name='label_skew', mode='MEAN')
         elif args.task == 'domain_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
