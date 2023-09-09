@@ -66,7 +66,6 @@ def source_to_target_freq(src_img, amp_trg, L=0.1, ratio=1.0):
     return src_in_trg.transpose(1, 2, 0)
 
 
-# The PACS Domain Digits Definition
 class MyPACS(data.Dataset):
     def __init__(self, root, train='train', transform=None, use_style=[],
                  target_transform=None, data_name=None, use_fft=False, prob_domain_name=[]) -> None:
@@ -239,7 +238,7 @@ class FLPACScomb(MultiDomainDataset):
     @staticmethod
     def get_transform():
         transform = transforms.Compose(
-            [transforms.ToPILImage(), FLPACS.Nor_TRANSFORM])
+            [transforms.ToPILImage(), FLPACScomb.Nor_TRANSFORM])
         return transform
 
     @staticmethod

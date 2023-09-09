@@ -5,10 +5,10 @@ import yaml
 from yacs.config import CfgNode as CN
 
 path = './data/'
-dataset = 'PACS'  # 'Digits, PACS
+dataset = 'PACS'  # 'fl_cifar10, PACS
 ood = 'photo'
 
-# Digits: MNIST, USPS, SVHN, SYN
+# fl_cifar10: MNIST, USPS, SVHN, SYN
 # PACS: 'photo', 'art_painting', 'cartoon', 'sketch'
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 
@@ -22,7 +22,7 @@ method_list = [ 'FedAVG','FedProx','MOON','MOONCOSAddGlobal','FedAVGCOSAddGlobal
 ]
 
 domain_info = {
-               'Digits': {
+               'fl_cifar10': {
                    'domain_list':['MNIST', 'USPS', 'SVHN', 'SYN'],
                    'commun_epoch':50
                },

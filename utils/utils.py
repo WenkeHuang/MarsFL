@@ -1,3 +1,4 @@
+import functools
 from collections import Counter
 import numpy as np
 import torch
@@ -12,9 +13,11 @@ def create_if_not_exists(path: str) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
 
+
 def set_requires_grad(net, requires_grad):
     for param in net.parameters():
         param.requires_grad = requires_grad
+
 
 def ini_client_domain(rand_domain_select, domains_list, parti_num):
     domains_len = len(domains_list)
@@ -110,15 +113,25 @@ def get_para(net, part_str):
 
     return used_net_para
 
+def row_into_parameters(row, parameters):
+    offset = 0
+    for param in parameters:
+        new_size = functools.reduce(lambda x, y: x * y, param.shape)
+        current_data = row[offset:offset + new_size]
+
+        param.data[:] = torch.from_numpy(current_data.reshape(param.shape))
+        offset += new_size
+
 def HE(probs):
     mean = probs.mean(dim=0)
     ent = - (mean * (mean + 1e-5).log()).sum()
     return ent
 
-def EH(probs,weight=None):
+
+def EH(probs, weight=None):
     ent = - (probs * (probs + 1e-5).log()).sum(dim=1)
-    if weight==None:
+    if weight == None:
         mean = torch.mean(ent)
     else:
-        mean = torch.mean(ent*weight)
+        mean = torch.mean(ent * weight)
     return mean

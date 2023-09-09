@@ -97,9 +97,11 @@ class MultiDomainDataset:
         # train
         for client_domain_name in client_domain_name_list:
             if client_domain_name in 'SYN':
-                train_dataset = domain_training_dataset_dict[client_domain_name].imagefolder_obj
+                # train_dataset = domain_training_dataset_dict[client_domain_name].imagefolder_obj
+                train_dataset = domain_training_dataset_dict[client_domain_name]
             elif client_domain_name in ['MNIST', 'USPS', 'SVHN']:
-                train_dataset = domain_training_dataset_dict[client_domain_name].dataset
+                # train_dataset = domain_training_dataset_dict[client_domain_name].dataset
+                train_dataset = domain_training_dataset_dict[client_domain_name]
             elif client_domain_name in ['photo', 'art_painting', 'cartoon', 'sketch']:
                 train_dataset = domain_training_dataset_dict[client_domain_name]
             elif client_domain_name in ['caltech', 'amazon', 'webcam', 'dslr']:

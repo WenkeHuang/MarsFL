@@ -9,10 +9,7 @@ DATASET:
   train_eval_domain_ratio: 1.0
   backbone: "resnet18"
   pretrained: False
-  use_two_crop: False
-  rank: 4
-  lora_alpha: 1
-  lora_dropout: 0
+  aug: "two_weak"
   ood_ratio: 1
 
 

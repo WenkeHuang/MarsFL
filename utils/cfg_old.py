@@ -14,7 +14,7 @@ def show_cfg(cfg, optimizer):
 CFG = CN()
 
 CFG.DATASET = CN()
-CFG.DATASET.dataset = "Digits"  #
+CFG.DATASET.dataset = "fl_cifar10"  #
 CFG.DATASET.communication_epoch = 2
 CFG.DATASET.n_classes = 10
 CFG.DATASET.parti_num = 5

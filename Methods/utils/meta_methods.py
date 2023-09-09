@@ -46,24 +46,26 @@ class FederatedMethod(nn.Module):
             self.fed_aggregation = None
 
         self.epoch_index = 0
-
+        self.random_net = copy.deepcopy(self.nets_list[0]).to(self.device)
         # 模型路径
-        self.base_net_folder = os.path.join(net_path(), self.args.dataset, self.args.OOD,
-                                            self.args.averaging, self.args.method)
-        create_if_not_exists(self.base_net_folder)
-        para_group_dirs = os.listdir(self.base_net_folder)  # 获取所有存储的参数组
-        n_para = len(para_group_dirs)  # 获取长度
-        if self.args.csv_name == None:
-            path = os.path.join(self.base_net_folder, 'para' + str(n_para + 1))
-            k = 1
-            while os.path.exists(path):
-                path = os.path.join(self.base_net_folder, 'para' + str(n_para + k))
-                k = k + 1
-        else:
-            path = os.path.join(self.base_net_folder, self.args.csv_name)
+        # self.base_net_folder = os.path.join(net_path(), self.args.dataset, self.args.OOD,
+        #                                     self.args.averaging, self.args.method)
+        #
+        # create_if_not_exists(self.base_net_folder)
+        # para_group_dirs = os.listdir(self.base_net_folder)
+        # n_para = len(para_group_dirs)
+        # if self.args.csv_name == None:
+        #     path = os.path.join(self.base_net_folder, 'para' + str(n_para + 1))
+        #     k = 1
+        #     while os.path.exists(path):
+        #         path = os.path.join(self.base_net_folder, 'para' + str(n_para + k))
+        #         k = k + 1
+        # else:
+        #     path = os.path.join(self.base_net_folder, self.args.csv_name)
 
-        self.net_folder = path
-        create_if_not_exists(self.net_folder)
+        # self.net_folder = path
+        # create_if_not_exists(self.net_folder)
+
         self.net_to_device()
 
     def net_to_device(self):
@@ -87,10 +89,10 @@ class FederatedMethod(nn.Module):
     def col_update(self, publoader):
         pass
 
-    def save_checkpoint(self):
-        global_net_path = os.path.join(self.net_folder, f'global_net_{self.cfg.DATASET.backbone}_{self.epoch_index}.pth')
-        torch.save(self.global_net.state_dict(), global_net_path)
-        print('save global_net over')
+    # def save_checkpoint(self):
+    #     global_net_path = os.path.join(self.net_folder, f'global_net_{self.cfg.DATASET.backbone}_{self.epoch_index}.pth')
+    #     torch.save(self.global_net.state_dict(), global_net_path)
+    #     print('save global_net over')
 
     def update(self, priloader_list):
         pass

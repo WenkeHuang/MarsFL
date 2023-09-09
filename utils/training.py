@@ -1,9 +1,12 @@
+import copy
+
+from Attack.utils import attack_net_para
 from Methods.utils.meta_methods import FederatedMethod
 from utils.logger import CsvWriter
-from argparse import Namespace
+
 import torch
 import numpy as np
-from utils.utils import log_msg
+from utils.utils import log_msg, row_into_parameters
 
 
 def cal_top_one_five(net, test_dl, device):
@@ -101,12 +104,11 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
         fed_method.epoch_index = epoch_index
-        # if hasattr(fed_method, 'update'):
-        #     fed_method.update(private_dataset.train_loaders)
 
         fed_method.local_update(private_dataset.train_loaders)
-        if args.task == 'att':
-            pass
+        if args.task == 'attack':
+            attack_net_para(args, cfg, fed_method)
+
         fed_method.sever_update(private_dataset.train_loaders)
 
         if args.task == 'OOD':
@@ -136,13 +138,13 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             '''
             全局模型在未知的Domain上的精度 & 存储
             '''
-            if args.OOD != "NONE":
-                out_domain_acc = global_out_evaluation(fed_method, private_dataset.test_loader, args.OOD)
-                if args.OOD in out_domain_accs_dict:
-                    out_domain_accs_dict[args.OOD].append(out_domain_acc)
+            if cfg[args.task].out_domain != "NONE":
+                out_domain_acc = global_out_evaluation(fed_method, private_dataset.test_loader, cfg[args.task].out_domain)
+                if cfg[args.task].out_domain in out_domain_accs_dict:
+                    out_domain_accs_dict[cfg[args.task].out_domain].append(out_domain_acc)
                 else:
-                    out_domain_accs_dict[args.OOD] = [out_domain_acc]
-                print(log_msg(f"The {epoch_index} Epoch: Out Domain {args.OOD} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
+                    out_domain_accs_dict[cfg[args.task].out_domain] = [out_domain_acc]
+                print(log_msg(f"The {epoch_index} Epoch: Out Domain {cfg[args.task].out_domain} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
 
             if args.save_checkpoint:
                 # 每十个交流周期进行一次存储
@@ -164,15 +166,40 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
             print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
 
+        elif args.task == 'attack':
+            if cfg.attack.dataset_type == 'single_domain':
+                top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
+                accs_list.append(top1acc)
+                print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}'))
+            elif cfg.attack.dataset_type == 'multi_domain':
+                domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
+                mean_in_domain_acc_list.append(mean_in_domain_acc)
+                for index, in_domain in enumerate(private_dataset.domain_list):
+                    if in_domain in in_domain_accs_dict:
+                        in_domain_accs_dict[in_domain].append(domain_accs[index])
+                    else:
+                        in_domain_accs_dict[in_domain] = [domain_accs[index]]
+
+                print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
 
     if args.csv_log:
         if args.task == 'OOD':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
-            if args.OOD != "NONE":
+            if cfg[args.task].out_domain != "NONE":
                 csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
+
         elif args.task == 'label_skew':
             csv_writer.write_acc(accs_list, name='label_skew', mode='MEAN')
+
         elif args.task == 'domain_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
+
+        elif args.task == 'attack':
+            if cfg.attack.dataset_type == 'multi_domain':
+                csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
+                csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
+
+            elif cfg.attack.dataset_type == 'single_domain':
+                csv_writer.write_acc(accs_list, name='label_skew', mode='MEAN')

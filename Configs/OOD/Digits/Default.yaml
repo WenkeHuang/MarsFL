@@ -2,13 +2,13 @@ DATASET:
   dataset : "Digits"
   communication_epoch : 50
   n_classes: 10
-  parti_num: 6 #
+  parti_num: 4 #
   online_ratio: 1.0
   domain_ratio: 0.5 # 扩大了到1.0
   train_eval_domain_ratio: 0.1
   backbone: "simple_cnn" # simple_cnn resnet18_pretrained resnet18
   pretrained: True # True False
-  use_two_crop: "WEAK"
+  aug: "two_weak"
 
 OPTIMIZER:
   type: 'SGD'
