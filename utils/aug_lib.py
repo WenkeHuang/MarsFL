@@ -23,8 +23,6 @@ class MinMaxVals:
     cutout: MinMax = MinMax(.0, .2)
 
 
-
-
 def float_parameter(level, maxval):
     """Helper function to scale `val` between 0 and maxval .
 
@@ -298,7 +296,6 @@ gaussian = TransformT(
     'Gaussian', lambda pil_img, level: pil_img.filter(ImageFilter.GaussianBlur))
 
 
-
 def _mirrored_enhancer_impl(enhancer, minimum=None, maximum=None):
     """Sets level to be between 0.1 and 1.8 for ImageEnhance utils of PIL."""
 
@@ -343,9 +340,6 @@ def CutoutDefault(img, v):  # [0, 60] => percentage: [0, 0.2]
 
 cutout = TransformT('Cutout',
                     lambda img, l: CutoutDefault(img, int_parameter(l, img.size[0] * min_max_vals.cutout.max)))
-
-
-
 
 blend_images = None
 
@@ -622,6 +616,7 @@ def set_augmentation_space(augmentation_space, num_strengths, custom_augmentatio
             translate_y  # extra coin-flip
         ]
 
+
 set_augmentation_space('fixed_standard', 31)
 
 
@@ -632,7 +627,10 @@ def apply_augmentation(aug_idx, m, img):
 def num_augmentations():
     return len(ALL_TRANSFORMS)
 
+
 import torch
+
+
 class TrivialAugmentWide(torch.nn.Module):
     r"""Dataset-independent data-augmentation with TrivialAugment Wide, as described in
     `"TrivialAugment: Tuning-free Yet State-of-the-Art Data Augmentation" <https://arxiv.org/abs/2103.10158>`.
@@ -707,6 +705,8 @@ class TrivialAugmentWide(torch.nn.Module):
         s += ', fill={fill}'
         s += ')'
         return s.format(**self.__dict__)
+
+
 class TrivialAugment:
     def __call__(self, img):
         op = random.choices(ALL_TRANSFORMS, k=1)[0]

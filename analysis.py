@@ -15,27 +15,26 @@ ood = 'photo'
 # aggregation_list = ['Equal', 'Weight']
 aggregation_list = ['Weight']
 
-method_list = [ 'FedAVG','FedProx','MOON','MOONCOSAddGlobal','FedAVGCOSAddGlobal'
-                # 'FedAVG','FedProx','MOON','FedProxGA','FedProxCOSAddGlobal',
-                # 'FedProxCOSNHNew','FedProxCOSAddNHNew','FedProxCOSAddNHMad','FedProxCOSAddNHMad_Pear'
-# ,'FedProxCOSAddSoft' FedProxCOSAddNHMad
-]
+method_list = ['FedAVG', 'FedProx', 'MOON', 'MOONCOSAddGlobal', 'FedAVGCOSAddGlobal'
+               # 'FedAVG','FedProx','MOON','FedProxGA','FedProxCOSAddGlobal',
+               # 'FedProxCOSNHNew','FedProxCOSAddNHNew','FedProxCOSAddNHMad','FedProxCOSAddNHMad_Pear'
+               # ,'FedProxCOSAddSoft' FedProxCOSAddNHMad
+               ]
 
 domain_info = {
-               'fl_cifar10': {
-                   'domain_list':['MNIST', 'USPS', 'SVHN', 'SYN'],
-                   'commun_epoch':50
-               },
-               'PACS': {
-                   'domain_list':['photo', 'art_painting', 'cartoon', 'sketch'],
-                   'commun_epoch': 50
-                }
-               }
+    'fl_cifar10': {
+        'domain_list': ['MNIST', 'USPS', 'SVHN', 'SYN'],
+        'commun_epoch': 50
+    },
+    'PACS': {
+        'domain_list': ['photo', 'art_painting', 'cartoon', 'sketch'],
+        'commun_epoch': 50
+    }
+}
 
 metrics_list = ['in', 'out']
 
 communication_epoch = domain_info[dataset]['commun_epoch']
-
 
 select_domain_list = domain_info[dataset]['domain_list']
 select_domain_list.remove(ood)
@@ -78,6 +77,7 @@ aim_cfg_dict = {
     #     'beta': 0.0,
     # }
 }
+
 
 def mean_acc_list(structure_path, metric):
     acc_dict = {}
@@ -133,7 +133,7 @@ def all_acc_list(structure_path, metric, scale_num):
                                 last_mean_acc_value = domain_mean_acc_value[-5:]
                                 # last_mean_acc_value = np.max(domain_mean_acc_value)
                                 last_mean_acc_value = np.mean(last_mean_acc_value)
-                                mean_acc_value.append(last_mean_acc_value) # 添加accuracy
+                                mean_acc_value.append(last_mean_acc_value)  # 添加accuracy
                             mean_acc_value = [round(item, 3) for item in mean_acc_value]
                             mean_acc_value.append(np.mean(mean_acc_value))
 
