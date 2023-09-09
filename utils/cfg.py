@@ -1,14 +1,13 @@
 from yacs.config import CfgNode as CN
-from utils.utils import log_msg
 
 
-def show_cfg(cfg, optimizer, task):
+def simplify_cfg(cfg, optimizer, task):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
     dump_cfg.OPTIMIZER = cfg.OPTIMIZER
     dump_cfg[optimizer] = cfg[optimizer]
     dump_cfg[task] = cfg[task]
-    print(log_msg("CONFIG:\n{}".format(dump_cfg.dump()), "INFO"))
+
     return dump_cfg
 
 
@@ -29,14 +28,13 @@ CFG.DATASET.aug = "weak"
 CFG.DATASET.beta = 0.5
 
 '''task'''
-
 # attack
 CFG.attack = CN()
-CFG.attack.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
+CFG.attack.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
 CFG.attack.dataset_type = 'multi_domain'
 CFG.attack.bad_client_rate = 0.4
 CFG.attack.noise_data_rate = 0.5
-# attack for min_max min_sum
+# attack para for min_max and min_sum
 CFG.attack.dev_type = 'std'
 CFG.attack.lamda = 10.0
 CFG.attack.threshold_diff = 1e-5

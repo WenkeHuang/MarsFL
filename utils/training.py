@@ -97,9 +97,15 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         out_domain_accs_dict = {}
     elif args.task == 'label_skew':
         accs_list = []
-    else:
+    elif args.task =='domain_skew':
         in_domain_accs_dict = {}
         mean_in_domain_acc_list = []
+    elif args.task == 'attack':
+        if cfg.attack.dataset_type == 'single_domain':
+            accs_list = []
+        elif cfg.attack.dataset_type == 'multi_domain':
+            in_domain_accs_dict = {}
+            mean_in_domain_acc_list = []
 
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):

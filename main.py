@@ -1,15 +1,14 @@
 import numpy as np
 
 from Aggregations import Aggregation_NAMES
-from Attack.utils import attack_type_dict, attack_dataset
+from Attack.utils import attack_dataset
 from Datasets.federated_dataset.single_domain import single_domain_dataset_name, get_single_domain_dataset
-from Datasets.utils.utils import noisify
 from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
 from Datasets.federated_dataset.multi_domain import multi_domain_dataset_name, get_multi_domain_dataset
 from Backbones import get_private_backbones
-from utils.cfg import CFG as cfg, show_cfg
-from utils.utils import ini_client_domain
+from utils.cfg import CFG as cfg, simplify_cfg
+from utils.utils import ini_client_domain, log_msg
 from argparse import ArgumentParser
 from utils.training import train
 import setproctitle
@@ -24,7 +23,7 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome fl_cifar10
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10
                         help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
@@ -74,7 +73,7 @@ def main(args=None):
 
     cfg.merge_from_list(args.opts)
 
-    particial_cfg = show_cfg(cfg, args.method, args.task)
+    particial_cfg = simplify_cfg(cfg, args.method, args.task)
 
     if args.seed is not None:
         set_random_seed(args.seed)
@@ -171,6 +170,7 @@ def main(args=None):
     if args.task == 'attack':
         fed_method.client_type = client_type
 
+    print(log_msg("CONFIG:\n{}".format(particial_cfg.dump()), "INFO"))
     if args.csv_name == None:
         setproctitle.setproctitle('{}_{}'.format(args.method, args.task))
     else:
