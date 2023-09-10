@@ -11,7 +11,7 @@ class FedProxLocal(LocalMethod):
 
     def __init__(self, args, cfg):
         super(FedProxLocal, self).__init__(args, cfg)
-        self.mu = cfg[self.args.method].mu
+        self.mu = cfg.Local[self.NAME].mu
 
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']

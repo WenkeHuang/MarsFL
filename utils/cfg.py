@@ -1,12 +1,28 @@
 from yacs.config import CfgNode as CN
 
 
-def simplify_cfg(cfg, optimizer, task):
+# 简化cfg 只留有关的
+def simplify_cfg(args, cfg):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
     dump_cfg.OPTIMIZER = cfg.OPTIMIZER
-    dump_cfg[optimizer] = cfg[optimizer]
-    dump_cfg[task] = cfg[task]
+    dump_cfg[args.method] = cfg[args.method]
+    dump_cfg[args.task] = cfg[args.task]
+
+    # simplify Sever cfg
+    if cfg[args.method].global_method in list(cfg['Sever'].keys()):
+        dump_cfg['Sever'] = CN()
+        dump_cfg['Sever'][cfg[args.method].global_method] = CN()
+        dump_cfg['Sever'][cfg[args.method].global_method] = cfg['Sever'][cfg[args.method].global_method]
+
+    # simplify Local cfg
+    if cfg[args.method].local_method in list(cfg['Local'].keys()):
+        dump_cfg['Local'] = CN()
+        dump_cfg['Local'][cfg[args.method].local_method] = CN()
+        dump_cfg['Local'][cfg[args.method].local_method] = cfg['Local'][cfg[args.method].local_method]
+
+    if args.attack_type is not None:
+        dump_cfg['attack'] = cfg['attack']
 
     return dump_cfg
 
@@ -30,14 +46,20 @@ CFG.DATASET.beta = 0.5
 '''task'''
 # attack
 CFG.attack = CN()
-CFG.attack.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
+CFG.attack.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
 CFG.attack.dataset_type = 'multi_domain'
-CFG.attack.bad_client_rate = 0.4
+CFG.attack.bad_client_rate = 0.2
 CFG.attack.noise_data_rate = 0.5
 # attack para for min_max and min_sum
 CFG.attack.dev_type = 'std'
 CFG.attack.lamda = 10.0
 CFG.attack.threshold_diff = 1e-5
+
+# label_skew
+CFG.label_skew = CN()
+
+# domain_skew
+CFG.domain_skew = CN()
 
 # OOD
 CFG.OOD = CN()
@@ -59,8 +81,30 @@ CFG.OPTIMIZER.local_test_batch = 64
 CFG.OPTIMIZER.val_batch = 64
 CFG.OPTIMIZER.local_train_lr = 1e-3
 
-'''Federated Method'''
+'''Sever'''
+CFG.Sever = CN()
 
+CFG.Sever.FLTrustSever = CN()
+CFG.Sever.FLTrustSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FLTrustSever.pub_len = 5000
+CFG.Sever.FLTrustSever.pub_aug = 'weak'
+CFG.Sever.FLTrustSever.public_batch_size = 64
+CFG.Sever.FLTrustSever.public_epoch = 20
+
+CFG.Sever.SageFlowSever = CN()
+CFG.Sever.SageFlowSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.SageFlowSever.pub_len = 5000
+CFG.Sever.SageFlowSever.pub_aug = 'weak'
+CFG.Sever.SageFlowSever.public_batch_size = 64
+CFG.Sever.SageFlowSever.public_epoch = 20
+
+'''Local'''
+CFG.Local = CN()
+
+CFG.Local.FedProxLocal = CN()
+CFG.Local.FedProxLocal.mu = 0.01
+
+'''Federated Method'''
 # FedAVG
 CFG.FedAVG = CN()
 CFG.FedAVG.local_method = 'BaseLocal'
@@ -70,4 +114,8 @@ CFG.FedAVG.global_method = 'BaseGlobal'
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
 CFG.FedProx.global_method = 'BaseGlobal'
-CFG.FedProx.mu = 0.01
+
+# FedProxDefense
+CFG.FedProxDefense = CN()
+CFG.FedProxDefense.local_method = 'FedProxLocal'
+CFG.FedProxDefense.global_method = 'BulyanSever'

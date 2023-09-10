@@ -23,17 +23,19 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10
+    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_mnist
                         help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
-    parser.add_argument('--task', type=str, default='attack')  # OOD label_skew domain_skew attack
+    parser.add_argument('--task', type=str, default='domain_skew')  # OOD label_skew domain_skew
+    parser.add_argument('--attack_type', type=str, default='byzantine')  # byzantine backdoor None
+
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='FedProx',
+    parser.add_argument('--method', type=str, default='FedProxDefense',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
     '''
@@ -73,7 +75,7 @@ def main(args=None):
 
     cfg.merge_from_list(args.opts)
 
-    particial_cfg = simplify_cfg(cfg, args.method, args.task)
+    particial_cfg = simplify_cfg(args,cfg)
 
     if args.seed is not None:
         set_random_seed(args.seed)
@@ -131,21 +133,22 @@ def main(args=None):
     elif args.task == 'domain_skew':
         client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
         private_dataset.get_data_loaders(client_domain_list)
-    elif args.task == 'attack':
+
+    if args.attack_type == 'byzantine':
 
         # 数据集的信息
         if args.dataset in multi_domain_dataset_name:
-            client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
-            private_dataset.get_data_loaders(client_domain_list)
+            # client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+            # private_dataset.get_data_loaders(client_domain_list)
             particial_cfg.attack.dataset_type = 'multi_domain'
 
         elif args.dataset in single_domain_dataset_name:
-            private_dataset.get_data_loaders()
-            client_domain_list = None
+            # private_dataset.get_data_loaders()
+            # client_domain_list = None
             particial_cfg.attack.dataset_type = 'single_domain'
 
         # 攻击和未被攻击的客户端数量
-        bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg[args.task].bad_client_rate)
+        bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
         good_scale = particial_cfg.DATASET.parti_num - bad_scale
         client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
         # 攻击类型是数据集攻击 那么修改数据集的内容
@@ -167,7 +170,7 @@ def main(args=None):
     if args.task == 'OOD':
         # 加权数据集分配给method
         fed_method.train_eval_loaders = private_dataset.train_eval_loaders
-    if args.task == 'attack':
+    if args.attack_type == 'byzantine':
         fed_method.client_type = client_type
 
     print(log_msg("CONFIG:\n{}".format(particial_cfg.dump()), "INFO"))
