@@ -108,14 +108,19 @@ CFG.Local.FedProxLocal.mu = 0.01
 # FedAVG
 CFG.FedAVG = CN()
 CFG.FedAVG.local_method = 'BaseLocal'
-CFG.FedAVG.global_method = 'BaseGlobal'
+CFG.FedAVG.global_method = 'BaseSever'
 
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'BaseGlobal'
+CFG.FedProx.global_method = 'BaseSever'
 
 # FedProxDefense
 CFG.FedProxDefense = CN()
 CFG.FedProxDefense.local_method = 'FedProxLocal'
 CFG.FedProxDefense.global_method = 'BulyanSever'
+
+# FedProc
+CFG.FedProc = CN()
+CFG.FedProc.local_method = 'FedProcLocal'
+CFG.FedProc.global_method = 'FedProcSever'

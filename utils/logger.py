@@ -3,7 +3,7 @@ import os
 import csv
 from utils.conf import log_path
 from utils.utils import create_if_not_exists
-import pickle
+
 import yaml
 from yacs.config import CfgNode as CN
 
@@ -19,11 +19,14 @@ class CsvWriter:
         print(self.para_path)
 
     def model_folder_path(self):
-        model_path = os.path.join(log_path(), self.args.task, self.args.dataset, self.args.OOD, self.args.averaging, self.args.method)
+        if self.args.task == 'OOD':
+            model_path = os.path.join(log_path(), self.args.task, self.args.dataset, self.cfg.OOD.out_domain, self.args.averaging, self.args.method)
+        else:
+            model_path = os.path.join(log_path(), self.args.task, self.args.dataset, self.args.averaging, self.args.method)
         create_if_not_exists(model_path)
         return model_path
 
-    def write_weight(self, weight_dict, epoch_index,client_domain_list):
+    def write_weight(self, weight_dict, epoch_index, client_domain_list):
         weight_path = os.path.join(self.para_path, 'weight.csv')
         if epoch_index != 0:
             write_type = 'a'
@@ -33,8 +36,7 @@ class CsvWriter:
         with open(weight_path, write_type) as result_file:
             result_file.write(str(epoch_index) + ':' + '\n')
             for i in range(len(client_domain_list)):
-
-                result_file.write(client_domain_list[i] + ',' )
+                result_file.write(client_domain_list[i] + ',')
             result_file.write('\n')
             for k in weight_dict:
                 result_file.write(k + ':' + str(list(weight_dict[k])) + '\n')

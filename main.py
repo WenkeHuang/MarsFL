@@ -23,19 +23,19 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_mnist
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_mnist
                         help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
-    parser.add_argument('--task', type=str, default='domain_skew')  # OOD label_skew domain_skew
-    parser.add_argument('--attack_type', type=str, default='byzantine')  # byzantine backdoor None
+    parser.add_argument('--task', type=str, default='label_skew')  # OOD label_skew domain_skew
+    parser.add_argument('--attack_type', type=str, default='None')  # byzantine backdoor None
 
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='FedProxDefense',
+    parser.add_argument('--method', type=str, default='FedProc',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
     '''

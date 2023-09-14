@@ -1,10 +1,8 @@
 from Sever.utils.sever_methods import SeverMethod
 
-from utils.utils import cal_client_weight
-
 
 class BaseSever(SeverMethod):
-    NAME = 'BaseGlobal'
+    NAME = 'BaseSever'
 
     def __init__(self, args, cfg):
         super(BaseSever, self).__init__(args, cfg)
@@ -19,9 +17,6 @@ class BaseSever(SeverMethod):
 
         # 获取参与者的聚合权重
         freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
-
-        # client_weight = cal_client_weight(online_clients_list=online_clients_list, client_domain_list=client_domain_list, freq=freq)
-        # print(client_weight)
 
         # FedAVG 是聚合Bone + cls
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
