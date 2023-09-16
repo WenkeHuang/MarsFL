@@ -1,6 +1,4 @@
-import copy
-
-from Attack.utils import attack_net_para
+from Attack.byzantine.utils import attack_net_para
 from Methods.utils.meta_methods import FederatedMethod
 from utils.logger import CsvWriter
 
@@ -97,15 +95,11 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         out_domain_accs_dict = {}
     elif args.task == 'label_skew':
         accs_list = []
-    elif args.task =='domain_skew':
+    elif args.task == 'domain_skew':
         in_domain_accs_dict = {}
         mean_in_domain_acc_list = []
-    elif args.task == 'attack':
-        if cfg.attack.dataset_type == 'single_domain':
-            accs_list = []
-        elif cfg.attack.dataset_type == 'multi_domain':
-            in_domain_accs_dict = {}
-            mean_in_domain_acc_list = []
+    elif args.task == 'attack' and args.attack_type == 'backdoor':
+        attack_success_rate = []
 
     communication_epoch = cfg.DATASET.communication_epoch
     for epoch_index in range(communication_epoch):
@@ -172,21 +166,11 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
             print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
 
-        # if args.attack == 'byzantine':
-        #     if cfg.attack.dataset_type == 'single_domain':
-        #         top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
-        #         accs_list.append(top1acc)
-        #         print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}'))
-        #     elif cfg.attack.dataset_type == 'multi_domain':
-        #         domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
-        #         mean_in_domain_acc_list.append(mean_in_domain_acc)
-        #         for index, in_domain in enumerate(private_dataset.domain_list):
-        #             if in_domain in in_domain_accs_dict:
-        #                 in_domain_accs_dict[in_domain].append(domain_accs[index])
-        #             else:
-        #                 in_domain_accs_dict[in_domain] = [domain_accs[index]]
-        #
-        #         print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
+        if args.attack == 'backdoor':
+            if cfg.attack.dataset_type == 'single_domain':
+                top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.backdoor_test_loader, fed_method.device)
+                attack_success_rate.append(top1acc)
+                print(log_msg(f'The {epoch_index} Epoch: attack success rate:{top1acc}'))
 
     if args.csv_log:
         if args.task == 'OOD':
@@ -202,10 +186,5 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
 
-        # if args.attack == 'byzantine':
-        #     if cfg.attack.dataset_type == 'multi_domain':
-        #         csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
-        #         csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
-        #
-        #     elif cfg.attack.dataset_type == 'single_domain':
-        #         csv_writer.write_acc(accs_list, name='label_skew', mode='MEAN')
+        if args.attack == 'backdoor':
+            csv_writer.write_acc(attack_success_rate, name='attack_success_rate', mode='MEAN')

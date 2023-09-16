@@ -22,7 +22,11 @@ def simplify_cfg(args, cfg):
         dump_cfg['Local'][cfg[args.method].local_method] = cfg['Local'][cfg[args.method].local_method]
 
     if args.attack_type is not None:
-        dump_cfg['attack'] = cfg['attack']
+        dump_cfg['attack'] = CN()
+        dump_cfg['attack'].bad_client_rate = cfg['attack'].bad_client_rate
+        dump_cfg['attack'].noise_data_rate = cfg['attack'].bad_client_rate
+
+        dump_cfg['attack'][args.attack_type] = cfg['attack'][args.attack_type]
 
     return dump_cfg
 
@@ -43,18 +47,31 @@ CFG.DATASET.pretrained = False
 CFG.DATASET.aug = "weak"
 CFG.DATASET.beta = 0.5
 
-'''task'''
-# attack
+'''attack'''
 CFG.attack = CN()
-CFG.attack.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
-CFG.attack.dataset_type = 'multi_domain'
-CFG.attack.bad_client_rate = 0.2
+CFG.attack.bad_client_rate = 0.4
 CFG.attack.noise_data_rate = 0.5
-# attack para for min_max and min_sum
-CFG.attack.dev_type = 'std'
-CFG.attack.lamda = 10.0
-CFG.attack.threshold_diff = 1e-5
 
+CFG.attack.byzantine = CN()
+CFG.attack.byzantine.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
+CFG.attack.byzantine.dataset_type = 'multi_domain'
+
+# attack para for min_max and min_sum
+CFG.attack.byzantine.dev_type = 'std'
+CFG.attack.byzantine.lamda = 10.0
+CFG.attack.byzantine.threshold_diff = 1e-5
+
+CFG.attack.backdoor = CN()
+CFG.attack.backdoor.evils = 'semantic_backdoor'  # base_backdoor semantic_backdoor
+CFG.attack.backdoor.backdoor_label = 2
+CFG.attack.backdoor.trigger_position = [
+    [0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 4], [0, 0, 5], [0, 0, 6],
+    [0, 2, 0], [0, 2, 1], [0, 2, 2], [0, 2, 4], [0, 2, 5], [0, 2, 6], ]
+CFG.attack.backdoor.trigger_value = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+
+CFG.attack.backdoor.semantic_backdoor_label = 3
+
+'''task'''
 # label_skew
 CFG.label_skew = CN()
 

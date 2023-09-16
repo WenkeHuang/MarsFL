@@ -38,7 +38,7 @@ class BasicBlock(nn.Module):
     """
     expansion = 1
 
-    def __init__(self, in_planes: int, planes: int, stride: int = 1) -> None:
+    def __init__(self, in_planes: int, planes: int, stride: int = 1,downsample=None) -> None:
         """
         Instantiates the basic block of the network.
         :param in_planes: the number of input channels
@@ -71,37 +71,6 @@ class BasicBlock(nn.Module):
         return out
 
 
-# class BasicBlock(nn.Module):
-#     expansion = 1
-#
-#     def __init__(self, input_channel, output_channel, stride=1, downsample=None, track_running_stats=True):
-#         super(BasicBlock, self).__init__()
-#         self.conv1 = conv3x3(input_channel, output_channel, stride=stride)
-#         self.bn1 = nn.BatchNorm2d(output_channel, track_running_stats=track_running_stats)
-#         self.relu = nn.ReLU(inplace=False)
-#         self.conv2 = conv3x3(output_channel, output_channel)
-#         self.bn2 = nn.BatchNorm2d(output_channel, track_running_stats=track_running_stats)
-#         self.downsample = downsample
-#         self.stride = stride
-#
-#     def forward(self, input):
-#         residual = input
-#         out = self.conv1(input)
-#         out = self.bn1(out)
-#         out = self.relu(out)
-#
-#         out = self.conv2(out)
-#         out = self.bn2(out)
-#
-#         if self.downsample is not None:
-#             residual = self.downsample(input)
-#
-#         out += residual
-#         out = self.relu(out)
-#
-#         return out
-
-
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -112,8 +81,8 @@ class Bottleneck(nn.Module):
         self.relu = nn.ReLU(inplace=False)
         self.conv2 = conv3x3(channel, channel, stride=stride)
         self.bn2 = nn.BatchNorm2d(channel)
-        self.conv3 = conv1x1(channel, channel * 4)
-        self.bn3 = nn.BatchNorm2d(channel * 4)
+        self.conv3 = conv1x1(channel, channel * self.expansion)
+        self.bn3 = nn.BatchNorm2d(channel * self.expansion)
         self.downsample = downsample
         self.stride = stride
 
@@ -192,8 +161,17 @@ class ResNet(nn.Module):
         """
         strides = [stride] + [1] * (num_blocks - 1)
         layers = []
-        for stride in strides:
-            layers.append(block(self.in_planes, planes, stride))
+        if stride != 1 or self.in_planes != planes * block.expansion:
+            downsample = nn.Sequential(
+                conv1x1(self.in_planes, planes * block.expansion, stride),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
+        else:
+            downsample=None
+        layers.append(block(self.in_planes, planes, strides[0], downsample))
+        self.in_planes = planes * block.expansion
+        for i in range(1,len(strides)):
+            layers.append(block(self.in_planes, planes, strides[i]))
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
@@ -281,4 +259,14 @@ def resnet34(cfg) -> ResNet:
     :return: ResNet network
     """
     model = ResNet(BasicBlock, [3, 4, 6, 3], cfg.DATASET.n_classes)
+    return model
+
+def resnet50(cfg) -> ResNet:
+    """
+    Instantiates a ResNet18 network.
+    :param nclasses: number of output classes
+    :param nf: number of filters
+    :return: ResNet network
+    """
+    model = ResNet(Bottleneck, [3, 4, 6, 3], cfg.DATASET.n_classes)
     return model

@@ -85,7 +85,7 @@ class SingleDomainDataset:
                 np.random.shuffle(idx_k)
 
                 beta = self.cfg.DATASET.beta
-                if beta == 0:  # beta为0，不能用狄利克雷，均分？
+                if beta == 0:
                     idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.array_split(idx_k, n_participants))]
                 else:
                     proportions = np.random.dirichlet(np.repeat(a=beta, repeats=n_participants))
@@ -102,7 +102,7 @@ class SingleDomainDataset:
         for j in range(n_participants):
             train_sampler = SubsetRandomSampler(net_dataidx_map[j])
             train_loader = DataLoader(train_dataset,
-                                      batch_size=self.cfg.OPTIMIZER.local_test_batch, sampler=train_sampler, num_workers=4, drop_last=True)
+                                      batch_size=self.cfg.OPTIMIZER.local_train_batch, sampler=train_sampler, num_workers=4, drop_last=True)
             self.train_loaders.append(train_loader)
 
         test_loader = DataLoader(test_dataset,

@@ -1,11 +1,11 @@
 DATASET:
-  dataset : "fl_cifar10"
+  dataset : "fl_cifar100"
   communication_epoch : 100
-  n_classes: 10
-  parti_num: 4 #
+  n_classes: 100
+  parti_num: 10 #
   aug: "weak"
   beta: 0.5
-  backbone: "simple_cnn"
+  backbone: "resnet50"
 
 OPTIMIZER:
   type: 'SGD'
@@ -15,4 +15,4 @@ OPTIMIZER:
   local_train_batch: 64
   local_test_batch: 64
   val_batch: 64
-  local_train_lr: 1e-2 # 0.01
+  local_train_lr: 1e-1 # 0.01

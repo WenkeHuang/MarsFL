@@ -1,14 +1,21 @@
 # Generalization Federated Learning
 
-## Close Generalization
+##  Participating Calibration
 
 |  Method   | Venue  | Code | Paper
-|  ----  | ----  |----  |----  |
-| FedAvg | AISTATS‘17 | [Code](https://github.com/katsura-jp/fedavg.pytorch)|sa|
-| FedProx| MLSys'20 | [Code](https://github.com/ki-ljl/FedProx-PyTorch) |sa|
-| FedNTD| NeurIPS'22 | [Code](https://github.com/Lee-Gihun/FedNTD) |sa|
-| FedBE| ICLR'21 | [Code](https://github.com/hongyouc/FedBE) |sa|
-
+|  ----  | ----  | ----  | ----  |
+| FedAvg | AISTATS‘17 | [Code](https://github.com/katsura-jp/fedavg.pytorch)|[Paper](https://arxiv.org/abs/1602.05629)|
+| FedProx| MLSys'20 | [Code](https://github.com/ki-ljl/FedProx-PyTorch) |[Paper](https://arxiv.org/abs/1812.06127)|
+|Scaffold|ICML 20| [Code]() | [Paper](https://arxiv.org/abs/1910.06378)|
+| FedBE| ICLR'21 | [Code](https://github.com/hongyouc/FedBE) |[Paper](https://arxiv.org/abs/2009.01974)|
+| FedRS| SIGKDD'21 | [Code](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://dlnext.acm.org/doi/10.1145/3447548.3467254)|
+| FedOPT| ICLR'21 | [Code](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://arxiv.org/abs/2003.002957)|
+|MOON | CVPR'21 |[Code](https://github.com/QinbinLi/MOON)|[Paper]()|
+|FedProc| arXiv'21 | [Code](https://github.com/973891422/Moon_FedProc)| [Paper](https://github.com/QinbinLi/MOON)|
+| FedDyn| ICLR'21 | [Code1](https://github.com/alpemreacar/FedDyn) [Code2](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://arxiv.org/abs/2003.002957)|
+| FedDC| CVPR'22 | [Code](https://github.com/gaoliang13/FedDC) |[Paper] [Zhihu](https://zhuanlan.zhihu.com/p/505889549)|
+| FedNTD| NeurIPS'22 | [Code](https://github.com/Lee-Gihun/FedNTD) |[Paper](https://arxiv.org/abs/2106.03097)|
+| FPL| CVPR'23 | [Code](https://github.com/WenkeHuang/RethinkFL) |[Paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Rethinking_Federated_Learning_With_Domain_Shift_A_Prototype_View_CVPR_2023_paper.pdf)|
 
 
 ## Unknown Generalization
@@ -16,8 +23,10 @@
 ### Federtaed Domain Adaptation
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
-| FADA | ICLR‘20 | |sa|
-
+| FADA | ICLR‘20 | [Code](https://drive.google.com/file/d/1OekTpqB6qLfjlE2XUjQPm3F110KDMFc0/view)| [Paper](https://arxiv.org/abs/1911.02054)|
+| COPA | ICCV'21 | [Code]| [Paper](https://openaccess.thecvf.com/content/ICCV2021/papers/Wu_Collaborative_Optimization_and_Aggregation_for_Decentralized_Domain_Generalization_and_Adaptation_ICCV_2021_paper.pdf)|
+| KD3A | ICML‘21 | [Code](https://github.com/FengHZ/KD3A)| [Paper](https://arxiv.org/abs/1911.02054)|
+| MCC-DA  | TCSVT'22 | [Code]| [Paper]|
 
 
 # Robustness Federated Learning
@@ -66,26 +75,14 @@ https://github.com/JYWa/FedNova/tree/master/distoptim
 fednova NeurIPS 2020
 https://github.com/JYWa/FedNova/tree/master/distoptim
 
-scaffold icml 2020
-https://zhuanlan.zhihu.com/p/169470634
-https://paperswithcode.com/paper/scaffold-stochastic-controlled-averaging-for
+
 
 
 MOON
 https://github.com/QinbinLi/MOON
 
 
-FedRS kdd 2021
-https://github.com/lxcnju/FedRepo/tree/main/algorithms
-https://zhuanlan.zhihu.com/p/502972718
 
-fedopt iclr 2021
-https://github.com/lxcnju/FedRepo
-https://github.com/lxcnju/FedRepo/tree/main/algorithms
-
-feddyn iclr 2021
-https://github.com/alpemreacar/FedDyn
-https://github.com/lxcnju/FedRepo/tree/main/algorithms
 
 fedlc icml2022
 暂无代码
@@ -94,8 +91,4 @@ feddc cvpr 2022
 https://github.com/gaoliang13/FedDC
 https://zhuanlan.zhihu.com/p/505889549
 
-fedalign cvpr 2022
-https://github.com/mmendiet/FedAlign
 
-https://github.com/DRSAD/iCaRL
-https://github.com/Impression2805/CVPR21_PASS

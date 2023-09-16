@@ -1,7 +1,9 @@
 import numpy as np
-
+import torch
+from torch.utils.data import DataLoader
 from Aggregations import Aggregation_NAMES
-from Attack.utils import attack_dataset
+from Attack.backdoor.utils import BackdoorDataset, backdoor_attack
+from Attack.byzantine.utils import attack_dataset
 from Datasets.federated_dataset.single_domain import single_domain_dataset_name, get_single_domain_dataset
 from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
@@ -23,19 +25,19 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_mnist
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_cifar100 fl_mnist
                         help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
     parser.add_argument('--task', type=str, default='label_skew')  # OOD label_skew domain_skew
-    parser.add_argument('--attack_type', type=str, default='None')  # byzantine backdoor None
+    parser.add_argument('--attack_type', type=str, default='backdoor')  # byzantine backdoor None
 
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='FedProc',
+    parser.add_argument('--method', type=str, default='FedAVG',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
     '''
@@ -75,7 +77,7 @@ def main(args=None):
 
     cfg.merge_from_list(args.opts)
 
-    particial_cfg = simplify_cfg(args,cfg)
+    particial_cfg = simplify_cfg(args, cfg)
 
     if args.seed is not None:
         set_random_seed(args.seed)
@@ -153,6 +155,17 @@ def main(args=None):
         client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
         # 攻击类型是数据集攻击 那么修改数据集的内容
         attack_dataset(args, cfg, private_dataset, client_type)
+    elif args.attack_type == 'backdoor':
+        # 攻击和未被攻击的客户端数量
+        bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
+        good_scale = particial_cfg.DATASET.parti_num - bad_scale
+        client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
+
+        # 攻击训练集
+        backdoor_attack(args, particial_cfg, client_type, private_dataset, is_train=True)
+
+        # 攻击测试集用于测试专属指标
+        backdoor_attack(args, particial_cfg, client_type, private_dataset, is_train=False)
 
     '''
     Loading the Private Backbone
@@ -173,8 +186,8 @@ def main(args=None):
     if args.attack_type == 'byzantine':
         fed_method.client_type = client_type
 
-    print(log_msg("CONFIG:\n{}".format(particial_cfg.dump()), "INFO"))
-    if args.csv_name == None:
+    # print(log_msg("CONFIG:\n{}".format(particial_cfg.dump()), "INFO"))
+    if args.csv_name is None:
         setproctitle.setproctitle('{}_{}'.format(args.method, args.task))
     else:
         setproctitle.setproctitle('{}_{}_{}'.format(args.method, args.task, args.csv_name))

@@ -105,14 +105,14 @@ def noisify(nb_classes=10, train_labels=None, noise_type=None, noise_rate=0):
 # 数据集攻击
 def attack_dataset(args, cfg, private_dataset, client_type):
     # 攻击类型是数据集攻击 那么修改数据集的内容
-    if attack_type_dict[cfg['attack'].evils] == 'dataset':
+    if attack_type_dict[cfg['attack'].byzantine.evils] == 'dataset':
         for i in range(len(client_type)):
             if not client_type[i]:
                 dataset = private_dataset.train_loaders[i].dataset
                 train_labels = np.asarray([[dataset.targets[i]] for i in range(len(dataset.targets))])
                 train_noisy_labels, actual_noise_rate = noisify(
                     train_labels=train_labels,
-                    noise_type=cfg['attack'].evils,
+                    noise_type=cfg['attack'].byzantine.evils,
                     noise_rate=cfg['attack'].noise_data_rate,
                     nb_classes=len(np.unique(train_labels)))
 
@@ -123,13 +123,13 @@ def attack_dataset(args, cfg, private_dataset, client_type):
 # 网络参数攻击
 def attack_net_para(args, cfg, fed_method):
     temp_net = copy.deepcopy(fed_method.global_net)
-    if cfg['attack'].evils == 'RandomNoise':
+    if cfg['attack'].byzantine.evils == 'RandomNoise':
         for i in fed_method.online_clients_list:
             if fed_method.client_type[i] == False:
                 random_net = copy.deepcopy(fed_method.random_net)
                 fed_method.nets_list[i] = random_net
 
-    elif cfg['attack'].evils == 'AddNoise':
+    elif cfg['attack'].byzantine.evils == 'AddNoise':
         for i in fed_method.online_clients_list:
             if fed_method.client_type[i] == False:
                 sele_net = fed_method.nets_list[i]
@@ -138,7 +138,7 @@ def attack_net_para(args, cfg, fed_method):
                 for name, param in sele_net.state_dict().items():
                     param += torch.tensor(copy.deepcopy(noise_weight * (random_net.state_dict()[name] - param)), dtype=param.dtype)
 
-    elif cfg['attack'].evils == 'lie_attack':
+    elif cfg['attack'].byzantine.evils == 'lie_attack':
         # 计算z的值
         n = len(fed_method.online_clients_list)
         m = n - sum(fed_method.client_type)
@@ -167,7 +167,7 @@ def attack_net_para(args, cfg, fed_method):
                 sele_net = fed_method.nets_list[i]
                 row_into_parameters((avg + z * std).cpu().numpy(), sele_net.parameters())
 
-    elif cfg['attack'].evils == 'min_sum':
+    elif cfg['attack'].byzantine.evils == 'min_sum':
 
         # 计算好客户端的模型变化量和对应均值
         all_net_delta = []
@@ -187,11 +187,11 @@ def attack_net_para(args, cfg, fed_method):
             all_net_delta = torch.cat(all_net_delta, dim=0)
             avg_delta = torch.mean(all_net_delta, dim=0)
 
-        if cfg['attack'].dev_type == 'unit_vec':
+        if cfg['attack'].byzantine.dev_type == 'unit_vec':
             deviation = avg_delta / torch.norm(avg_delta)  # unit vector, dir opp to good dir
-        elif cfg['attack'].dev_type == 'sign':
+        elif cfg['attack'].byzantine.dev_type == 'sign':
             deviation = torch.sign(avg_delta)
-        elif cfg['attack'].dev_type == 'std':
+        elif cfg['attack'].byzantine.dev_type == 'std':
             deviation = torch.std(all_net_delta, 0)
 
         lamda_fail = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
@@ -228,7 +228,7 @@ def attack_net_para(args, cfg, fed_method):
                 sele_net = fed_method.nets_list[i]
                 row_into_parameters(mal_update.cpu().numpy(), sele_net.parameters())
 
-    elif cfg['attack'].evils == 'min_max':
+    elif cfg['attack'].byzantine.evils == 'min_max':
         # 计算好客户端的模型变化量和对应均值
         all_net_delta = []
         with torch.no_grad():
@@ -247,11 +247,11 @@ def attack_net_para(args, cfg, fed_method):
             all_net_delta = torch.cat(all_net_delta, dim=0)
             avg_delta = torch.mean(all_net_delta, dim=0)
 
-        if cfg[args.task].dev_type == 'unit_vec':
+        if cfg[args.task].byzantine.dev_type == 'unit_vec':
             deviation = avg_delta / torch.norm(avg_delta)  # unit vector, dir opp to good dir
-        elif cfg[args.task].dev_type == 'sign':
+        elif cfg[args.task].byzantine.dev_type == 'sign':
             deviation = torch.sign(avg_delta)
-        elif cfg[args.task].dev_type == 'std':
+        elif cfg[args.task].byzantine.dev_type == 'std':
             deviation = torch.std(all_net_delta, 0)
 
         lamda_fail = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
