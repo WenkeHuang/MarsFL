@@ -2,9 +2,10 @@ DATASET:
   dataset : "fl_mnist"
   communication_epoch : 100
   n_classes: 10
-  parti_num: 4 #
+  parti_num: 10 #
   aug: "weak"
   beta: 0.5
+  backbone: "simple_cnn"
 
 OPTIMIZER:
   type: 'SGD'

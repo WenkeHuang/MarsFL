@@ -19,7 +19,13 @@ class MultiKrumSever(SeverMethod):
 
         self.momentum = 0.9
         self.learning_rate = self.cfg.OPTIMIZER.local_train_lr
-        self.current_weights = np.concatenate([i.data.numpy().flatten() for i in copy.deepcopy(nets_list[0]).cpu().parameters()])
+
+        self.current_weights = []
+        for name, param in copy.deepcopy(nets_list[0]).cpu().state_dict().items():
+            param = nets_list[0].state_dict()[name].view(-1)
+            self.current_weights.append(param)
+        self.current_weights = torch.cat(self.current_weights, dim=0).cpu().numpy()
+
         self.velocity = np.zeros(self.current_weights.shape, self.current_weights.dtype)
         self.n = 5
 

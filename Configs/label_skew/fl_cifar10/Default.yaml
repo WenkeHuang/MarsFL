@@ -2,7 +2,7 @@ DATASET:
   dataset : "fl_cifar10"
   communication_epoch : 100
   n_classes: 10
-  parti_num: 4 #
+  parti_num: 10 #
   aug: "weak"
   beta: 0.5
   backbone: "simple_cnn"
@@ -11,7 +11,7 @@ OPTIMIZER:
   type: 'SGD'
   momentum: 0.9
   weight_decay: 1e-5
-  local_epoch: 10 # 10
+  local_epoch: 1 # 10
   local_train_batch: 64
   local_test_batch: 64
   val_batch: 64

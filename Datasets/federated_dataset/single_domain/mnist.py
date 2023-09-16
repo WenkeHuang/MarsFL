@@ -62,7 +62,7 @@ class FLMNIST(SingleDomainDataset):
     def __init__(self, args, cfg) -> None:
         super().__init__(args, cfg)
 
-        self.Singel_Channel_Nor_TRANSFORM = transforms.Compose(
+        self.one_channel_train_transform = transforms.Compose(
             [
                 transforms.Resize((32, 32)),
                 transforms.RandomCrop(32, padding=4),
@@ -70,20 +70,23 @@ class FLMNIST(SingleDomainDataset):
                 transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
                 transforms.Normalize((0.1307, 0.1307, 0.1307),
                                      (0.3081, 0.3081, 0.3081))])
+        self.one_channel_test_transform = transforms.Compose(
+            [transforms.Resize((32, 32)),
+             transforms.ToTensor(),
+             transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
+             transforms.Normalize((0.1307, 0.1307, 0.1307),
+                                  (0.3081, 0.3081, 0.3081))])
 
     def get_data_loaders(self):
         pri_aug = self.cfg.DATASET.aug
         if pri_aug == 'weak':
-            train_transform = self.Singel_Channel_Nor_TRANSFORM
+            train_transform = self.one_channel_train_transform
         elif pri_aug == 'strong':
-            train_transform = self.Singel_Channel_Nor_TRANSFORM
+            train_transform = self.one_channel_train_transform
 
         train_dataset = MyMNIST(root=single_domain_data_path(), train=True,
                                 download=False, transform=train_transform)
-        test_transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
-             transforms.Normalize((0.1307, 0.1307, 0.1307),
-                                  (0.3081, 0.3081, 0.3081))])
+
         test_dataset = MyMNIST(single_domain_data_path(), train=False,
-                               download=False, transform=test_transform)
+                               download=False, transform=self.one_channel_test_transform)
         self.partition_label_skew_loaders(train_dataset, test_dataset)

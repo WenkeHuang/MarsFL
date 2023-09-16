@@ -66,13 +66,13 @@ def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
             for i in range(len(dataset)):
                 img, target = dataset.__getitem__(i)
                 if cfg.attack.backdoor.evils == 'base_backdoor':
-                    base_backdoor(cfg, img, target, noise_data_rate)
+                    img, target = base_backdoor(cfg, img, target, noise_data_rate)
 
                     all_targets.append(target)
                     all_imgs.append(img.numpy())
                 elif cfg.attack.backdoor.evils == 'semantic_backdoor':
                     if target == cfg.attack.backdoor.semantic_backdoor_label:
-                        semantic_backdoor(cfg, img, target, noise_data_rate)
+                        img, target = semantic_backdoor(cfg, img, target, noise_data_rate)
                         all_targets.append(target)
                         all_imgs.append(img.numpy())
 

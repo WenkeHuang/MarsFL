@@ -187,15 +187,15 @@ def attack_net_para(args, cfg, fed_method):
             all_net_delta = torch.cat(all_net_delta, dim=0)
             avg_delta = torch.mean(all_net_delta, dim=0)
 
-        if cfg['attack'].byzantine.dev_type == 'unit_vec':
+        if cfg.attack.byzantine.dev_type == 'unit_vec':
             deviation = avg_delta / torch.norm(avg_delta)  # unit vector, dir opp to good dir
-        elif cfg['attack'].byzantine.dev_type == 'sign':
+        elif cfg.attack.byzantine.dev_type == 'sign':
             deviation = torch.sign(avg_delta)
-        elif cfg['attack'].byzantine.dev_type == 'std':
+        elif cfg.attack.byzantine.dev_type == 'std':
             deviation = torch.std(all_net_delta, 0)
 
-        lamda_fail = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
-        lamda = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
+        lamda_fail = torch.Tensor([cfg.attack.byzantine.lamda]).float().to(fed_method.device)
+        lamda = torch.Tensor([cfg.attack.byzantine.lamda]).float().to(fed_method.device)
         lamda_succ = 0
 
         distances = []
@@ -207,7 +207,7 @@ def attack_net_para(args, cfg, fed_method):
         min_score = torch.min(scores)
         del distances
 
-        while torch.abs(lamda_succ - lamda) > cfg[args.task].threshold_diff:
+        while torch.abs(lamda_succ - lamda) > cfg.attack.byzantine.threshold_diff:
             mal_update = (avg_delta - lamda * deviation)
             distance = torch.norm((all_net_delta - mal_update), dim=1) ** 2
             score = torch.sum(distance)
@@ -247,15 +247,15 @@ def attack_net_para(args, cfg, fed_method):
             all_net_delta = torch.cat(all_net_delta, dim=0)
             avg_delta = torch.mean(all_net_delta, dim=0)
 
-        if cfg[args.task].byzantine.dev_type == 'unit_vec':
+        if cfg.attack.byzantine.dev_type == 'unit_vec':
             deviation = avg_delta / torch.norm(avg_delta)  # unit vector, dir opp to good dir
-        elif cfg[args.task].byzantine.dev_type == 'sign':
+        elif cfg.attack.byzantine.dev_type == 'sign':
             deviation = torch.sign(avg_delta)
-        elif cfg[args.task].byzantine.dev_type == 'std':
+        elif cfg.attack.byzantine.dev_type == 'std':
             deviation = torch.std(all_net_delta, 0)
 
-        lamda_fail = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
-        lamda = torch.Tensor([cfg[args.task].lamda]).float().to(fed_method.device)
+        lamda_fail = torch.Tensor([cfg.attack.byzantine.lamda]).float().to(fed_method.device)
+        lamda = torch.Tensor([cfg.attack.byzantine.lamda]).float().to(fed_method.device)
         lamda_succ = 0
 
         distances = []
@@ -266,7 +266,7 @@ def attack_net_para(args, cfg, fed_method):
         max_distance = torch.max(distances)
         del distances
 
-        while torch.abs(lamda_succ - lamda) > cfg[args.task].threshold_diff:
+        while torch.abs(lamda_succ - lamda) > cfg.attack.byzantine.threshold_diff:
             mal_update = (avg_delta - lamda * deviation)
             distance = torch.norm((all_net_delta - mal_update), dim=1) ** 2
             max_d = torch.max(distance)

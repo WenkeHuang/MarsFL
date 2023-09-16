@@ -3,9 +3,8 @@ import copy
 import numpy as np
 import torch
 
-from Backbones import get_private_backbones
 from Sever.utils.sever_methods import SeverMethod
-from Sever.utils.utils import trimmed_mean, fools_gold, geometric_median_update
+from Sever.utils.utils import geometric_median_update
 from utils.utils import row_into_parameters
 
 
