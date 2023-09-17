@@ -103,3 +103,6 @@ class FLTrustSever(SeverMethod):
         delta_weight = np.sum(np.array(TSnorm).reshape(-1, 1) * all_delta, axis=0) / (total_TS + 1e-5)
         new_global_net_para = global_net_para + delta_weight
         row_into_parameters(new_global_net_para, global_net.parameters())
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_net.state_dict())
+

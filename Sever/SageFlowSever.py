@@ -93,3 +93,6 @@ class SageFlowSever(SeverMethod):
         # global net
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                   global_net=global_net, freq=freq, except_part=[], global_only=False)
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_net.state_dict())
+

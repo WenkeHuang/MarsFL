@@ -75,3 +75,6 @@ class DncSever(SeverMethod):
 
         new_global_net_para = global_net_para + benign_updates
         row_into_parameters(new_global_net_para, global_net.parameters())
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_net.state_dict())
+

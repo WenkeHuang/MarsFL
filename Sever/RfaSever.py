@@ -58,3 +58,5 @@ class RfaSever(SeverMethod):
         new_global_net_para = global_net_para + weighted_updates
 
         row_into_parameters(new_global_net_para, global_net.parameters())
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_net.state_dict())

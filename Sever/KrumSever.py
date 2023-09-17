@@ -62,3 +62,6 @@ class KrumSever(SeverMethod):
         self.current_weights += self.velocity
 
         row_into_parameters(self.current_weights, global_net.parameters())
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_net.state_dict())
+

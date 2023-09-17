@@ -56,3 +56,6 @@ class FoolsGoldSever(SeverMethod):
                                     np.arange(len(online_clients_list)), global_net_para, clip=0)
             new_global_net_para = global_net_para + this_delta
             row_into_parameters(new_global_net_para, global_net.parameters())
+            for _, net in enumerate(nets_list):
+                net.load_state_dict(global_net.state_dict())
+

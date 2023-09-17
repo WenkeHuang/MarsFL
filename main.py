@@ -25,7 +25,7 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='fl_mnist',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_cifar100 fl_mnist
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_cifar100 fl_mnist
                         help='Which scenario to perform experiments on.')
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
