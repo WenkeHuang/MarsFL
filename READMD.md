@@ -7,6 +7,7 @@
 | FedAvg | AISTATS‘17 | [Code](https://github.com/katsura-jp/fedavg.pytorch)|[Paper](https://arxiv.org/abs/1602.05629)|
 | FedProx| MLSys'20 | [Code](https://github.com/ki-ljl/FedProx-PyTorch) |[Paper](https://arxiv.org/abs/1812.06127)|
 |Scaffold|ICML 20| [Code]() | [Paper](https://arxiv.org/abs/1910.06378)|
+|FedNova| NeurIPS'20| [Code](https://github.com/JYWa/FedNova/tree/master/distoptim)||
 | FedBE| ICLR'21 | [Code](https://github.com/hongyouc/FedBE) |[Paper](https://arxiv.org/abs/2009.01974)|
 | FedRS| SIGKDD'21 | [Code](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://dlnext.acm.org/doi/10.1145/3447548.3467254)|
 | FedOPT| ICLR'21 | [Code](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://arxiv.org/abs/2003.002957)|
@@ -15,6 +16,7 @@
 | FedDyn| ICLR'21 | [Code1](https://github.com/alpemreacar/FedDyn) [Code2](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://arxiv.org/abs/2003.002957)|
 | FedDC| CVPR'22 | [Code](https://github.com/gaoliang13/FedDC) |[Paper] [Zhihu](https://zhuanlan.zhihu.com/p/505889549)|
 | FedNTD| NeurIPS'22 | [Code](https://github.com/Lee-Gihun/FedNTD) |[Paper](https://arxiv.org/abs/2106.03097)|
+| FedLC| ICML'22 | [Code] |[Paper](https://proceedings.mlr.press/v162/zhang22p.html)|
 | FPL| CVPR'23 | [Code](https://github.com/WenkeHuang/RethinkFL) |[Paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Rethinking_Federated_Learning_With_Domain_Shift_A_Prototype_View_CVPR_2023_paper.pdf)|
 
 
@@ -33,14 +35,13 @@
 ## Byzantine Attack
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
-| SymF |  | |sa|
-| PairF |  | |sa|
-| RandomNoise |  | |sa|
-| LIE | USNEIX'20 | [Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning)| |
-| MiMa |  | |sa|
-| MiSu |  | |sa|
+| SymF | NeurIPS'15 | | [Paper](https://arxiv.org/abs/1505.07634)|
+| PairF | NeurIPS'18 | |[Paper](https://arxiv.org/abs/1804.06872)|
+| RandomNoise | - | - |-|
+| LIE | USNEIX'20 | [Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning)| [Paper](https://arxiv.org/abs/1902.06156) |
 | Fang | USNEIX'20 | [Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning)| [Paper](https://www.usenix.org/system/files/sec20-fang.pdf)|
-
+| MiMa | NDSS'21  | [Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning) |[ Paper](https://www.ndss-symposium.org/ndss-program/ndss-2021/)|
+| MiSu | NDSS'21 |[Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning)  |[Paper](https://www.ndss-symposium.org/ndss-program/ndss-2021/)|
 
 ## Backdoor Attack
 https://github.com/THUYimingLi/backdoor-learning-resources#federated-learning
@@ -63,32 +64,6 @@ https://github.com/THUYimingLi/backdoor-learning-resources#federated-learning
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
-| qFFL | ICLR‘20 | [Code](https://github.com/illidanlab/FADE)|sa|
-| FADE | ICLR‘20 | [Code](https://github.com/illidanlab/FADE)|sa|
-| FCFL | NeurIPS'21 | [Code](https://github.com/cuis15/FCFL)||
-
-
-
-fedprox  arXiv 2018
-https://github.com/JYWa/FedNova/tree/master/distoptim
- 
-fednova NeurIPS 2020
-https://github.com/JYWa/FedNova/tree/master/distoptim
-
-
-
-
-MOON
-https://github.com/QinbinLi/MOON
-
-
-
-
-fedlc icml2022
-暂无代码
-
-feddc cvpr 2022
-https://github.com/gaoliang13/FedDC
-https://zhuanlan.zhihu.com/p/505889549
-
-
+| qFFL | ICLR‘20 | [Code](https://github.com/illidanlab/FADE)| [Paper](https://arxiv.org/abs/1905.10497)|
+| FADE | SIGKDD'21 |[Code](https://github.com/illidanlab/FADE)| [Paper]()|
+| FCFL | NeurIPS'21 | [Code](https://github.com/cuis15/FCFL)| [Paper](https://arxiv.org/pdf/2108.08435.pdf)|
