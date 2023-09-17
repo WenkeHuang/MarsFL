@@ -21,7 +21,7 @@ def simplify_cfg(args, cfg):
         dump_cfg['Local'][cfg[args.method].local_method] = CN()
         dump_cfg['Local'][cfg[args.method].local_method] = cfg['Local'][cfg[args.method].local_method]
 
-    if args.attack_type is not None:
+    if args.attack_type != 'None':
         dump_cfg['attack'] = CN()
         dump_cfg['attack'].bad_client_rate = cfg['attack'].bad_client_rate
         dump_cfg['attack'].noise_data_rate = cfg['attack'].bad_client_rate
@@ -101,6 +101,9 @@ CFG.OPTIMIZER.local_train_lr = 1e-3
 '''Sever'''
 CFG.Sever = CN()
 
+CFG.Sever.FedOptSever = CN()
+CFG.Sever.FedOptSever.global_lr = 0.5
+
 CFG.Sever.FLTrustSever = CN()
 CFG.Sever.FLTrustSever.public_dataset_name = 'pub_svhn'
 CFG.Sever.FLTrustSever.pub_len = 5000
@@ -125,6 +128,11 @@ CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
 
 '''Federated Method'''
+# qffeAVG
+CFG.qffeAVG = CN()
+CFG.qffeAVG.local_method = 'qffeAVGLocal'
+CFG.qffeAVG.global_method = 'qffeAVGSever'
+
 # FedAVG
 CFG.FedAVG = CN()
 CFG.FedAVG.local_method = 'BaseLocal'
@@ -145,7 +153,7 @@ CFG.FedProc = CN()
 CFG.FedProc.local_method = 'FedProcLocal'
 CFG.FedProc.global_method = 'FedProcSever'
 
-# qffeAVG
-CFG.qffeAVG = CN()
-CFG.qffeAVG.local_method = 'qffeAVGLocal'
-CFG.qffeAVG.global_method = 'qffeAVGSever'
+# FedOpt
+CFG.FedOpt = CN()
+CFG.FedOpt.local_method = 'BaseLocal'
+CFG.FedOpt.global_method = 'FedOptSever'
