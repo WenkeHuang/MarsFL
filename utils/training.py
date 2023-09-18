@@ -7,6 +7,7 @@ import torch
 import numpy as np
 from utils.utils import log_msg
 
+
 def cal_top_one_five(net, test_dl, device):
     net.eval()
     correct, total, top1, top5 = 0.0, 0.0, 0.0, 0.0
@@ -23,6 +24,7 @@ def cal_top_one_five(net, test_dl, device):
     top1acc = round(100 * top1 / total, 2)
     top5acc = round(100 * top5 / total, 2)
     return top1acc, top5acc
+
 
 # def global_personal_evaluation(optimizer: FederatedMethod, test_loader: dict, client_domain_list: list):
 #     personal_domain_accs = []
@@ -54,13 +56,36 @@ def global_in_evaluation(optimizer: FederatedMethod, test_loader: dict, in_domai
     mean_in_domain_acc = round(np.mean(in_domain_accs, axis=0), 3)
     return in_domain_accs, mean_in_domain_acc
 
-def cal_sim_con_weight(optimizer, test_loader):
+
+def cal_sim_con_weight(**kwargs):
+    # para
+    optimizer = kwargs['optimizer']
+    test_loader = kwargs['test_loader']
+    task = kwargs['task']
+    domain_list = kwargs['domain_list']
+
     global_net = optimizer.global_net
-    overall_acc = cal_top_one_five(net=global_net, test_dl=test_loader, device=optimizer.device)
-    overall_top1_acc = overall_acc[0]
+    if task == 'label_skew':
+        overall_acc = cal_top_one_five(net=global_net, test_dl=test_loader, device=optimizer.device)
+        overall_top1_acc = overall_acc[0]
+    elif task == 'domain_skew':
+        accs = []
+        for in_domain in domain_list:
+
+            test_domain_dl = test_loader[in_domain]
+            top1acc, _ = cal_top_one_five(net=global_net, test_dl=test_domain_dl, device=optimizer.device)
+            accs.append(top1acc)
+        overall_top1_acc = round(np.mean(accs, axis=0), 3)
+
     partial_acc_list = []
-    nets_list = optimizer.nets_list
-    aggregation_weight_list = optimizer.aggregation_weight_list
+    nets_list = optimizer.nets_list_before_agg
+
+    if hasattr(optimizer, 'aggregation_weight_list'):
+        aggregation_weight_list = optimizer.aggregation_weight_list
+    else:
+        print('not support this method')
+        return
+
     for index_out, _ in enumerate(optimizer.online_clients_list):
         global_w = {}
         temp_global_net = copy.deepcopy(global_net)
@@ -92,14 +117,29 @@ def cal_sim_con_weight(optimizer, test_loader):
                 for key in used_net_para:
                     global_w[key] += used_net_para[key] * temp_freq[index]
         temp_global_net.load_state_dict(global_w, strict=False)
-        partial_top1_acc,partial_top5_acc = cal_top_one_five(net=temp_global_net, test_dl=test_loader, device=optimizer.device)
+
+        if task == 'label_skew':
+            partial_top1_acc, partial_top5_acc = cal_top_one_five(net=temp_global_net, test_dl=test_loader, device=optimizer.device)
+        elif task == 'domain_skew':
+            accs = []
+            for in_domain in domain_list:
+
+                test_domain_dl = test_loader[in_domain]
+                top1acc, _ = cal_top_one_five(net=temp_global_net, test_dl=test_domain_dl, device=optimizer.device)
+                accs.append(top1acc)
+            partial_top1_acc = round(np.mean(accs, axis=0), 3)
+
         partial_acc_list.append(partial_top1_acc)
+
     overall_top1_acc_list = [overall_top1_acc] * len(partial_acc_list)
-    dif_ac = [a - b +1e-5 for a, b in zip(overall_top1_acc_list, partial_acc_list)]
+    dif_ac = [a - b + 1e-5 for a, b in zip(overall_top1_acc_list, partial_acc_list)]
     dif_ac = dif_ac / (np.sum(dif_ac))
+    print(partial_acc_list)
+
     sim_con_weight = dif_ac.dot(aggregation_weight_list) / (
-                np.linalg.norm(dif_ac) * np.linalg.norm(aggregation_weight_list))
+            np.linalg.norm(dif_ac) * np.linalg.norm(aggregation_weight_list))
     return sim_con_weight
+
 
 def global_out_evaluation(optimizer: FederatedMethod, test_loader: dict, out_domain: str):
     test_out_domain_dl = test_loader[out_domain]
@@ -127,15 +167,16 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         fed_method.ini()
 
     if args.task == 'OOD':
-        in_domain_accs_dict = {} # Query-Client Accuracy A^u
-        mean_in_domain_acc_list = [] # Cross-Client Accuracy A^U
-        out_domain_accs_dict = {} # Out-Client Accuracy A^o
+        in_domain_accs_dict = {}  # Query-Client Accuracy A^u
+        mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U
+        out_domain_accs_dict = {}  # Out-Client Accuracy A^o
     elif args.task == 'label_skew':
         mean_in_domain_acc_list = []
-        contribution_match_degree_list = [] # Contribution Match Degree \bm{\mathcal{E}}
+        contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
     elif args.task == 'domain_skew':
-        in_domain_accs_dict = {} # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
-        mean_in_domain_acc_list = [] # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
+        in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
+        mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
+        contribution_match_degree_list = []
     if args.attack_type == 'backdoor':
         attack_success_rate = []
 
@@ -145,14 +186,13 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         # Client 端操作
         fed_method.local_update(private_dataset.train_loaders)
+        fed_method.nets_list_before_agg = copy.deepcopy(fed_method.nets_list)
+
         if args.attack_type == 'byzantine':
             attack_net_para(args, cfg, fed_method)
 
         # Server 端操作
         fed_method.sever_update(private_dataset.train_loaders)
-
-        # Defense 手段操作
-        fed_method.defense_update()
 
         if args.task == 'OOD':
             '''
@@ -189,7 +229,8 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         elif args.task == 'label_skew':
             top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
-            con_fair_metric = cal_sim_con_weight(fed_method,private_dataset.test_loader)
+            con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
+                                                 domain_list=None, task=args.task)
             contribution_match_degree_list.append(con_fair_metric)
             mean_in_domain_acc_list.append(top1acc)
             print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc} Performance Fairness:{con_fair_metric}'))
@@ -197,6 +238,9 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         elif args.task == 'domain_skew':
             domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
             mean_in_domain_acc_list.append(mean_in_domain_acc)
+            con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
+                                                 domain_list=private_dataset.domain_list, task=args.task)
+            contribution_match_degree_list.append(con_fair_metric)
             for index, in_domain in enumerate(private_dataset.domain_list):
                 if in_domain in in_domain_accs_dict:
                     in_domain_accs_dict[in_domain].append(domain_accs[index])
@@ -218,12 +262,13 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 csv_writer.write_acc(out_domain_accs_dict, name='out_domain', mode='ALL')
 
         elif args.task == 'label_skew':
-            csv_writer.write_acc(mean_in_domain_acc_list , name='in_domain', mode='MEAN')
-            csv_writer.write_acc(contribution_match_degree_list , name='performance_fairness', mode='MEAN')
+            csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
+            csv_writer.write_acc(contribution_match_degree_list, name='performance_fairness', mode='MEAN')
 
         elif args.task == 'domain_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
+            csv_writer.write_acc(contribution_match_degree_list, name='performance_fairness', mode='MEAN')
 
         if args.attack_type == 'backdoor':
             csv_writer.write_acc(attack_success_rate, name='attack_success_rate', mode='MEAN')

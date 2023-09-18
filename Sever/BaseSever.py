@@ -21,3 +21,4 @@ class BaseSever(SeverMethod):
         # FedAVG 是聚合Bone + cls
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                   global_net=global_net, freq=freq, except_part=[], global_only=False)
+        return freq

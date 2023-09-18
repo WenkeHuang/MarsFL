@@ -27,7 +27,7 @@ class FedProc(FederatedMethod):
                                     local_protos=self.local_protos,epoch_index=self.epoch_index)
 
     def sever_update(self, priloader_list):
-        self.global_protos = self.sever_model.sever_update(fed_aggregation=self.fed_aggregation,
+        self.aggregation_weight_list,self.global_protos = self.sever_model.sever_update(fed_aggregation=self.fed_aggregation,
                                                            online_clients_list=self.online_clients_list,
                                                            priloader_list=priloader_list,
                                                            client_domain_list=self.client_domain_list,
