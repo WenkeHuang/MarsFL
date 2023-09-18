@@ -4,30 +4,32 @@ import numpy as np
 import torch
 
 from Backbones import get_private_backbones
-from Sever.utils.sever_methods import SeverMethod
-from Sever.utils.utils import trimmed_mean
+from Defense.utils.defense_methods import DefenseMethod
+from Defense.utils.utils import krum
 from utils.utils import row_into_parameters
 
 
-class TrimmedMeanSever(SeverMethod):
-    NAME = 'TrimmedMeanSever'
+class Krum(DefenseMethod):
+    NAME = 'Krum'
 
     def __init__(self, args, cfg):
-        super(TrimmedMeanSever, self).__init__(args, cfg)
+        super(Krum, self).__init__(args, cfg)
 
         nets_list = get_private_backbones(cfg)
 
         self.momentum = 0.9
         self.learning_rate = self.cfg.OPTIMIZER.local_train_lr
+
         self.current_weights = []
         for name, param in copy.deepcopy(nets_list[0]).cpu().state_dict().items():
             param = nets_list[0].state_dict()[name].view(-1)
             self.current_weights.append(param)
         self.current_weights = torch.cat(self.current_weights, dim=0).cpu().numpy()
+
         self.velocity = np.zeros(self.current_weights.shape, self.current_weights.dtype)
         self.n = 5
 
-    def sever_update(self, **kwargs):
+    def defense_operation(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
 
@@ -54,7 +56,7 @@ class TrimmedMeanSever(SeverMethod):
         f = len(online_clients_list) // 2  # worse case 50% malicious points
         k = len(online_clients_list) - f - 1
 
-        current_grads = trimmed_mean(all_grads, len(online_clients_list), k)
+        current_grads = krum(all_grads, len(online_clients_list), f - k)
 
         self.velocity = self.momentum * self.velocity - self.learning_rate * current_grads
         self.current_weights += self.velocity

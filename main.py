@@ -1,21 +1,19 @@
-import numpy as np
-import torch
-from torch.utils.data import DataLoader
-from Aggregations import Aggregation_NAMES
-from Attack.backdoor.utils import BackdoorDataset, backdoor_attack
-from Attack.byzantine.utils import attack_dataset
 from Datasets.federated_dataset.single_domain import single_domain_dataset_name, get_single_domain_dataset
+from Datasets.federated_dataset.multi_domain import multi_domain_dataset_name, get_multi_domain_dataset
 from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
-from Datasets.federated_dataset.multi_domain import multi_domain_dataset_name, get_multi_domain_dataset
+from Attack.backdoor.utils import backdoor_attack
+from Attack.byzantine.utils import attack_dataset
+from Aggregations import Aggregation_NAMES
+from utils.cfg import CFG as cfg, simplify_cfg,show_cfg
 from Backbones import get_private_backbones
-from utils.cfg import CFG as cfg, simplify_cfg
-from utils.utils import ini_client_domain, log_msg
+from utils.utils import ini_client_domain
 from argparse import ArgumentParser
 from utils.training import train
 import setproctitle
-import argparse
+import numpy as np
 import datetime
+import argparse
 import socket
 import uuid
 import copy
@@ -23,7 +21,7 @@ import os
 
 
 def parse_args():
-    parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
+    parser = ArgumentParser(description='Federated Learning by Zekun Shi, Wenke Huang, and Mang Ye', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
     parser.add_argument('--dataset', type=str, default='fl_cifar10',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_cifar100 fl_mnist
                         help='Which scenario to perform experiments on.')
@@ -40,6 +38,7 @@ def parse_args():
     parser.add_argument('--method', type=str, default='FedOpt',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
+
     '''
     Aggregations Strategy Hyper-Parameter
     '''
@@ -48,7 +47,7 @@ def parse_args():
 
     # parser.add_argument('--note', type=str,default='DKDWeight', help='Something extra')
 
-    parser.add_argument('--csv_log', action='store_true', default=False, help='Enable csv logging')
+    parser.add_argument('--csv_log', action='store_true', default=True, help='Enable csv logging') # store_true store_false
     parser.add_argument('--csv_name', type=str, default=None, help='Predefine the csv name')
     parser.add_argument('--save_checkpoint', action='store_true', default=False)
     # parser.add_argument('--use_random_domain', action='store_true',default=False)
@@ -58,12 +57,11 @@ def parse_args():
 
     return args
 
-
 def main(args=None):
     if args is None:
         args = parse_args()
 
-    args.conf_jobnum = str(uuid.uuid4())
+    args.conf_jobnum = str(uuid.uuid4()) # Universally Unique Identifier
     args.conf_timestamp = str(datetime.datetime.now())
     args.conf_host = socket.gethostname()
 
@@ -77,7 +75,9 @@ def main(args=None):
 
     cfg.merge_from_list(args.opts)
 
-    particial_cfg = simplify_cfg(args, cfg)
+    partical_cfg = simplify_cfg(args, cfg)
+
+    show_cfg(partical_cfg,args.method)
 
     if args.seed is not None:
         set_random_seed(args.seed)
@@ -86,15 +86,14 @@ def main(args=None):
     Loading the dataset
     '''
     if args.dataset in multi_domain_dataset_name:
-        private_dataset = get_multi_domain_dataset(args, particial_cfg)
+        private_dataset = get_multi_domain_dataset(args, partical_cfg)
     elif args.dataset in single_domain_dataset_name:
-        private_dataset = get_single_domain_dataset(args, particial_cfg)
+        private_dataset = get_single_domain_dataset(args, partical_cfg)
 
     if args.task == 'OOD':
         '''
-        Define clients domain
+        Define out-of distribution domain
         '''
-
         in_domain_list = copy.deepcopy(private_dataset.domain_list)
         if cfg[args.task].out_domain != "NONE":
             in_domain_list.remove(cfg[args.task].out_domain)
@@ -104,7 +103,7 @@ def main(args=None):
 
         # 先生成再删
         # 随机采样
-        temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+        temp_client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, partical_cfg.DATASET.parti_num)
 
         # 均分
         # temp_client_domain_list = copy.deepcopy(private_dataset.domain_list) * (particial_cfg.DATASET.parti_num // len(private_dataset.domain_list))
@@ -121,7 +120,7 @@ def main(args=None):
                 client_domain_list.append(temp_client_domain_list[i])
 
         # 只用改一次 因为不是deepcopy
-        particial_cfg.DATASET.parti_num = len(client_domain_list)
+        partical_cfg.DATASET.parti_num = len(client_domain_list)
 
         # cfg.freeze()
 
@@ -133,50 +132,49 @@ def main(args=None):
         client_domain_list = None
 
     elif args.task == 'domain_skew':
-        client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
+        client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, partical_cfg.DATASET.parti_num)
         private_dataset.get_data_loaders(client_domain_list)
 
     if args.attack_type == 'byzantine':
-
         # 数据集的信息
         if args.dataset in multi_domain_dataset_name:
             # client_domain_list = ini_client_domain(args.rand_domain_select, private_dataset.domain_list, particial_cfg.DATASET.parti_num)
             # private_dataset.get_data_loaders(client_domain_list)
-            particial_cfg.attack.dataset_type = 'multi_domain'
+            partical_cfg.attack.dataset_type = 'multi_domain'
 
         elif args.dataset in single_domain_dataset_name:
             # private_dataset.get_data_loaders()
             # client_domain_list = None
-            particial_cfg.attack.dataset_type = 'single_domain'
+            partical_cfg.attack.dataset_type = 'single_domain'
 
         # 攻击和未被攻击的客户端数量
-        bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
-        good_scale = particial_cfg.DATASET.parti_num - bad_scale
+        bad_scale = int(partical_cfg.DATASET.parti_num * partical_cfg['attack'].bad_client_rate)
+        good_scale = partical_cfg.DATASET.parti_num - bad_scale
         client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
         # 攻击类型是数据集攻击 那么修改数据集的内容
         attack_dataset(args, cfg, private_dataset, client_type)
     elif args.attack_type == 'backdoor':
         # 攻击和未被攻击的客户端数量
-        bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
-        good_scale = particial_cfg.DATASET.parti_num - bad_scale
+        bad_scale = int(partical_cfg.DATASET.parti_num * partical_cfg['attack'].bad_client_rate)
+        good_scale = partical_cfg.DATASET.parti_num - bad_scale
         client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
 
         # 攻击训练集
-        backdoor_attack(args, particial_cfg, client_type, private_dataset, is_train=True)
+        backdoor_attack(args, partical_cfg, client_type, private_dataset, is_train=True)
 
         # 攻击测试集用于测试专属指标
-        backdoor_attack(args, particial_cfg, client_type, private_dataset, is_train=False)
+        backdoor_attack(args, partical_cfg, client_type, private_dataset, is_train=False)
 
     '''
     Loading the Private Backbone
     '''
-    priv_backbones = get_private_backbones(particial_cfg)
+    priv_backbones = get_private_backbones(partical_cfg)
 
     '''
     Loading the Federated Optimizer
     '''
 
-    fed_method = get_fed_method(priv_backbones, client_domain_list, args, particial_cfg)
+    fed_method = get_fed_method(priv_backbones, client_domain_list, args, partical_cfg)
     assert args.structure in fed_method.COMPATIBILITY
 
     # 将部分参数给方法
@@ -191,7 +189,7 @@ def main(args=None):
         setproctitle.setproctitle('{}_{}'.format(args.method, args.task))
     else:
         setproctitle.setproctitle('{}_{}_{}'.format(args.method, args.task, args.csv_name))
-    train(fed_method, private_dataset, args, particial_cfg, client_domain_list)
+    train(fed_method, private_dataset, args, partical_cfg, client_domain_list)
 
 
 if __name__ == '__main__':

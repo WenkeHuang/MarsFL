@@ -6,16 +6,15 @@ from torch import optim, nn
 from tqdm import tqdm
 
 from Datasets.public_dataset import get_public_dataset
-from Sever.utils.sever_methods import SeverMethod
-
+from Defense.utils.defense_methods import DefenseMethod
 from utils.utils import row_into_parameters
 import torch.nn.functional as F
 
-class SageFlowSever(SeverMethod):
-    NAME = 'SageFlowSever'
+class SageFlow(DefenseMethod):
+    NAME = 'SageFlow'
 
     def __init__(self, args, cfg):
-        super(SageFlowSever, self).__init__(args, cfg)
+        super(SageFlow, self).__init__(args, cfg)
         self.eth = 2.2
         self.delta = 5
 
@@ -29,7 +28,7 @@ class SageFlowSever(SeverMethod):
         self.public_dataset.get_data_loaders()
         self.public_loader = self.public_dataset.traindl
 
-    def sever_update(self, **kwargs):
+    def defense_operation(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
         fed_aggregation=kwargs['fed_aggregation']

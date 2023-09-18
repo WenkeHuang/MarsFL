@@ -7,21 +7,16 @@ import torch
 import os
 
 
-class LocalMethod(nn.Module):
-    """
-    Federated learning Methods.
-    """
+class DefenseMethod(nn.Module):
     NAME = None
 
     def __init__(self, args, cfg) -> None:
-        super(LocalMethod, self).__init__()
+        super(DefenseMethod, self).__init__()
+
         self.args = args
         self.cfg = cfg
         self.device = get_device(device_id=self.args.device_id)
 
-    def loc_update(self, **kwargs):
-        pass
-
-    def train_net(self, *args,**kwargs):
+    def defense_operation(self, **kwargs):
         pass
 

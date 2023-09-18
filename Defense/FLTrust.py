@@ -6,16 +6,16 @@ from torch import optim, nn
 from tqdm import tqdm
 
 from Datasets.public_dataset import get_public_dataset
-from Sever.utils.sever_methods import SeverMethod
+from Defense.utils.defense_methods import DefenseMethod
 
 from utils.utils import row_into_parameters
 
 
-class FLTrustSever(SeverMethod):
-    NAME = 'FLTrustSever'
+class FLTrust(DefenseMethod):
+    NAME = 'FLTrust'
 
     def __init__(self, args, cfg):
-        super(FLTrustSever, self).__init__(args, cfg)
+        super(FLTrust, self).__init__(args, cfg)
 
         public_dataset_name = cfg.Sever[self.NAME].public_dataset_name
         pub_len = cfg.Sever[self.NAME].pub_len
@@ -27,7 +27,7 @@ class FLTrustSever(SeverMethod):
         self.public_dataset.get_data_loaders()
         self.public_loader = self.public_dataset.traindl
 
-    def sever_update(self, **kwargs):
+    def defense_operation(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
 
@@ -66,7 +66,7 @@ class FLTrustSever(SeverMethod):
                               momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
         for _ in iterator:
             for batch_idx, (images, labels) in enumerate(self.public_loader):
-                images = images
+                # images = images
                 images = images.to(self.device)
                 labels = labels.to(self.device)
                 outputs = temp_net(images)

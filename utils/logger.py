@@ -3,13 +3,10 @@ import os
 import csv
 from utils.conf import log_path
 from utils.utils import create_if_not_exists
-
-import yaml
 from yacs.config import CfgNode as CN
+import yaml
 
 except_args = ['csv_log', 'csv_name', 'device_id', 'seed', 'tensorboard', 'conf_jobnum', 'conf_timestamp', 'conf_host', 'opts']
-
-
 class CsvWriter:
     def __init__(self, args, cfg):
         self.args = args
