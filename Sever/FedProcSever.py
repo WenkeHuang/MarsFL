@@ -44,4 +44,4 @@ class FedProcSever(SeverMethod):
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                   global_net=global_net, freq=freq, except_part=[], global_only=False)
         global_protos = self.proto_aggregation(online_clients_list, local_protos)
-        return global_protos
+        return freq, global_protos
