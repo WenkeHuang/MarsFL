@@ -16,23 +16,19 @@ averaging = 'Weight'
 
 method_list = ['FedAVG', 'FedProx', 'FedProc']
 
-domain_info = {
-    'Dataset': {
-        'domain_list': ['MNIST', 'USPS', 'SVHN', 'SYN'],
-        'commun_epoch': 50
-    },
-    'PACS': {
-        'domain_list': ['photo', 'art_painting', 'cartoon', 'sketch'],
-        'commun_epoch': 50
+Dataset_info = {
+    'fl_cifar10': {
+        'parti_num':10,
+        'communication_epoch': 100
     }
 }
 
-metrics_list = ['in', 'out']
-
-communication_epoch = domain_info[dataset]['commun_epoch']
-
-
-scale_dict = {'in': len(select_domain_list), 'out': 1}
+metrics_dict = \
+    {
+        'label_skew' : ['in_domain_mean_acc','performance_fairness_mean_acc'],
+        'domain_skew': ['in_domain_mean_acc','in_domain_all_acc'],
+        'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
+    }
 
 aim_args_dict = {
     # 'parti_num': 1,
@@ -40,14 +36,13 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
-        # 'n_classes': 10,
         # 'use_two_crop': "WEAK"
         # 'parti_num': 20
     },
 }
 
 
-def mean_acc_list(structure_path, metric):
+def mean_metric(structure_path, metric):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
@@ -61,13 +56,13 @@ def mean_acc_list(structure_path, metric):
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
                         if len(os.listdir(para_path)) > 3:
-                            data = pd.read_table(para_path + '/' + metric + '_domain_mean_acc.csv', sep=",")
+                            data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values
                             mean_acc_value = np.mean(acc_value, axis=0)
                             mean_acc_value = mean_acc_value.tolist()
                             mean_acc_value = [round(item, 3) for item in mean_acc_value]
-                            last_acc_vale = mean_acc_value[-10:]  # 取最后五轮结果
+                            last_acc_vale = mean_acc_value[-5:]  # 取最后五轮结果
                             last_acc_vale = np.mean(last_acc_vale)
                             mean_acc_value.append(round(last_acc_vale, 3))
                             acc_dict[experiment_index] = [model, para] + mean_acc_value
@@ -75,7 +70,7 @@ def mean_acc_list(structure_path, metric):
     return acc_dict
 
 
-def all_metric_dict(structure_path, metric, scale_num):
+def all_metric(structure_path, metric, scale_num):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
@@ -104,7 +99,6 @@ def all_metric_dict(structure_path, metric, scale_num):
                                 mean_acc_value.append(last_mean_acc_value)  # 添加accuracy
                             mean_acc_value = [round(item, 3) for item in mean_acc_value]
                             mean_acc_value.append(np.mean(mean_acc_value))
-
                             # Specific parameter value
                             acc_dict[experiment_index] = [model, para] + mean_acc_value
                             experiment_index += 1
@@ -114,7 +108,6 @@ def all_metric_dict(structure_path, metric, scale_num):
 def select_para(args_path, cfg_path):
     args_pd = pd.read_table(args_path, sep=",")
     # aim_cfg.merge_from_file(cfg_path)
-
     args_pd = args_pd.loc[:, args_pd.columns]
 
     now_arg_dict = {}
@@ -154,28 +147,22 @@ def select_para(args_path, cfg_path):
 if __name__ == '__main__':
     print('**************************************************************')
     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
-
-    for _, metric in enumerate(metrics_list):
-        aggregation_path = os.path.join(scenario_path, aggregation)
-
-        print('Dataset: ' + dataset + ' Aggregation: ' + aggregation + ' Metric: ' + metric)
-        # mean_df.to_excel(os.path.join(structure_path, domain + '_output.xls'), na_rep=True)
-        each_acc_dict, n_participants = all_metric_dict(aggregation_path, metric, scale_num=scale_dict[metric])
-        each_df = pd.DataFrame(each_acc_dict)
-        each_df = each_df.T
-        # pd.set_option('display.max_columns', None)
-        column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
-        each_df.columns = column_each_acc_list
-        print(each_df)
-
-        if metric == 'in':
-            print('Dataset: ' + dataset + ' Aggregation: ' + aggregation + ' Metric: ' + metric)
-            mean_acc_dict = mean_acc_list(aggregation_path, metric)
+    for _, metric in enumerate(metrics_dict[task]):
+        print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
+        # if "all" in metric:
+        #     each_acc_dict, n_participants = all_metric(specific_path, metric, scale_num=scale_dict[metric])
+        #     each_df = pd.DataFrame(each_acc_dict)
+        #     each_df = each_df.T
+        #     # pd.set_option('display.max_columns', None)
+        #     column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
+        #     each_df.columns = column_each_acc_list
+        #     print(each_df)
+        if "mean" in metric:
+            mean_acc_dict = mean_metric(specific_path, metric)
             mean_df = pd.DataFrame(mean_acc_dict)
             mean_df = mean_df.T
             column_mean_acc_list = ['method', 'para'] + ['E: ' + str(i) for i in
-                                                         range(communication_epoch)] + ['MEAN']
+            range(Dataset_info[dataset]['communication_epoch'])] + ['MEAN']
             mean_df.columns = column_mean_acc_list
             print(mean_df)
-
     print('**************************************************************')

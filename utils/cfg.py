@@ -1,5 +1,5 @@
 from yacs.config import CfgNode as CN
-
+from utils.utils import log_msg
 
 # 简化cfg 只留有关的
 def simplify_cfg(args, cfg):
@@ -30,6 +30,13 @@ def simplify_cfg(args, cfg):
 
     return dump_cfg
 
+def show_cfg(cfg, method):
+    dump_cfg = CN()
+    dump_cfg.DATASET = cfg.DATASET
+    dump_cfg.OPTIMIZER = cfg.OPTIMIZER
+    dump_cfg[method] = cfg[method]
+    print(log_msg("CONFIG:\n{}".format(dump_cfg.dump()), "INFO"))
+    return dump_cfg
 
 CFG = CN()
 '''Federated dataset'''

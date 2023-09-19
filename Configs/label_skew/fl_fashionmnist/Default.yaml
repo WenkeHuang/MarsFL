@@ -1,5 +1,5 @@
 DATASET:
-  dataset : "fl_cifar10"
+  dataset : "fl_fashionmnist"
   communication_epoch : 100
   n_classes: 10
   parti_num: 10

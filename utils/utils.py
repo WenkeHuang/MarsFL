@@ -4,6 +4,15 @@ import numpy as np
 import torch
 import os
 
+def log_msg(msg, mode="INFO"):
+    color_map = {
+        "INFO": 36,
+        "TRAIN": 32,
+        "TEST": 31,
+        "OOD": 33,
+    }
+    msg = "\033[{}m[{}] {}\033[0m".format(color_map[mode], mode, msg)
+    return msg
 
 def create_if_not_exists(path: str) -> None:
     """

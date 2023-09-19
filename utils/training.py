@@ -123,7 +123,6 @@ def cal_sim_con_weight(**kwargs):
         elif task == 'domain_skew':
             accs = []
             for in_domain in domain_list:
-
                 test_domain_dl = test_loader[in_domain]
                 top1acc, _ = cal_top_one_five(net=temp_global_net, test_dl=test_domain_dl, device=optimizer.device)
                 accs.append(top1acc)

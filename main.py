@@ -9,7 +9,7 @@ from Methods import Fed_Methods_NAMES, get_fed_method
 from utils.conf import set_random_seed, config_path
 from Datasets.federated_dataset.multi_domain import multi_domain_dataset_name, get_multi_domain_dataset
 from Backbones import get_private_backbones
-from utils.cfg import CFG as cfg, simplify_cfg
+from utils.cfg import CFG as cfg, simplify_cfg,show_cfg
 from utils.utils import ini_client_domain, log_msg
 from argparse import ArgumentParser
 from utils.training import train
@@ -25,11 +25,15 @@ import os
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
-    parser.add_argument('--dataset', type=str, default='Digits',  # Digits,PACS PACScomb OfficeHome fl_cifar10 fl_cifar100 fl_mnist
+
+    parser.add_argument('--task', type=str, default='label_skew')  # OOD label_skew domain_skew
+
+    parser.add_argument('--dataset', type=str, default='fl_fashionmnist',
                         help='Which scenario to perform experiments on.')
+    # fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist
+    # Digits,PACS PACScomb OfficeHome
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
 
-    parser.add_argument('--task', type=str, default='domain_skew')  # OOD label_skew domain_skew
     parser.add_argument('--attack_type', type=str, default='None')  # byzantine backdoor None
 
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
@@ -79,6 +83,7 @@ def main(args=None):
 
     particial_cfg = simplify_cfg(args, cfg)
 
+    show_cfg(particial_cfg,args.method)
     if args.seed is not None:
         set_random_seed(args.seed)
 
