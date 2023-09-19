@@ -1,5 +1,5 @@
 from yacs.config import CfgNode as CN
-from utils.utils import log_msg
+
 
 # 简化cfg 只留有关的
 def simplify_cfg(args, cfg):
@@ -21,23 +21,15 @@ def simplify_cfg(args, cfg):
         dump_cfg['Local'][cfg[args.method].local_method] = CN()
         dump_cfg['Local'][cfg[args.method].local_method] = cfg['Local'][cfg[args.method].local_method]
 
-    # simplify Attack cfg
     if args.attack_type != 'None':
         dump_cfg['attack'] = CN()
         dump_cfg['attack'].bad_client_rate = cfg['attack'].bad_client_rate
         dump_cfg['attack'].noise_data_rate = cfg['attack'].bad_client_rate
+
         dump_cfg['attack'][args.attack_type] = cfg['attack'][args.attack_type]
 
     return dump_cfg
 
-
-def show_cfg(cfg, method):
-    dump_cfg = CN()
-    dump_cfg.DATASET = cfg.DATASET
-    dump_cfg.OPTIMIZER = cfg.OPTIMIZER
-    dump_cfg[method] = cfg[method]
-    print(log_msg("CONFIG:\n{}".format(dump_cfg.dump()), "INFO"))
-    return dump_cfg
 
 CFG = CN()
 '''Federated dataset'''
@@ -62,7 +54,7 @@ CFG.attack.noise_data_rate = 0.5
 
 CFG.attack.byzantine = CN()
 CFG.attack.byzantine.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
-# CFG.attack.byzantine.dataset_type = 'multi_domain' #
+CFG.attack.byzantine.dataset_type = 'multi_domain'
 
 # attack para for min_max and min_sum
 CFG.attack.byzantine.dev_type = 'std'

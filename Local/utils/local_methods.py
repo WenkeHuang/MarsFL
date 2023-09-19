@@ -15,6 +15,7 @@ class LocalMethod(nn.Module):
 
     def __init__(self, args, cfg) -> None:
         super(LocalMethod, self).__init__()
+
         self.args = args
         self.cfg = cfg
         self.device = get_device(device_id=self.args.device_id)

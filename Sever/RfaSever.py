@@ -3,19 +3,20 @@ import copy
 import numpy as np
 import torch
 
-from Defense.utils.defense_methods import DefenseMethod
-from Defense.utils.utils import geometric_median_update
+from Sever.utils.sever_methods import SeverMethod
+from Sever.utils.utils import geometric_median_update
 from utils.utils import row_into_parameters
 
 
-class Rfa(DefenseMethod):
-    NAME = 'Rfa'
+class RfaSever(SeverMethod):
+    NAME = 'RfaSever'
 
     def __init__(self, args, cfg):
-        super(Rfa, self).__init__(args, cfg)
+        super(RfaSever, self).__init__(args, cfg)
+
         self.max_iter = 3
 
-    def defense_operation(self, **kwargs):
+    def sever_update(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
         priloader_list=kwargs['priloader_list']

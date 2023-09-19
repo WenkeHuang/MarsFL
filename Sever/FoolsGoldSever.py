@@ -2,18 +2,20 @@ import copy
 
 import numpy as np
 import torch
-from Defense.utils.defense_methods import DefenseMethod
-from Defense.utils.utils import trimmed_mean, fools_gold
+
+from Backbones import get_private_backbones
+from Sever.utils.sever_methods import SeverMethod
+from Sever.utils.utils import trimmed_mean, fools_gold
 from utils.utils import row_into_parameters
 
 
-class FoolsGold(DefenseMethod):
-    NAME = 'FoolsGold'
+class FoolsGoldSever(SeverMethod):
+    NAME = 'FoolsGoldSever'
 
     def __init__(self, args, cfg):
-        super(FoolsGold, self).__init__(args, cfg)
+        super(FoolsGoldSever, self).__init__(args, cfg)
 
-    def defense_operation(self, **kwargs):
+    def sever_update(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
 

@@ -4,15 +4,16 @@ import numpy as np
 import torch
 
 from Backbones import get_private_backbones
-from Defense.utils.defense_methods import DefenseMethod
-from Defense.utils.utils import bulyan
+from Sever.utils.sever_methods import SeverMethod
+from Sever.utils.utils import bulyan
 from utils.utils import row_into_parameters
 
-class Bulyan(DefenseMethod):
-    NAME = 'Bulyan'
+
+class BulyanSever(SeverMethod):
+    NAME = 'BulyanSever'
 
     def __init__(self, args, cfg):
-        super(Bulyan, self).__init__(args, cfg)
+        super(BulyanSever, self).__init__(args, cfg)
 
         nets_list = get_private_backbones(cfg)
 
@@ -26,7 +27,7 @@ class Bulyan(DefenseMethod):
         self.velocity = np.zeros(self.current_weights.shape, self.current_weights.dtype)
         self.n = 5
 
-    def defense_operation(self, **kwargs):
+    def sever_update(self, **kwargs):
 
         online_clients_list = kwargs['online_clients_list']
 

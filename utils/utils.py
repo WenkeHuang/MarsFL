@@ -18,15 +18,6 @@ def set_requires_grad(net, requires_grad):
     for param in net.parameters():
         param.requires_grad = requires_grad
 
-def log_msg(msg, mode="INFO"):
-    color_map = {
-        "INFO": 36,
-        "TRAIN": 32,
-        "TEST": 31,
-        "OOD": 33,
-    }
-    msg = "\033[{}m[{}] {}\033[0m".format(color_map[mode], mode, msg)
-    return msg
 
 def ini_client_domain(rand_domain_select, domains_list, parti_num):
     domains_len = len(domains_list)

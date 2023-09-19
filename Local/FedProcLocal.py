@@ -30,6 +30,8 @@ class FedProcLocal(LocalMethod):
     def __init__(self, args, cfg):
         super(FedProcLocal, self).__init__(args, cfg)
 
+
+
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']

@@ -5,24 +5,19 @@ import yaml
 from yacs.config import CfgNode as CN
 
 path = './data/'
-dataset = 'PACS'  # 'fl_cifar10, PACS
-ood = 'photo'
 
+task = 'label_skew'
+attack_type = 'None'
+dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+averaging = 'Weight'
 # fl_cifar10: MNIST, USPS, SVHN, SYN
 # PACS: 'photo', 'art_painting', 'cartoon', 'sketch'
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 
-# aggregation_list = ['Equal', 'Weight']
-aggregation_list = ['Weight']
-
-method_list = ['FedAVG', 'FedProx', 'MOON', 'MOONCOSAddGlobal', 'FedAVGCOSAddGlobal'
-               # 'FedAVG','FedProx','MOON','FedProxGA','FedProxCOSAddGlobal',
-               # 'FedProxCOSNHNew','FedProxCOSAddNHNew','FedProxCOSAddNHMad','FedProxCOSAddNHMad_Pear'
-               # ,'FedProxCOSAddSoft' FedProxCOSAddNHMad
-               ]
+method_list = ['FedAVG', 'FedProx', 'FedProc']
 
 domain_info = {
-    'fl_cifar10': {
+    'Dataset': {
         'domain_list': ['MNIST', 'USPS', 'SVHN', 'SYN'],
         'commun_epoch': 50
     },
@@ -36,8 +31,6 @@ metrics_list = ['in', 'out']
 
 communication_epoch = domain_info[dataset]['commun_epoch']
 
-select_domain_list = domain_info[dataset]['domain_list']
-select_domain_list.remove(ood)
 
 scale_dict = {'in': len(select_domain_list), 'out': 1}
 
@@ -51,31 +44,6 @@ aim_cfg_dict = {
         # 'use_two_crop': "WEAK"
         # 'parti_num': 20
     },
-    # 'FedProxCOSNHNew': {
-    #     'mu': 0.01
-    # },
-    # 'FedProxCOSAddNHNew': {
-    #     # 'temperature': 1.0,
-    #     # 'mu': 0.01,
-    #     'alpha':1.0,
-    #     'beta': 0.0,
-    # },
-    # 'FedProxCOSAddSoft': {
-    #     # 'temperature': 1.0,
-    #     # 'mu': 0.01,
-    #     # 'alpha': 0.0,
-    #     # 'beta': 1.0,
-    # },
-    # 'FedProxCOSAddGlobal':{
-    #     # 'alpha':0.0,
-    #     'alpha':1.0,
-    #     'beta': 0.0,
-    # },
-    # 'FedProxCOSAddNHMad':{
-    #     # 'alpha':0.0,
-    #     'alpha':1.0,
-    #     'beta': 0.0,
-    # }
 }
 
 
@@ -107,7 +75,7 @@ def mean_acc_list(structure_path, metric):
     return acc_dict
 
 
-def all_acc_list(structure_path, metric, scale_num):
+def all_metric_dict(structure_path, metric, scale_num):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
@@ -185,35 +153,29 @@ def select_para(args_path, cfg_path):
 
 if __name__ == '__main__':
     print('**************************************************************')
-    dataset_path = os.path.join(path, dataset)
-    # dataset_path = os.path.join(path, 'Digits_10')
-    # dataset_path = os.path.join(path, 'Digits_727')
+    specific_path = os.path.join(path, task,attack_type,dataset,averaging)
 
-    # dataset_path = os.path.join(path, 'PACS_30')
-    scenario_path = os.path.join(dataset_path, ood)
+    for _, metric in enumerate(metrics_list):
+        aggregation_path = os.path.join(scenario_path, aggregation)
 
-    for _, aggregation in enumerate(aggregation_list):
-        for _, metric in enumerate(metrics_list):
-            aggregation_path = os.path.join(scenario_path, aggregation)
+        print('Dataset: ' + dataset + ' Aggregation: ' + aggregation + ' Metric: ' + metric)
+        # mean_df.to_excel(os.path.join(structure_path, domain + '_output.xls'), na_rep=True)
+        each_acc_dict, n_participants = all_metric_dict(aggregation_path, metric, scale_num=scale_dict[metric])
+        each_df = pd.DataFrame(each_acc_dict)
+        each_df = each_df.T
+        # pd.set_option('display.max_columns', None)
+        column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
+        each_df.columns = column_each_acc_list
+        print(each_df)
 
+        if metric == 'in':
             print('Dataset: ' + dataset + ' Aggregation: ' + aggregation + ' Metric: ' + metric)
-            # mean_df.to_excel(os.path.join(structure_path, domain + '_output.xls'), na_rep=True)
-            each_acc_dict, n_participants = all_acc_list(aggregation_path, metric, scale_num=scale_dict[metric])
-            each_df = pd.DataFrame(each_acc_dict)
-            each_df = each_df.T
-            # pd.set_option('display.max_columns', None)
-            column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
-            each_df.columns = column_each_acc_list
-            print(each_df)
+            mean_acc_dict = mean_acc_list(aggregation_path, metric)
+            mean_df = pd.DataFrame(mean_acc_dict)
+            mean_df = mean_df.T
+            column_mean_acc_list = ['method', 'para'] + ['E: ' + str(i) for i in
+                                                         range(communication_epoch)] + ['MEAN']
+            mean_df.columns = column_mean_acc_list
+            print(mean_df)
 
-            if metric == 'in':
-                print('Dataset: ' + dataset + ' Aggregation: ' + aggregation + ' Metric: ' + metric)
-                mean_acc_dict = mean_acc_list(aggregation_path, metric)
-                mean_df = pd.DataFrame(mean_acc_dict)
-                mean_df = mean_df.T
-                column_mean_acc_list = ['method', 'para'] + ['E: ' + str(i) for i in
-                                                             range(communication_epoch)] + ['MEAN']
-                mean_df.columns = column_mean_acc_list
-                print(mean_df)
-
-        print('**************************************************************')
+    print('**************************************************************')

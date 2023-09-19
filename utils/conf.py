@@ -23,11 +23,14 @@ def log_path() -> str:
 def net_path() -> str:
     return './checkpoints/'
 
+
 def config_path() -> str:
     return './Configs/'
 
+
 def checkpoint_path() -> str:
     return './checkpoint/'
+
 
 def set_random_seed(seed: int) -> None:
     """

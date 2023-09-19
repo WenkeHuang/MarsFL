@@ -1,4 +1,5 @@
 from Aggregations.utils.meta_aggregation import FederatedAggregation
+import numpy as np
 
 class Equal(FederatedAggregation):
     NAME = 'Equal'
