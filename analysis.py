@@ -6,9 +6,10 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'label_skew'
+task = 'domain_skew'
+# label_skew domain_skew
 attack_type = 'None'
-dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+dataset = 'Digits'  # 'fl_cifar10, PACS
 averaging = 'Weight'
 # fl_cifar10,fl_fashionmnist, fl_cifar100
 # Digits: MNIST, USPS, SVHN, SYN
@@ -29,13 +30,17 @@ Dataset_info = {
     'fl_fashionmnist': {
         'parti_num': 10,
         'communication_epoch': 100
+    },
+    'Digits': {
+        'parti_num': 4,
+        'communication_epoch': 50
     }
 }
 
 metrics_dict = \
     {
         'label_skew' : ['in_domain_mean_acc','performance_fairness_mean_acc'],
-        'domain_skew': ['in_domain_mean_acc','in_domain_all_acc'],
+        'domain_skew': ['in_domain_mean_acc','in_domain_all_acc','performance_variance_mean_acc','contribution_fairness_mean_acc'],
         'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
     }
 
@@ -93,7 +98,7 @@ def all_metric(structure_path, metric, scale_num):
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
                         if len(os.listdir(para_path)) > 3:
-                            data = pd.read_table(para_path + '/' + metric + '_domain_all_acc.csv', sep=",")
+                            data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values[:, 1:]
                             # parti_num = args_pd['parti_num'][0]
@@ -158,14 +163,15 @@ if __name__ == '__main__':
     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
-        # if "all" in metric:
-        #     each_acc_dict, n_participants = all_metric(specific_path, metric, scale_num=scale_dict[metric])
-        #     each_df = pd.DataFrame(each_acc_dict)
-        #     each_df = each_df.T
-        #     # pd.set_option('display.max_columns', None)
-        #     column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
-        #     each_df.columns = column_each_acc_list
-        #     print(each_df)
+        if "all" in metric:
+            each_acc_dict, n_participants = all_metric(specific_path, metric, scale_num=Dataset_info[dataset]['parti_num'])
+            each_df = pd.DataFrame(each_acc_dict)
+            each_df = each_df.T
+            # pd.set_option('display.max_columns', None)
+            column_each_acc_list = ['method', 'para'] + [str(i) for i in range(n_participants)] + ['avg']
+            each_df.columns = column_each_acc_list
+            print(each_df)
+
         if "mean" in metric:
             mean_acc_dict = mean_metric(specific_path, metric)
             mean_df = pd.DataFrame(mean_acc_dict)

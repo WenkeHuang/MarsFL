@@ -49,8 +49,9 @@ def parse_args():
     Aggregations Strategy Hyper-Parameter
     '''
     parser.add_argument('--averaging', type=str, default='Weight', choices=Aggregation_NAMES, help='The Option for averaging strategy')
-    parser.add_argument('--seed', type=int, default=0, help='The random seed.')
+    # Weight Equal
 
+    parser.add_argument('--seed', type=int, default=0, help='The random seed.')
     # parser.add_argument('--note', type=str,default='DKDWeight', help='Something extra')
 
     parser.add_argument('--csv_log', action='store_true', default=False, help='Enable csv logging')
