@@ -5,7 +5,7 @@ from Backbones.SimpleCNN import SimpleCNN, SimpleCNN_sr
 
 Backbone_NAMES = {
     'simple_cnn': SimpleCNN,
-
+    'resnet10': resnet10,
     'resnet18': resnet18,
     'resnet18_pretrained': resnet18_pretrained,
     'resnet50': resnet50

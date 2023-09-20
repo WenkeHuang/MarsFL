@@ -5,17 +5,12 @@ from torchvision.datasets import MNIST, SVHN, ImageFolder, DatasetFolder, USPS
 from Datasets.utils.transforms import DeNormalize
 import torchvision.transforms as transforms
 from utils.conf import multi_domain_data_path
-# from utils.aug_lib import TrivialAugment
 import torch.utils.data as data
 from typing import Tuple
 from PIL import Image
-
-
-# The fl_cifar10 Domain fl_cifar10 Definition
 class MyDigits(data.Dataset):
     def __init__(self, root, train=True, transform=None,
                  target_transform=None, download=False, data_name=None) -> None:
-        # self.not_aug_transform = utils.Compose([utils.ToTensor()])
         self.data_name = data_name
         self.root = root
         self.train = train
@@ -61,7 +56,6 @@ class MyDigits(data.Dataset):
         if self.target_transform is not None:
             target = self.target_transform(target)
         return img, target
-
     def __len__(self):
         return len(self.dataset)
 

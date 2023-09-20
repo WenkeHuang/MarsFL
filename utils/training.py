@@ -176,6 +176,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
         contribution_match_degree_list = []
+        performance_variane_list = []
     if args.attack_type == 'backdoor':
         attack_success_rate = []
 
@@ -228,25 +229,34 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         elif args.task == 'label_skew':
             top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
-            con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
-                                                 domain_list=None, task=args.task)
-            contribution_match_degree_list.append(con_fair_metric)
+            if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+                con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
+                                                     domain_list=None, task=args.task)
+                contribution_match_degree_list.append(con_fair_metric)
+            else:
+                contribution_match_degree_list.append(0)
             mean_in_domain_acc_list.append(top1acc)
-            print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc} Performance Fairness:{con_fair_metric}'))
+            print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc} Con Fair:{con_fair_metric}', "TEST"))
 
         elif args.task == 'domain_skew':
             domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
+            perf_var = np.var(domain_accs, ddof=0)
+            performance_variane_list.append(perf_var)
             mean_in_domain_acc_list.append(mean_in_domain_acc)
-            con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
-                                                 domain_list=private_dataset.domain_list, task=args.task)
-            contribution_match_degree_list.append(con_fair_metric)
+            if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+                con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
+                                                     domain_list=private_dataset.domain_list, task=args.task)
+                contribution_match_degree_list.append(con_fair_metric)
+            else:
+                contribution_match_degree_list.append(0)
+
             for index, in_domain in enumerate(private_dataset.domain_list):
                 if in_domain in in_domain_accs_dict:
                     in_domain_accs_dict[in_domain].append(domain_accs[index])
                 else:
                     in_domain_accs_dict[in_domain] = [domain_accs[index]]
 
-            print(log_msg(f"The {epoch_index} Epoch: Domain Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name}", "TEST"))
+            print(log_msg(f"The {epoch_index} Epoch: Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name} Con Fair: {con_fair_metric} Per Var: {perf_var} ", "TEST"))
 
         if args.attack_type == 'backdoor':
             top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.backdoor_test_loader, fed_method.device)
@@ -262,12 +272,14 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         elif args.task == 'label_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
-            csv_writer.write_acc(contribution_match_degree_list, name='performance_fairness', mode='MEAN')
+            csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
 
         elif args.task == 'domain_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
             csv_writer.write_acc(in_domain_accs_dict, name='in_domain', mode='ALL')
-            csv_writer.write_acc(contribution_match_degree_list, name='performance_fairness', mode='MEAN')
+            csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
+            csv_writer.write_acc(performance_variane_list, name='performance_variance', mode='MEAN')
+
 
         if args.attack_type == 'backdoor':
             csv_writer.write_acc(attack_success_rate, name='attack_success_rate', mode='MEAN')

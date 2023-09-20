@@ -10,7 +10,8 @@ task = 'label_skew'
 attack_type = 'None'
 dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
 averaging = 'Weight'
-# fl_cifar10: MNIST, USPS, SVHN, SYN
+# fl_cifar10,fl_fashionmnist, fl_cifar100
+# Digits: MNIST, USPS, SVHN, SYN
 # PACS: 'photo', 'art_painting', 'cartoon', 'sketch'
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 
@@ -19,6 +20,14 @@ method_list = ['FedAVG', 'FedProx', 'FedProc']
 Dataset_info = {
     'fl_cifar10': {
         'parti_num':10,
+        'communication_epoch': 100
+    },
+    'fl_cifar100': {
+        'parti_num': 10,
+        'communication_epoch': 100
+    },
+    'fl_fashionmnist': {
+        'parti_num': 10,
         'communication_epoch': 100
     }
 }

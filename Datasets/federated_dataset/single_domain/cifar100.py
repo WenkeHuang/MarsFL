@@ -5,20 +5,12 @@ from Datasets.federated_dataset.single_domain.utils.single_domain_dataset import
 from Datasets.utils.transforms import DeNormalize
 from utils.conf import multi_domain_data_path, single_domain_data_path
 from PIL import Image
-
 from typing import Tuple
-
-import torchvision.transforms as T
-
-from torch.autograd import Variable
-import torch.nn.functional as F
-
 
 class MyCIFAR100(CIFAR100):
     """
     Overrides the CIFAR10 dataset to change the getitem function.
     """
-
     def __init__(self, root, train=True, transform=None,
                  target_transform=None, download=False) -> None:
         self.not_aug_transform = transforms.Compose([transforms.ToTensor()])
@@ -74,11 +66,11 @@ class FedLeaCIFAR100(SingleDomainDataset):
                                download=False, transform=test_transform)
         self.partition_label_skew_loaders(train_dataset, test_dataset)
 
-    @staticmethod
-    def get_transform():
-        transform = transforms.Compose(
-            [transforms.ToPILImage(), FedLeaCIFAR100.Nor_TRANSFORM])
-        return transform
+    # @staticmethod
+    # def get_transform():
+    #     transform = transforms.Compose(
+    #         [transforms.ToPILImage(), FedLeaCIFAR100.Nor_TRANSFORM])
+    #     return transform
 
     @staticmethod
     def get_normalization_transform():
