@@ -12,10 +12,10 @@ class MOON(FederatedMethod):
 
     def __init__(self, nets_list, client_domain_list, args,cfg):
         super(MOON, self).__init__(nets_list, client_domain_list,args,cfg)
+
         self.prev_nets_list = []
         self.mu = cfg[self.NAME].mu
         self.temperature_moon = cfg[self.NAME].temperature_moon
-
     def ini(self):
         self.global_net = copy.deepcopy(self.nets_list[0])
         self.global_net = self.global_net.to(self.device)
@@ -31,10 +31,9 @@ class MOON(FederatedMethod):
         online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
 
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, self.nets_list[i],self.prev_nets_list[i], priloader_list[i])
+            self.train_net(i, self.nets_list[i], self.prev_nets_list[i], priloader_list[i])
 
         self.copy_nets2_prevnets()
-
         # 获取参与者的聚合权重
         freq = self.fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
@@ -46,6 +45,7 @@ class MOON(FederatedMethod):
         self.fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=self.nets_list,
                                        global_net=self.global_net, freq=freq, except_part=['lora_'],global_only=False)
         return None
+
 
     def train_net(self, index, net,prev_net, train_loader):
         net = net.to(self.device)

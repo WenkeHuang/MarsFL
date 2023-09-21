@@ -131,6 +131,10 @@ CFG.Local = CN()
 CFG.Local.FedProxLocal = CN()
 CFG.Local.FedProxLocal.mu = 0.01
 
+CFG.Local.MOONLocal = CN()
+CFG.Local.MOONLocal.mu = 5
+CFG.Local.MOONLocal.temperature_moon = 0.5
+
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
 
@@ -164,3 +168,9 @@ CFG.FedProc.global_method = 'FedProcSever'
 CFG.FedOpt = CN()
 CFG.FedOpt.local_method = 'BaseLocal'
 CFG.FedOpt.global_method = 'FedOptSever'
+
+
+#Moon
+CFG.MOON = CN()
+CFG.MOON.local_method = 'MOONLocal'
+CFG.MOON.global_method = 'BaseSever'
