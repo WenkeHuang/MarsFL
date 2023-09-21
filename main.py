@@ -28,15 +28,14 @@ def parse_args():
 
     parser.add_argument('--task', type=str, default='OOD')
     # OOD label_skew domain_skew
-
     parser.add_argument('--dataset', type=str, default='Digits',
                         help='Which scenario to perform experiments on.')
     # fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
     # Digits,PACS PACScomb OfficeHome
+    parser.add_argument('--attack_type', type=str, default='None')
+    # byzantine backdoor None
+
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
-
-    parser.add_argument('--attack_type', type=str, default='None')  # byzantine backdoor None
-
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
