@@ -161,6 +161,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     # GA需要测聚合前后的本地效果
     fed_method.test_loaders = private_dataset.test_loader
 
+
     if hasattr(fed_method, 'ini'):
         # 要在这一步 把方法的个性化绑定进去
         fed_method.ini()
@@ -169,6 +170,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         in_domain_accs_dict = {}  # Query-Client Accuracy A^u
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U
         out_domain_accs_dict = {}  # Out-Client Accuracy A^o
+        fed_method.out_train_loader = private_dataset.out_train_loader
     elif args.task == 'label_skew':
         mean_in_domain_acc_list = []
         contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}

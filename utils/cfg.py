@@ -99,7 +99,7 @@ CFG.OPTIMIZER = CN()
 CFG.OPTIMIZER.type = 'SGD'
 CFG.OPTIMIZER.momentum = 0.9
 CFG.OPTIMIZER.weight_decay = 1e-5
-CFG.OPTIMIZER.local_epoch = 10
+CFG.OPTIMIZER.local_epoch = 2
 CFG.OPTIMIZER.local_train_batch = 64
 CFG.OPTIMIZER.local_test_batch = 64
 CFG.OPTIMIZER.val_batch = 64
@@ -124,6 +124,10 @@ CFG.Sever.SageFlowSever.pub_len = 5000
 CFG.Sever.SageFlowSever.pub_aug = 'weak'
 CFG.Sever.SageFlowSever.public_batch_size = 64
 CFG.Sever.SageFlowSever.public_epoch = 20
+
+CFG.Sever.KD3ASever = CN()
+CFG.Sever.KD3ASever.confidence_gate_begin = 0.9
+CFG.Sever.KD3ASever.confidence_gate_end = 0.95
 
 '''Local'''
 CFG.Local = CN()
@@ -174,3 +178,9 @@ CFG.FedOpt.global_method = 'FedOptSever'
 CFG.MOON = CN()
 CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
+
+
+#Moon
+CFG.KD3A = CN()
+CFG.KD3A.local_method = 'BaseLocal'
+CFG.KD3A.global_method = 'KD3ASever'

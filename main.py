@@ -26,7 +26,7 @@ def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
 
-    parser.add_argument('--task', type=str, default='domain_skew')
+    parser.add_argument('--task', type=str, default='OOD')
     # OOD label_skew domain_skew
 
     parser.add_argument('--dataset', type=str, default='Digits',
@@ -132,8 +132,12 @@ def main(args=None):
 
         # cfg.freeze()
 
-        private_dataset.client_domain_list = client_domain_list  # 参与者具体的Domain选择
+        private_dataset.client_domain_list = client_domain_list
+        client_domain_list.append(cfg[args.task].out_domain)
+        # 参与者具体的Domain选择
         private_dataset.get_data_loaders(client_domain_list)
+        private_dataset.out_train_loader = private_dataset.train_loaders.pop()
+        client_domain_list.pop()
 
     elif args.task == 'label_skew':
         private_dataset.get_data_loaders()
