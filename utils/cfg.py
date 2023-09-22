@@ -158,6 +158,11 @@ CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
 CFG.FedProx.global_method = 'BaseSever'
 
+# FedProxGA
+CFG.FedProxGA = CN()
+CFG.FedProxGA.local_method = 'FedProxLocal'
+CFG.FedProxGA.global_method = 'FedProxGASever'
+
 # FedProxDefense
 CFG.FedProxDefense = CN()
 CFG.FedProxDefense.local_method = 'FedProxLocal'
