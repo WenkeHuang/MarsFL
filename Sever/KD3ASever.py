@@ -50,6 +50,7 @@ class KD3ASever(SeverMethod):
                     knowledge_list = [torch.softmax(nets_list[i](images), dim=1).unsqueeze(1) for
                                       i in range(len(nets_list))]
                     knowledge_list = torch.cat(knowledge_list, 1)
+                knowledge_list.to(self.device)
                 _, consensus_knowledge, consensus_weight = knowledge_vote(knowledge_list, confidence_gate,
                                                                           num_classes=self.cfg.DATASET.n_classes)
 
@@ -59,7 +60,7 @@ class KD3ASever(SeverMethod):
 
                 lam = np.random.beta(2, 2)
                 batch_size = images.size(0)
-                index = torch.randperm(batch_size).cuda()
+                index = torch.randperm(batch_size).to(self.device)
                 mixed_image = lam * images + (1 - lam) * images[index, :]
                 mixed_consensus = lam * consensus_knowledge + (1 - lam) * consensus_knowledge[index, :]
                 output_t = global_net(mixed_image)
@@ -69,18 +70,17 @@ class KD3ASever(SeverMethod):
                 task_loss_t.backward()
                 optimizer.step()
                 # Calculate consensus focus
-                consensus_focus_dict = calculate_consensus_focus(consensus_focus_dict, knowledge_list, confidence_gate,
-                                                                 len(nets_list)-1, self.cfg.DATASET.n_classes)
+                self.consensus_focus_dict = calculate_consensus_focus(self.consensus_focus_dict, knowledge_list, confidence_gate,
+                                                                 len(nets_list), self.cfg.DATASET.n_classes)
                 # loss.backward()
-                iterator.desc = "Global  %d loss = %0.3f" % (index, task_loss_t)
-                optimizer.step()
+                # iterator.desc = "Global  %d loss = %0.1f" % (index, task_loss_t)
         # Consensus Focus Re-weighting
         target_parameter_alpha = self.target_weight[0] / self.target_weight[1]
         target_weight = round(target_parameter_alpha / len(nets_list), 4)
         epoch_domain_weight = []
         source_total_weight = 1 - target_weight
         for i in range(1, len(nets_list)+1):
-            epoch_domain_weight.append(consensus_focus_dict[i])
+            epoch_domain_weight.append(self.consensus_focus_dict[i])
         if sum(epoch_domain_weight) == 0:
             epoch_domain_weight = [v + 1e-3 for v in epoch_domain_weight]
         epoch_domain_weight = [round(source_total_weight * v / sum(epoch_domain_weight), 4) for v in
@@ -100,7 +100,7 @@ class KD3ASever(SeverMethod):
         # fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
         #                           global_net=global_net, freq=freq, except_part=[], global_only=False)
 
-        federated_average(nets_list,self.domain_weigh,global_net)
+        federated_average(nets_list,self.domain_weight,global_net)
         freq = self.domain_weight
 
         return freq
@@ -114,8 +114,8 @@ def knowledge_vote(knowledge_list, confidence_gate, num_classes):
     """
     max_p, max_p_class = knowledge_list.max(2)
     max_conf, _ = max_p.max(1)
-    max_p_mask = (max_p > confidence_gate).float().cuda()
-    consensus_knowledge = torch.zeros(knowledge_list.size(0), knowledge_list.size(2)).cuda()
+    max_p_mask = (max_p > confidence_gate).float()
+    consensus_knowledge = torch.zeros(knowledge_list.size(0), knowledge_list.size(2)).to(knowledge_list.device)
     for batch_idx, (p, p_class, p_mask) in enumerate(zip(max_p, max_p_class, max_p_mask)):
         # to solve the [0,0,0] situation
         if torch.sum(p_mask) > 0:
@@ -123,8 +123,8 @@ def knowledge_vote(knowledge_list, confidence_gate, num_classes):
         for source_idx, source_class in enumerate(p_class):
             consensus_knowledge[batch_idx, source_class] += p[source_idx]
     consensus_knowledge_conf, consensus_knowledge = consensus_knowledge.max(1)
-    consensus_knowledge_mask = (max_conf > confidence_gate).float().cuda()
-    consensus_knowledge = torch.zeros(consensus_knowledge.size(0), num_classes).cuda().scatter_(1,
+    consensus_knowledge_mask = (max_conf > confidence_gate).float().to(knowledge_list.device)
+    consensus_knowledge = torch.zeros(consensus_knowledge.size(0), num_classes).to(knowledge_list.device).scatter_(1,
                                                                                                 consensus_knowledge.view(
                                                                                                     -1, 1), 1)
     return consensus_knowledge_conf, consensus_knowledge, consensus_knowledge_mask
@@ -172,7 +172,7 @@ def update_domain_weight(global_domain_weight, epoch_domain_weight, momentum=0.9
 
 
 
-def federated_average(net_list, coefficient_matrix, global_net,batchnorm_mmd=True):
+def federated_average(model_list, coefficient_matrix, global_net,batchnorm_mmd=True):
     """
     :param model_list: a list of all models needed in federated average. [0]: model for target domain,
     [1:-1] model for source domains
@@ -181,7 +181,7 @@ def federated_average(net_list, coefficient_matrix, global_net,batchnorm_mmd=Tru
     :return model list after federated average
     """
 
-    model_list = net_list.insert(0,global_net)
+    model_list.insert(0,global_net)
     if batchnorm_mmd:
         dict_list = [it.state_dict() for it in model_list]
         dict_item_list = [dic.items() for dic in dict_list]
@@ -191,6 +191,7 @@ def federated_average(net_list, coefficient_matrix, global_net,batchnorm_mmd=Tru
             dict_list[0][key_data_pair_list[0][0]] = sum(source_data_list)
         for model in model_list:
             model.load_state_dict(dict_list[0])
+        model_list.pop(0)
     else:
         named_parameter_list = [model.named_parameters() for model in model_list]
         for parameter_list in zip(*named_parameter_list):
