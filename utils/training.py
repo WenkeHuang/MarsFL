@@ -174,6 +174,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     elif args.task == 'label_skew':
         mean_in_domain_acc_list = []
         contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
+        fed_method.net_cls_counts = private_dataset.net_cls_counts # label stastic
     elif args.task == 'domain_skew':
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}

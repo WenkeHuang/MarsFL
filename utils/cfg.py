@@ -139,8 +139,23 @@ CFG.Local.MOONLocal = CN()
 CFG.Local.MOONLocal.mu = 5
 CFG.Local.MOONLocal.temperature_moon = 0.5
 
+CFG.Local.FedProtoLocal = CN()
+CFG.Local.FedProtoLocal.mu = 2
+
+CFG.Local.FPLLocal = CN()
+CFG.Local.FPLLocal.infoNCET = 0.5
+
+CFG.Local.ScaffoldLocal = CN()
+CFG.Local.ScaffoldLocal.max_grad_norm = 100
+
+CFG.Local.FedLCLocal = CN()
+CFG.Local.FedLCLocal.tau = 0.5
+
+
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
+
+
 
 '''Federated Method'''
 # qffeAVG
@@ -168,6 +183,16 @@ CFG.FedProc = CN()
 CFG.FedProc.local_method = 'FedProcLocal'
 CFG.FedProc.global_method = 'FedProcSever'
 
+# FedProto
+CFG.FedProto = CN()
+CFG.FedProto.local_method = 'FedProtoLocal'
+CFG.FedProto.global_method = 'FedProtoSever'
+
+# FPL
+CFG.FPL = CN()
+CFG.FPL.local_method = 'FPLLocal'
+CFG.FPL.global_method = 'FPLSever'
+
 # FedOpt
 CFG.FedOpt = CN()
 CFG.FedOpt.local_method = 'BaseLocal'
@@ -179,8 +204,27 @@ CFG.MOON = CN()
 CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
 
+#FedDyn
+CFG.MOON = CN()
+CFG.MOON.local_method = 'FedDynLocal'
+CFG.MOON.global_method = 'BaseSever'
 
-#Moon
+#Scaffold
+CFG.Scaffold = CN()
+CFG.Scaffold.local_method = 'ScaffoldLocal'
+CFG.Scaffold.global_method = 'ScaffoldSever'
+
+#Scaffold
+CFG.FedLC = CN()
+CFG.FedLC.local_method = 'FedLCLocal'
+CFG.FedLC.global_method = 'BaseSever'
+
+#KD3A
 CFG.KD3A = CN()
 CFG.KD3A.local_method = 'BaseLocal'
 CFG.KD3A.global_method = 'KD3ASever'
+
+#FADA
+CFG.FADA = CN()
+CFG.FADA.local_method = 'BaseLocal'
+CFG.FADA.global_method = 'FADASever'

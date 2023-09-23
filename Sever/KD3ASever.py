@@ -100,7 +100,7 @@ class KD3ASever(SeverMethod):
         # fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
         #                           global_net=global_net, freq=freq, except_part=[], global_only=False)
 
-        federated_average(nets_list,self.domain_weight,global_net)
+        federated_average(nets_list,self.domain_weight, global_net)
         freq = self.domain_weight
 
         return freq
