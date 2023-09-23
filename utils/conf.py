@@ -17,8 +17,10 @@ def single_domain_data_path() -> str:
     return '/data0/data_wk/'  # 140
     # return '/data/FL_data/Domain/' # 129
 
+
 def log_path() -> str:
     return './data/'
+
 
 def net_path() -> str:
     return './checkpoints/'

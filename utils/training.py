@@ -158,10 +158,6 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     if args.csv_log:
         csv_writer = CsvWriter(args, cfg)
 
-    # GA需要测聚合前后的本地效果
-    fed_method.test_loaders = private_dataset.test_loader
-
-
     if hasattr(fed_method, 'ini'):
         # 要在这一步 把方法的个性化绑定进去
         fed_method.ini()

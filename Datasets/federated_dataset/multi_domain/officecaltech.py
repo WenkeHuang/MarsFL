@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 from utils.conf import multi_domain_data_path
 from Datasets.utils.transforms import TwoCropsTransform
 
+
 class ImageFolder_Custom(DatasetFolder):
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
         self.data_name = data_name
@@ -39,6 +40,10 @@ class ImageFolder_Custom(DatasetFolder):
         else:
             used_index_list = self.test_index_list
 
+        print(index)
+        print(self.imagefolder_obj.samples[used_index_list[index]])
+        print()
+
         path = self.imagefolder_obj.samples[used_index_list[index]][0]
         target = self.imagefolder_obj.samples[used_index_list[index]][1]
         target = int(target)
@@ -56,6 +61,7 @@ class FLOfficeCaltech(MultiDomainDataset):
 
     # N_CLASS = 65
     N_CLASS = 10
+
     # Nor_TRANSFORM = utils.Compose(
     #     [utils.Resize((32, 32)),
     #      utils.RandomCrop(32, padding=4),
@@ -99,7 +105,7 @@ class FLOfficeCaltech(MultiDomainDataset):
         domain_train_eval_dataset_dict = {}
 
         train_transform = self.train_transform
-        if self.cfg.DATASET.use_two_crop == 'WEAK':
+        if self.cfg.DATASET.aug == 'two_weak':
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
         else:
             train_val_transform = self.train_transform
