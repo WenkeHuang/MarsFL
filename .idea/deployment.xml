@@ -1,26 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="wanguancheng@WHU129WGC:8666 agent (2)" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" serverName="huangwenke@127.0.0.1:6000" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="129">
+      <paths name="Copy of project-level server 'huangwenke@127.0.0.1:3000'">
         <serverdata>
           <mappings>
-            <mapping deploy="/FL/marsFL" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="wanguancheng@WHU129WGC:8666 agent">
+      <paths name="Copy of project-level server 'huangwenke@127.0.0.1:4000'">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/wanguancheng/FL/marsFL" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="wanguancheng@WHU129WGC:8666 agent (2)">
+      <paths name="fin_4000">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/wanguancheng/FL/marsFL" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="huangwenke@127.0.0.1:3000 key">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="huangwenke@127.0.0.1:4000 key">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="huangwenke@127.0.0.1:5000">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="huangwenke@127.0.0.1:6000">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/MarsFL" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="huangwenke@127.0.0.1:6000 password">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

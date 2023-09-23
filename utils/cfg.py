@@ -61,7 +61,7 @@ CFG.attack.noise_data_rate = 0.5
 
 CFG.attack.byzantine = CN()
 CFG.attack.byzantine.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
-CFG.attack.byzantine.dataset_type = 'multi_domain'
+CFG.attack.byzantine.dataset_type = 'single_domain'
 
 # attack para for min_max and min_sum
 CFG.attack.byzantine.dev_type = 'std'
@@ -172,6 +172,11 @@ CFG.FedAVG.global_method = 'BaseSever'
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
 CFG.FedProx.global_method = 'BaseSever'
+
+# FedProxGA
+CFG.FedProxGA = CN()
+CFG.FedProxGA.local_method = 'FedProxLocal'
+CFG.FedProxGA.global_method = 'FedProxGASever'
 
 # FedProxDefense
 CFG.FedProxDefense = CN()
