@@ -63,7 +63,7 @@ https://github.com/THUYimingLi/backdoor-learning-resources#federated-learning
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
-| Backdoor | | [Code](https://github.com/cpwan/Attack-Adaptive-Aggregation-in-Federated-Learning/blob/master/clients_attackers.py#L34) | |
+| Backdoor | arXiv'17 | [Code](https://github.com/cpwan/Attack-Adaptive-Aggregation-in-Federated-Learning/blob/master/clients_attackers.py#L34) | [Paper](https://arxiv.org/abs/1712.05526) |
 | Semantic Backdoor | AISTATS'20 | [Code](https://github.com/cpwan/Attack-Adaptive-Aggregation-in-Federated-Learning/blob/master/clients_attackers.py#L34) | [Paper](https://arxiv.org/pdf/1807.00459.pdf)
 | F3BA | AAAI'23 | [Code](https://github.com/jinghuichenFocused-Flip-Federated-Backdoor-Attack)| [Paper](https://arxiv.org/abs/2301.08170)|
 | FLIP | ICLR'23 | [Code](https://github.com/KaiyuanZh/FLIP) | [Paper](https://github.com/KaiyuanZh/FLIP)
