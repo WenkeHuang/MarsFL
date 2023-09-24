@@ -28,7 +28,7 @@ def parse_args():
 
     parser.add_argument('--task', type=str, default='OOD')
     # OOD label_skew domain_skew
-    parser.add_argument('--dataset', type=str, default='Digits',
+    parser.add_argument('--dataset', type=str, default='OfficeHome',
                         help='Which scenario to perform experiments on.')
     # fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
     # Digits,PACS PACScomb OfficeHome

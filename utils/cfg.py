@@ -95,7 +95,7 @@ CFG.OOD = CN()
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 # OfficeHome 'Art', 'Clipart', 'Product', 'Real_World'
 # DomainNet 'clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'
-CFG.OOD.out_domain = 'MNIST'
+CFG.OOD.out_domain = 'Real_World'
 
 '''Federated OPTIMIZER'''
 CFG.OPTIMIZER = CN()
@@ -212,16 +212,16 @@ CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
 
 # FedDyn
-CFG.MOON = CN()
-CFG.MOON.local_method = 'FedDynLocal'
-CFG.MOON.global_method = 'BaseSever'
+CFG.FedDyn = CN()
+CFG.FedDyn.local_method = 'FedDynLocal'
+CFG.FedDyn.global_method = 'BaseSever'
 
 # Scaffold
 CFG.Scaffold = CN()
 CFG.Scaffold.local_method = 'ScaffoldLocal'
 CFG.Scaffold.global_method = 'ScaffoldSever'
 
-# Scaffold
+# FedLC
 CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'

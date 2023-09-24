@@ -6,10 +6,10 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'label_skew'
+task = 'domain_skew'
 # label_skew domain_skew
 attack_type = 'None'
-dataset = 'fl_fashionmnist'  # 'fl_cifar10, PACS
+dataset = 'Digits'  # 'fl_cifar10, PACS
 averaging = 'Weight'
 # Weight Equal
 # fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet

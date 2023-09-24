@@ -87,27 +87,17 @@ class MultiDomainDataset:
             elif key in ['photo', 'art_painting', 'cartoon', 'sketch']:
                 y_train = value.labels
             elif key in ['caltech', 'amazon', 'webcam', 'dslr']:
-                y_train = value.imagefolder_obj.targets
+                y_train = value.train_data_list[:, 1]
             elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
-                y_train = value.imagefolder_obj.targets
+                y_train = value.train_data_list[:, 1]
 
             not_used_index_dict[key] = np.arange(len(y_train))
             ini_len_dict[key] = len(y_train)
 
         # train
         for client_domain_name in client_domain_name_list:
-            if client_domain_name in 'SYN':
-                # train_dataset = domain_training_dataset_dict[client_domain_name].imagefolder_obj
-                train_dataset = domain_training_dataset_dict[client_domain_name]
-            elif client_domain_name in ['MNIST', 'USPS', 'SVHN']:
-                # train_dataset = domain_training_dataset_dict[client_domain_name].dataset
-                train_dataset = domain_training_dataset_dict[client_domain_name]
-            elif client_domain_name in ['photo', 'art_painting', 'cartoon', 'sketch']:
-                train_dataset = domain_training_dataset_dict[client_domain_name]
-            elif client_domain_name in ['caltech', 'amazon', 'webcam', 'dslr']:
-                train_dataset = domain_training_dataset_dict[client_domain_name]
-            elif client_domain_name in ['Art', 'Clipart', 'Product', 'Real_World']:
-                train_dataset = domain_training_dataset_dict[client_domain_name]
+
+            train_dataset = domain_training_dataset_dict[client_domain_name]
 
             idxs = np.random.permutation(not_used_index_dict[client_domain_name])
             percent = self.domain_ratio[client_domain_name]
@@ -131,9 +121,9 @@ class MultiDomainDataset:
             elif key in ['photo', 'art_painting', 'cartoon', 'sketch']:
                 y_train_eval = value.labels
             elif key in ['caltech', 'amazon', 'webcam', 'dslr']:
-                y_train_eval = value.imagefolder_obj.targets
+                y_train_eval = value.test_data_list[:, 1]
             elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
-                y_train_eval = value.imagefolder_obj.targets
+                y_train_eval = value.test_data_list[:, 1]
 
             ini_len_dict[key] = len(y_train_eval)
             not_used_index_dict[key] = np.arange(len(y_train_eval))
@@ -141,18 +131,8 @@ class MultiDomainDataset:
         调用Validation的Dataloader
         '''
         for domain_name, value in domain_train_eval_dataset_dict.items():
-            if domain_name in 'SYN':
-                # train_eval_dataset = domain_train_eval_dataset_dict[domain_name].imagefolder_obj
-                train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
-            elif domain_name in ['MNIST', 'USPS', 'SVHN']:
-                # train_eval_dataset = domain_train_eval_dataset_dict[domain_name].dataset
-                train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
-            elif domain_name in ['photo', 'art_painting', 'cartoon', 'sketch']:
-                train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
-            elif domain_name in ['caltech', 'amazon', 'webcam', 'dslr']:
-                train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
-            elif domain_name in ['Art', 'Clipart', 'Product', 'Real_World']:
-                train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
+
+            train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
 
             idxs = np.random.permutation(not_used_index_dict[domain_name])
             percent = self.train_eval_domain_ratio[domain_name]
@@ -167,18 +147,8 @@ class MultiDomainDataset:
         调用Testing的Dataloader
         '''
         for key, value in domain_testing_dataset_dict.items():
-            if key in ['SYN']:
-                # test_dataset = value.imagefolder_obj
-                test_dataset = value
-            elif key in ['MNIST', 'USPS', 'SVHN']:
-                # test_dataset = value.dataset
-                test_dataset = value
-            elif key in ['photo', 'art_painting', 'cartoon', 'sketch']:
-                test_dataset = value
-            elif key in ['caltech', 'amazon', 'webcam', 'dslr']:
-                test_dataset = value
-            elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
-                test_dataset = value
+
+            test_dataset = domain_testing_dataset_dict[key]
 
             test_loader = DataLoader(test_dataset,
                                      batch_size=self.cfg.OPTIMIZER.local_test_batch, shuffle=False, **dataloader_kwargs)

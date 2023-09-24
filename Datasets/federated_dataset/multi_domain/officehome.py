@@ -4,6 +4,7 @@ import torchvision.transforms as transforms
 from utils.conf import multi_domain_data_path
 from torchvision.datasets import ImageFolder
 from Datasets.utils.transforms import TwoCropsTransform
+import numpy as np
 
 
 class ImageFolder_Custom():
@@ -13,38 +14,40 @@ class ImageFolder_Custom():
         self.train = train
         self.transform = transform
         self.target_transform = target_transform
-        if train:
-            self.imagefolder_obj = ImageFolder(self.root + 'office_home/' + self.data_name + '/', self.transform, self.target_transform)
-        else:
-            self.imagefolder_obj = ImageFolder(self.root + 'office_home/' + self.data_name + '/', self.transform, self.target_transform)
 
+        self.imagefolder_obj = ImageFolder(self.root + 'office_home/' + self.data_name + '/', self.transform, self.target_transform)
+
+        # split train dataset
         all_data = self.imagefolder_obj.samples
-        self.train_index_list = []
-        self.test_index_list = []
+        self.train_data_list = []
+        self.test_data_list = []
         for i in range(len(all_data)):
             if i % subset_capacity <= subset_train_num:
-                self.train_index_list.append(i)
+                self.train_data_list.append(all_data[i])
             else:
-                self.test_index_list.append(i)
+                self.test_data_list.append(all_data[i])
+
+        self.train_data_list = np.array(self.train_data_list)
+        self.test_data_list = np.array(self.test_data_list)
 
     def __len__(self):
         if self.train:
-            return len(self.train_index_list)
+            return len(self.train_data_list)
         else:
-            return len(self.test_index_list)
+            return len(self.test_data_list)
 
     def __getitem__(self, index):
 
         if self.train:
-            used_index_list = self.train_index_list
+            data_list = self.train_data_list
         else:
-            used_index_list = self.test_index_list
+            data_list = self.test_data_list
 
         # path = self.samples[used_index_list[index]][0]
         # target = self.samples[used_index_list[index]][1]
 
-        path = self.imagefolder_obj.samples[used_index_list[index]][0]
-        target = self.imagefolder_obj.samples[used_index_list[index]][1]
+        path = data_list[index][0]
+        target = data_list[index][1]
 
         target = int(target)
         img = self.imagefolder_obj.loader(path)
