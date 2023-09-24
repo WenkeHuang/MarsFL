@@ -2,7 +2,7 @@ from Local.utils.local_methods import LocalMethod
 import torch.optim as optim
 import torch.nn as nn
 from tqdm import tqdm
-
+import copy
 
 class FedDynLocal(LocalMethod):
     NAME = 'FedDynLocal'
