@@ -41,7 +41,7 @@ def parse_args():
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='FedProxGA',
+    parser.add_argument('--method', type=str, default='COPADG',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos
     '''
