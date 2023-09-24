@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="huangwenke@127.0.0.1:6000" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
-    <option name="confirmBeforeUploading" value="false" />
+  <component name="PublishConfigData" autoUpload="Always" serverName="huangwenke@127.0.0.1:6000" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="Copy of project-level server 'huangwenke@127.0.0.1:3000'">
         <serverdata>

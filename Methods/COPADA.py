@@ -12,7 +12,7 @@ class COPADA(FederatedMethod):
     COMPATIBILITY = ['homogeneity']
 
     def __init__(self, nets_list, client_domain_list, args, cfg):
-        super(COPAdA, self).__init__(nets_list, client_domain_list, args, cfg)
+        super(COPADA, self).__init__(nets_list, client_domain_list, args, cfg)
         self.head_dict = {}
     def ini(self):
         super().ini()

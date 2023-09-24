@@ -4,11 +4,11 @@ import torch.nn as nn
 from tqdm import tqdm
 
 
-class COPADALocal(LocalMethod):
-    NAME = 'COPADALocal'
+class COPALocal(LocalMethod):
+    NAME = 'COPALocal'
 
     def __init__(self, args, cfg):
-        super(COPADALocal, self).__init__(args, cfg)
+        super(COPALocal, self).__init__(args, cfg)
 
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']

@@ -239,7 +239,7 @@ CFG.FADA = CN()
 CFG.FADA.local_method = 'BaseLocal'
 CFG.FADA.global_method = 'FADASever'
 
-#COPA
-CFG.COPA = CN()
-CFG.COPA.local_method = 'COPALocal'
-CFG.COPA.global_method = 'COPASever'
+# COPADG
+CFG.COPADG = CN()
+CFG.COPADG.local_method = 'COPALocal'
+CFG.COPADG.global_method = 'COPADGSever'
