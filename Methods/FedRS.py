@@ -2,14 +2,16 @@ from Aggregations import get_fed_aggregation
 from Methods.utils.meta_methods import FederatedMethod
 
 import copy
+import torch
+import numpy as np
 
 
-class FedLC(FederatedMethod):
-    NAME = 'FedLC'
+class FedRS(FederatedMethod):
+    NAME = 'FedRS'
     COMPATIBILITY = ['homogeneity']
 
     def __init__(self, nets_list, client_domain_list, args, cfg):
-        super(FedLC, self).__init__(nets_list, client_domain_list, args, cfg)
+        super(FedRS, self).__init__(nets_list, client_domain_list, args, cfg)
 
     def ini(self):
         super().ini()

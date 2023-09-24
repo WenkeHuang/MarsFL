@@ -16,19 +16,19 @@ class FedLCLocal(LocalMethod):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
-
+        net_cls_counts = kwargs['net_cls_counts']
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], priloader_list[i])
+            self.train_net(i, nets_list[i], priloader_list[i],net_cls_counts)
 
 
-    def _train_net(self, index, net, train_loader):
+    def train_net(self, index, net, train_loader,net_cls_counts):
         net = net.to(self.device)
         net.train()
         if self.cfg.OPTIMIZER.type == 'SGD':
             optimizer = optim.SGD(filter(lambda p: p.requires_grad, net.parameters()), lr=self.cfg.OPTIMIZER.local_train_lr,
                                   momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
         criterion = self.logit_calibrated_loss
-        label_distrib = torch.tensor(list(self.net_cls_counts[index].values()), device=self.device).float()
+        label_distrib = torch.tensor(list(net_cls_counts[index].values()), device=self.device).float()
         iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
         for _ in iterator:
             for batch_idx, (images, labels) in enumerate(train_loader):

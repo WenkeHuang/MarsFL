@@ -163,6 +163,9 @@ CFG.Local.FedLCLocal.tau = 0.5
 CFG.Local.FedNovaLocal = CN()
 CFG.Local.FedNovaLocal.rho = 0.9
 
+CFG.Local.FedRSLocal = CN()
+CFG.Local.FedRSLocal.alpha = 0.5
+
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
 
@@ -232,6 +235,11 @@ CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'
 
+#FedRS
+CFG.FedRS = CN()
+CFG.FedRS.local_method = 'FedRSLocal'
+CFG.FedRS.global_method = 'BaseSever'
+
 #FedNova
 CFG.FedNova = CN()
 CFG.FedNova.local_method = 'FedNovaLocal'
@@ -250,7 +258,7 @@ CFG.FADA.global_method = 'FADASever'
 # COPADA
 CFG.COPADA = CN()
 CFG.COPADA.local_method = 'COPALocal'
-CFG.COPADA.global_method = 'COPADASever'
+CFG.COPADA.global_method = 'COPAGSever'
 
 # COPADG
 CFG.COPADG = CN()

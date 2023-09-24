@@ -15,7 +15,7 @@ def multi_domain_data_path() -> str:
 
 def single_domain_data_path() -> str:
     # return '/data0/data_wk/'  # 140
-    return '/data/FL_data/Domain/' # 129
+    return '/data/FL_data/' # 129
 
 
 def log_path() -> str:
