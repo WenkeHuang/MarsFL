@@ -169,7 +169,8 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         fed_method.out_train_loader = private_dataset.out_train_loader
     elif args.task == 'label_skew':
         mean_in_domain_acc_list = []
-        contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
+        if args.attack_type == 'None':
+            contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
         fed_method.net_cls_counts = private_dataset.net_cls_counts # label stastic
     elif args.task == 'domain_skew':
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
@@ -221,46 +222,42 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                     out_domain_accs_dict[cfg[args.task].out_domain] = [out_domain_acc]
                 print(log_msg(f"The {epoch_index} Epoch: Out Domain {cfg[args.task].out_domain} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
 
-            # if args.save_checkpoint:
-            #     # 每十个交流周期进行一次存储
-            #     if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
-            #         fed_method.save_checkpoint()
+        else:
+            if 'mean_in_domain_acc_list' in locals():
+                print("进行 mean_in_domain_acc_list 评估")
+                top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
+                mean_in_domain_acc_list.append(top1acc)
+                print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}', "TEST"))
 
-        elif args.task == 'label_skew':
-            top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
-            if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
-                con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
-                                                     domain_list=None, task=args.task)
-                contribution_match_degree_list.append(con_fair_metric)
-            else:
-                contribution_match_degree_list.append(0)
-            mean_in_domain_acc_list.append(top1acc)
-            print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc} Con Fair:{con_fair_metric}', "TEST"))
-
-        elif args.task == 'domain_skew':
-            domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
-            perf_var = np.var(domain_accs, ddof=0)
-            performance_variane_list.append(perf_var)
-            mean_in_domain_acc_list.append(mean_in_domain_acc)
-            if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
-                con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
-                                                     domain_list=private_dataset.domain_list, task=args.task)
-                contribution_match_degree_list.append(con_fair_metric)
-            else:
-                contribution_match_degree_list.append(0)
-
-            for index, in_domain in enumerate(private_dataset.domain_list):
-                if in_domain in in_domain_accs_dict:
-                    in_domain_accs_dict[in_domain].append(domain_accs[index])
+            if 'contribution_match_degree_list' in locals():
+                print("进行 contribution_match_degree_list 评估")
+                if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+                    con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
+                                                         domain_list=None, task=args.task)
+                    contribution_match_degree_list.append(con_fair_metric)
                 else:
-                    in_domain_accs_dict[in_domain] = [domain_accs[index]]
+                    con_fair_metric = 0
+                    contribution_match_degree_list.append(con_fair_metric)
+                print(log_msg(f'The {epoch_index} Method: {args.method} Epoch: Con Fair:{con_fair_metric}', "TEST"))
 
-            print(log_msg(f"The {epoch_index} Epoch: Mean Acc: {mean_in_domain_acc} Method: {args.method} CSV: {args.csv_name} Con Fair: {con_fair_metric} Per Var: {perf_var} ", "TEST"))
+            if 'in_domain_accs_dict' in locals():
+                print("进行 in_domain_accs_dict 评估")
+                domain_accs, mean_in_domain_acc = global_in_evaluation(fed_method, private_dataset.test_loader, private_dataset.domain_list)
+                perf_var = np.var(domain_accs, ddof=0)
+                performance_variane_list.append(perf_var)
+                mean_in_domain_acc_list.append(mean_in_domain_acc)
 
-        if args.attack_type == 'backdoor':
-            top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.backdoor_test_loader, fed_method.device)
-            attack_success_rate.append(top1acc)
-            print(log_msg(f'The {epoch_index} Epoch: attack success rate:{top1acc}'))
+                for index, in_domain in enumerate(private_dataset.domain_list):
+                    if in_domain in in_domain_accs_dict:
+                        in_domain_accs_dict[in_domain].append(domain_accs[index])
+                    else:
+                        in_domain_accs_dict[in_domain] = [domain_accs[index]]
+                print(log_msg(f"The {epoch_index} Epoch: Mean Acc: {mean_in_domain_acc} Method: {args.method} Per Var: {perf_var} ", "TEST"))
+
+            if 'attack_success_rate' in locals():
+                top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.backdoor_test_loader, fed_method.device)
+                attack_success_rate.append(top1acc)
+                print(log_msg(f'The {epoch_index} Epoch: attack success rate:{top1acc}'))
 
     if args.csv_log:
         if args.task == 'OOD':
@@ -279,6 +276,10 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
             csv_writer.write_acc(performance_variane_list, name='performance_variance', mode='MEAN')
 
-
         if args.attack_type == 'backdoor':
             csv_writer.write_acc(attack_success_rate, name='attack_success_rate', mode='MEAN')
+
+        # if args.save_checkpoint:
+        #     # 每十个交流周期进行一次存储
+        #     if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+        #         fed_method.save_checkpoint()

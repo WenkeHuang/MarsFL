@@ -33,6 +33,7 @@ Dataset_info = {
         'communication_epoch': 100
     },
     'Digits': {
+        'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     }
@@ -49,10 +50,10 @@ aim_args_dict = {
     # 'parti_num': 1,
 }
 
+
 aim_cfg_dict = {
     'DATASET': {
-        # 'use_two_crop': "WEAK"
-        # 'parti_num': 20
+        # 'backbone': "resnet18"
     },
 }
 
@@ -61,7 +62,8 @@ def mean_metric(structure_path, metric):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
-        if model != '' and model in method_list:
+        if model != '':
+        # if model != '' and model in method_list:
             model_path = os.path.join(structure_path, model)
             if os.path.isdir(model_path):
                 for para in os.listdir(model_path):
@@ -74,13 +76,16 @@ def mean_metric(structure_path, metric):
                             data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values
-                            mean_acc_value = np.mean(acc_value, axis=0)
-                            mean_acc_value = mean_acc_value.tolist()
-                            mean_acc_value = [round(item, 3) for item in mean_acc_value]
-                            last_acc_vale = mean_acc_value[-5:]  # 取最后五轮结果
-                            last_acc_vale = np.mean(last_acc_vale)
-                            mean_acc_value.append(round(last_acc_vale, 3))
-                            acc_dict[experiment_index] = [model, para] + mean_acc_value
+                            if type(acc_value[0][0]) == str:
+                                pass
+                            else:
+                                mean_acc_value = np.mean(acc_value, axis=0)
+                                mean_acc_value = mean_acc_value.tolist()
+                                mean_acc_value = [round(item, 3) for item in mean_acc_value]
+                                last_acc_vale = mean_acc_value[-5:]  # 取最后五轮结果
+                                last_acc_vale = np.mean(last_acc_vale)
+                                mean_acc_value.append(round(last_acc_vale, 3))
+                                acc_dict[experiment_index] = [model, para] + mean_acc_value
                             experiment_index += 1
     return acc_dict
 
@@ -89,7 +94,8 @@ def all_metric(structure_path, metric, scale_num):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
-        if model != '' and model in method_list:
+        if model != '':
+        # if model != '' and model in method_list:
             model_path = os.path.join(structure_path, model)
             if os.path.isdir(model_path):  # Check this path = path to folder
                 for para in os.listdir(model_path):
