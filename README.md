@@ -15,6 +15,7 @@ Guancheng Wan
 |MOON | CVPR'21 |[Code](https://github.com/QinbinLi/MOON)|[Paper]()| Yes|
 |FedProc| arXiv'21 | [Code](https://github.com/973891422/Moon_FedProc)| [Paper](https://github.com/QinbinLi/MOON)|Yes|
 | FedDyn| ICLR'21 | [Code1](https://github.com/alpemreacar/FedDyn) [Code2](https://github.com/lxcnju/FedRepo/tree/main/algorithms) |[Paper](https://arxiv.org/abs/2003.002957)| Yes|
+|FedProto| AAAI'22 | [Code](https://github.com/yuetan031/fedproto)| [Paper](https://arxiv.org/abs/2105.00243)|Yes|
 | FedDC| CVPR'22 | [Code](https://github.com/gaoliang13/FedDC) |[Paper] [Zhihu](https://zhuanlan.zhihu.com/p/505889549)|
 | FedNTD| NeurIPS'22 | [Code](https://github.com/Lee-Gihun/FedNTD) |[Paper](https://arxiv.org/abs/2106.03097)|
 | FedLC| ICML'22 | [Code] |[Paper](https://proceedings.mlr.press/v162/zhang22p.html)| 
