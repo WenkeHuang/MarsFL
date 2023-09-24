@@ -24,7 +24,7 @@ import os
 
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
-    parser.add_argument('--device_id', type=int, default=7, help='The Device Id for Experiment')
+    parser.add_argument('--device_id', type=int, default=0, help='The Device Id for Experiment')
 
     parser.add_argument('--task', type=str, default='OOD')
     # OOD label_skew domain_skew
@@ -193,6 +193,9 @@ def main(args=None):
     if args.task == 'OOD':
         # 加权数据集分配给method
         fed_method.train_eval_loaders = private_dataset.train_eval_loaders
+
+        fed_method.test_loaders = private_dataset.test_loader
+
     if args.attack_type == 'byzantine':
         fed_method.client_type = client_type
 

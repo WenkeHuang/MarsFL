@@ -5,6 +5,7 @@ from utils.conf import multi_domain_data_path
 from torchvision.datasets import ImageFolder
 from Datasets.utils.transforms import TwoCropsTransform
 
+
 class ImageFolder_Custom():
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
         self.data_name = data_name
@@ -95,7 +96,7 @@ class FLOfficeHome(MultiDomainDataset):
 
         train_transform = self.train_transform
 
-        if self.cfg.DATASET.use_two_crop == 'WEAK':
+        if self.cfg.DATASET.aug == 'two_weak':
             # 构造非对称aug
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
         else:

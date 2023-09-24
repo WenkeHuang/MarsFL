@@ -1,6 +1,7 @@
 from yacs.config import CfgNode as CN
 from utils.utils import log_msg
 
+
 # 简化cfg 只留有关的
 def simplify_cfg(args, cfg):
     dump_cfg = CN()
@@ -30,6 +31,7 @@ def simplify_cfg(args, cfg):
 
     return dump_cfg
 
+
 def show_cfg(cfg, method):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
@@ -37,6 +39,7 @@ def show_cfg(cfg, method):
     dump_cfg[method] = cfg[method]
     print(log_msg("CONFIG:\n{}".format(dump_cfg.dump()), "INFO"))
     return dump_cfg
+
 
 CFG = CN()
 '''Federated dataset'''
@@ -129,6 +132,9 @@ CFG.Sever.KD3ASever = CN()
 CFG.Sever.KD3ASever.confidence_gate_begin = 0.9
 CFG.Sever.KD3ASever.confidence_gate_end = 0.95
 
+CFG.Sever.FedProxGASever = CN()
+CFG.Sever.FedProxGASever.base_step_size = 0.2
+
 '''Local'''
 CFG.Local = CN()
 
@@ -156,8 +162,6 @@ CFG.Local.FedLCLocal.tau = 0.5
 
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
-
-
 
 '''Federated Method'''
 # qffeAVG
@@ -205,8 +209,7 @@ CFG.FedOpt = CN()
 CFG.FedOpt.local_method = 'BaseLocal'
 CFG.FedOpt.global_method = 'FedOptSever'
 
-
-#Moon
+# Moon
 CFG.MOON = CN()
 CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
@@ -216,7 +219,7 @@ CFG.FedDyn = CN()
 CFG.FedDyn.local_method = 'FedDynLocal'
 CFG.FedDyn.global_method = 'BaseSever'
 
-#Scaffold
+# Scaffold
 CFG.Scaffold = CN()
 CFG.Scaffold.local_method = 'ScaffoldLocal'
 CFG.Scaffold.global_method = 'ScaffoldSever'
@@ -226,12 +229,12 @@ CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'
 
-#KD3A
+# KD3A
 CFG.KD3A = CN()
 CFG.KD3A.local_method = 'BaseLocal'
 CFG.KD3A.global_method = 'KD3ASever'
 
-#FADA
+# FADA
 CFG.FADA = CN()
 CFG.FADA.local_method = 'BaseLocal'
 CFG.FADA.global_method = 'FADASever'
