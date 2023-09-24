@@ -58,26 +58,8 @@ class ScaffoldLocal(LocalMethod):
         for i in online_clients_list:  # 遍历循环当前的参与者
             self.train_net(i, nets_list[i], priloader_list[i],global_net,local_controls,global_control,delta_models)
             self.update_local_control(i,local_controls,global_control,delta_models,delta_controls)
-    def train_net(self, index, net, train_loader):
-        net.train()
-        if self.cfg.OPTIMIZER.type == 'SGD':
-            optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
-                                  momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
-        criterion = nn.CrossEntropyLoss()
-        criterion.to(self.device)
-        iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
-        for _ in iterator:
-            for batch_idx, (images, labels) in enumerate(train_loader):
-                images = images.to(self.device)
-                labels = labels.to(self.device)
-                outputs = net(images)
-                loss = criterion(outputs, labels)
-                optimizer.zero_grad()
-                loss.backward()
-                iterator.desc = "Local Pariticipant %d loss = %0.3f" % (index, loss)
-                optimizer.step()
 
-    def _train_net(self, index, net, train_loader, global_net, local_controls, global_control, delta_models):
+    def train_net(self, index, net, train_loader, global_net, local_controls, global_control, delta_models):
         net = net.to(self.device)
         net.train()
         # optimizer = optim.SGD(net.parameters(), lr=self.local_lr, momentum=0.9, weight_decay=1e-5)
@@ -88,7 +70,7 @@ class ScaffoldLocal(LocalMethod):
         )
         criterion = nn.CrossEntropyLoss()
         criterion.to(self.device)
-        iterator = tqdm(range(self.local_epoch))
+        iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
         self.cnt=0
         for _ in iterator:
             for batch_idx, (images, labels) in enumerate(train_loader):
@@ -110,7 +92,7 @@ class ScaffoldLocal(LocalMethod):
         delta_model = self.get_delta_model(global_net, net)
         delta_models[index] = copy.deepcopy(delta_model)
 
-    def update_local_control(self, index,local_controls,global_control,delta_models,delta_controls):
+    def update_local_control(self, index, local_controls, global_control,delta_models,delta_controls):
         client_control = local_controls[index]
         delta_model = delta_models[index]
 

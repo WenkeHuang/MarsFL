@@ -95,7 +95,7 @@ CFG.OOD = CN()
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 # OfficeHome 'Art', 'Clipart', 'Product', 'Real_World'
 # DomainNet 'clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'
-CFG.OOD.out_domain = 'Real_World'
+CFG.OOD.out_domain = 'MNIST'
 
 '''Federated OPTIMIZER'''
 CFG.OPTIMIZER = CN()
@@ -148,8 +148,11 @@ CFG.Local.MOONLocal.temperature_moon = 0.5
 CFG.Local.FedProtoLocal = CN()
 CFG.Local.FedProtoLocal.mu = 2
 
+CFG.Local.FedDynLocal = CN()
+CFG.Local.FedDynLocal.reg_lamb = 1e-2
+
 CFG.Local.FPLLocal = CN()
-CFG.Local.FPLLocal.infoNCET = 0.5
+CFG.Local.FPLLocal.infoNCET = 0.2
 
 CFG.Local.ScaffoldLocal = CN()
 CFG.Local.ScaffoldLocal.max_grad_norm = 100
@@ -211,7 +214,7 @@ CFG.MOON = CN()
 CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
 
-# FedDyn
+#FedDyn
 CFG.FedDyn = CN()
 CFG.FedDyn.local_method = 'FedDynLocal'
 CFG.FedDyn.global_method = 'BaseSever'
@@ -221,7 +224,7 @@ CFG.Scaffold = CN()
 CFG.Scaffold.local_method = 'ScaffoldLocal'
 CFG.Scaffold.global_method = 'ScaffoldSever'
 
-# FedLC
+#FedLC
 CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'
@@ -235,3 +238,8 @@ CFG.KD3A.global_method = 'KD3ASever'
 CFG.FADA = CN()
 CFG.FADA.local_method = 'BaseLocal'
 CFG.FADA.global_method = 'FADASever'
+
+#COPA
+CFG.COPA = CN()
+CFG.COPA.local_method = 'COPALocal'
+CFG.COPA.global_method = 'COPASever'

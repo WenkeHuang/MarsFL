@@ -53,7 +53,7 @@ class FPLLocal(LocalMethod):
         criterion = nn.CrossEntropyLoss()
         criterion.to(self.device)
 
-        if len(self.global_protos) != 0:
+        if len(global_protos) != 0:
             all_global_protos_keys = np.array(list(global_protos.keys()))
             all_f = []
             mean_f = []
