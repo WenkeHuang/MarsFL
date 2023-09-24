@@ -160,6 +160,9 @@ CFG.Local.ScaffoldLocal.max_grad_norm = 100
 CFG.Local.FedLCLocal = CN()
 CFG.Local.FedLCLocal.tau = 0.5
 
+CFG.Local.FedNovaLocal = CN()
+CFG.Local.FedNovaLocal.rho = 0.9
+
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
 
@@ -229,6 +232,11 @@ CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'
 
+#FedNova
+CFG.FedNova = CN()
+CFG.FedNova.local_method = 'FedNovaLocal'
+CFG.FedNova.global_method = 'FedNovaSever'
+
 # KD3A
 CFG.KD3A = CN()
 CFG.KD3A.local_method = 'BaseLocal'
@@ -238,6 +246,11 @@ CFG.KD3A.global_method = 'KD3ASever'
 CFG.FADA = CN()
 CFG.FADA.local_method = 'BaseLocal'
 CFG.FADA.global_method = 'FADASever'
+
+# COPADA
+CFG.COPADA = CN()
+CFG.COPADA.local_method = 'COPALocal'
+CFG.COPADA.global_method = 'COPADASever'
 
 # COPADG
 CFG.COPADG = CN()
