@@ -1,5 +1,5 @@
 DATASET:
-  dataset : "fl_cifar10"
+  dataset : "Digits"
   communication_epoch : 50
   n_classes: 10
   parti_num: 4

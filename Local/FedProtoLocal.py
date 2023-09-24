@@ -7,6 +7,7 @@ import torch.nn as nn
 from tqdm import tqdm
 import copy
 
+
 def agg_func(protos):
     """
     Returns the average of the weights.
@@ -31,18 +32,17 @@ class FedProtoLocal(LocalMethod):
         super(FedProtoLocal, self).__init__(args, cfg)
         self.mu = cfg.Local[self.NAME].mu
 
-
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
         global_net = kwargs['global_net']
         global_protos = kwargs['global_protos']
-        local_protos=kwargs['local_protos']
-        epoch_index=kwargs['epoch_index']
+        local_protos = kwargs['local_protos']
+        epoch_index = kwargs['epoch_index']
 
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], global_net, priloader_list[i], global_protos,local_protos,epoch_index)
+            self.train_net(i, nets_list[i], global_net, priloader_list[i], global_protos, local_protos, epoch_index)
 
     def train_net(self, index, net, global_net, train_loader, global_protos, local_protos, epoch_index):
         net = net.to(self.device)
@@ -52,8 +52,10 @@ class FedProtoLocal(LocalMethod):
         criterion = nn.CrossEntropyLoss()
         criterion.to(self.device)
         iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
+        agg_protos_label = {}
+        protos_label_num = {}
         for iter in iterator:
-            agg_protos_label = {}
+
             for batch_idx, (images, labels) in enumerate(train_loader):
                 optimizer.zero_grad()
 
@@ -65,7 +67,7 @@ class FedProtoLocal(LocalMethod):
                 f = net.features(images)
                 loss_mse = nn.MSELoss()
                 if len(global_protos) == 0:
-                    lossProto = 0*lossCE
+                    lossProto = 0 * lossCE
                 else:
                     f_new = copy.deepcopy(f.data)
                     i = 0
@@ -83,11 +85,17 @@ class FedProtoLocal(LocalMethod):
                 optimizer.step()
 
                 if iter == self.cfg.OPTIMIZER.local_epoch - 1:
-                    for i in range(len(labels)):
-                        if labels[i].item() in agg_protos_label:
-                            agg_protos_label[labels[i].item()].append(f[i,:])
-                        else:
-                            agg_protos_label[labels[i].item()] = [f[i,:]]
+                    with torch.no_grad():
+                        for i in range(len(labels)):
+                            if labels[i].item() in agg_protos_label:
+                                agg_protos_label[labels[i].item()] += copy.deepcopy(f[i, :].detach())
+                                protos_label_num[labels[i].item()] += 1
+                            else:
+                                agg_protos_label[labels[i].item()] = copy.deepcopy(f[i, :].detach())
+                                protos_label_num[labels[i].item()] = 1
+
+        for label in agg_protos_label:
+            agg_protos_label[label] = agg_protos_label[label] / protos_label_num[label]
 
         agg_protos = agg_func(agg_protos_label)
         local_protos[index] = agg_protos

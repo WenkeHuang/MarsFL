@@ -135,6 +135,12 @@ CFG.Sever.KD3ASever.confidence_gate_end = 0.95
 CFG.Sever.FedProxGASever = CN()
 CFG.Sever.FedProxGASever.base_step_size = 0.2
 
+CFG.Sever.CRFLSever = CN()
+CFG.Sever.CRFLSever.param_clip_thres = 15
+CFG.Sever.CRFLSever.epoch_index_weight = 0.1
+CFG.Sever.CRFLSever.epoch_index_bias = 2
+CFG.Sever.CRFLSever.sigma = 0.01
+
 '''Local'''
 CFG.Local = CN()
 
@@ -168,6 +174,9 @@ CFG.Local.FedRSLocal.alpha = 0.5
 
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
+
+CFG.Local.CRFLLocal = CN()
+CFG.Local.CRFLLocal.scale_factor = 100
 
 '''Federated Method'''
 # qffeAVG
@@ -220,7 +229,7 @@ CFG.MOON = CN()
 CFG.MOON.local_method = 'MOONLocal'
 CFG.MOON.global_method = 'BaseSever'
 
-#FedDyn
+# FedDyn
 CFG.FedDyn = CN()
 CFG.FedDyn.local_method = 'FedDynLocal'
 CFG.FedDyn.global_method = 'BaseSever'
@@ -230,17 +239,17 @@ CFG.Scaffold = CN()
 CFG.Scaffold.local_method = 'ScaffoldLocal'
 CFG.Scaffold.global_method = 'ScaffoldSever'
 
-#FedLC
+# FedLC
 CFG.FedLC = CN()
 CFG.FedLC.local_method = 'FedLCLocal'
 CFG.FedLC.global_method = 'BaseSever'
 
-#FedRS
+# FedRS
 CFG.FedRS = CN()
 CFG.FedRS.local_method = 'FedRSLocal'
 CFG.FedRS.global_method = 'BaseSever'
 
-#FedNova
+# FedNova
 CFG.FedNova = CN()
 CFG.FedNova.local_method = 'FedNovaLocal'
 CFG.FedNova.global_method = 'FedNovaSever'
@@ -264,3 +273,8 @@ CFG.COPADA.global_method = 'COPAGSever'
 CFG.COPADG = CN()
 CFG.COPADG.local_method = 'COPALocal'
 CFG.COPADG.global_method = 'COPADGSever'
+
+# CRFL
+CFG.CRFL = CN()
+CFG.CRFL.local_method = 'CRFLLocal'
+CFG.CRFL.global_method = 'CRFLSever'
