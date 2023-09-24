@@ -175,8 +175,9 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     elif args.task == 'domain_skew':
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
-        contribution_match_degree_list = []
         performance_variane_list = []
+        if args.attack_type == 'None':
+            contribution_match_degree_list = []
     if args.attack_type == 'backdoor':
         attack_success_rate = []
 
