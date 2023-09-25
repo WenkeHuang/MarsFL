@@ -84,16 +84,30 @@ class FLOfficeCaltech(MultiDomainDataset):
                                         'webcam': cfg.DATASET.train_eval_domain_ratio, 'dslr': cfg.DATASET.train_eval_domain_ratio}
 
         self.train_transform = transforms.Compose(
-            [transforms.Resize((32, 32)),
-             transforms.RandomCrop(32, padding=4),
+            [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
              transforms.RandomHorizontalFlip(),
+             transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
+             transforms.RandomGrayscale(),
              transforms.ToTensor(),
-             self.get_normalization_transform()])
+             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+             ])
 
         self.test_transform = transforms.Compose(
-            [transforms.Resize((32, 32)),
+            [transforms.Resize([224, 224]),
              transforms.ToTensor(),
-             self.get_normalization_transform()])
+             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+             ])
+        # self.train_transform = transforms.Compose(
+        #     [transforms.Resize((32, 32)),
+        #      transforms.RandomCrop(32, padding=4),
+        #      transforms.RandomHorizontalFlip(),
+        #      transforms.ToTensor(),
+        #      self.get_normalization_transform()])
+        #
+        # self.test_transform = transforms.Compose(
+        #     [transforms.Resize((32, 32)),
+        #      transforms.ToTensor(),
+        #      self.get_normalization_transform()])
 
     def get_data_loaders(self, selected_domain_list=[]):
 

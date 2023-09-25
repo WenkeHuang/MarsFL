@@ -26,12 +26,12 @@ def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
     parser.add_argument('--device_id', type=int, default=0, help='The Device Id for Experiment')
 
-    parser.add_argument('--task', type=str, default='label_skew')
+    parser.add_argument('--task', type=str, default='domain_skew')
     # OOD label_skew domain_skew
-    parser.add_argument('--dataset', type=str, default='fl_cifar10',
+    parser.add_argument('--dataset', type=str, default='OfficeCaltech',
                         help='Which scenario to perform experiments on.')
     # fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
-    # Digits,PACS PACScomb OfficeHome
+    # Digits,OfficeCaltech, PACS PACScomb OfficeHome
     parser.add_argument('--attack_type', type=str, default='None')
     # byzantine backdoor None
 
@@ -41,7 +41,7 @@ def parse_args():
     '''
     Federated Optimizer Hyper-Parameter 
     '''
-    parser.add_argument('--method', type=str, default='FedNTD',
+    parser.add_argument('--method', type=str, default='FedAVG',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
