@@ -10,6 +10,7 @@ task = 'label_skew'
 # label_skew domain_skew
 attack_type = 'None'
 dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+
 averaging = 'Weight'
 # Weight Equal
 # fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
@@ -33,6 +34,11 @@ Dataset_info = {
         'communication_epoch': 100
     },
     'Digits': {
+        'backbone': 'resnet18',
+        'parti_num': 4,
+        'communication_epoch': 50
+    },
+    'OfficeCaltech': {
         'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50

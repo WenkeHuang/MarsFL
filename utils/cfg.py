@@ -147,7 +147,7 @@ CFG.Local.FedProxLocal = CN()
 CFG.Local.FedProxLocal.mu = 0.01
 
 CFG.Local.MOONLocal = CN()
-CFG.Local.MOONLocal.mu = 5
+CFG.Local.MOONLocal.mu = 1
 CFG.Local.MOONLocal.temperature_moon = 0.5
 
 CFG.Local.FedProtoLocal = CN()

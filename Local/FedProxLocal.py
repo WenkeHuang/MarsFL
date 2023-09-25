@@ -32,6 +32,7 @@ class FedProxLocal(LocalMethod):
         iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
         global_net = global_net.to(self.device)
         global_weight_collector = list(global_net.parameters())
+        print()
         for _ in iterator:
             for batch_idx, (images, labels) in enumerate(train_loader):
                 images = images.to(self.device)
