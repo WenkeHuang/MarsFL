@@ -58,11 +58,11 @@ CFG.DATASET.beta = 0.5
 
 '''attack'''
 CFG.attack = CN()
-CFG.attack.bad_client_rate = 0.4
+CFG.attack.bad_client_rate = 0.2
 CFG.attack.noise_data_rate = 0.5
 
 CFG.attack.byzantine = CN()
-CFG.attack.byzantine.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
+CFG.attack.byzantine.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
 CFG.attack.byzantine.dataset_type = 'single_domain'
 
 # attack para for min_max and min_sum
@@ -185,8 +185,6 @@ CFG.Local.qffeAVGLocal.q = 0.05
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100
 
-
-
 '''Federated Method'''
 # qffeAVG
 CFG.qffeAVG = CN()
@@ -201,7 +199,7 @@ CFG.FedAVG.global_method = 'BaseSever'
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'BaseSever'
+CFG.FedProx.global_method = 'BaseSever' # MultiKrumSever
 
 # FedProxGA
 CFG.FedProxGA = CN()
