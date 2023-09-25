@@ -71,7 +71,7 @@ CFG.attack.byzantine.lamda = 10.0
 CFG.attack.byzantine.threshold_diff = 1e-5
 
 CFG.attack.backdoor = CN()
-CFG.attack.backdoor.evils = 'base_backdoor'  # base_backdoor semantic_backdoor
+CFG.attack.backdoor.evils = 'semantic_backdoor'  # base_backdoor semantic_backdoor
 CFG.attack.backdoor.backdoor_label = 2
 CFG.attack.backdoor.trigger_position = [
     [0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 4], [0, 0, 5], [0, 0, 6],

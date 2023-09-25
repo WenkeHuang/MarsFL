@@ -71,7 +71,6 @@ def cal_sim_con_weight(**kwargs):
     elif task == 'domain_skew':
         accs = []
         for in_domain in domain_list:
-
             test_domain_dl = test_loader[in_domain]
             top1acc, _ = cal_top_one_five(net=global_net, test_dl=test_domain_dl, device=optimizer.device)
             accs.append(top1acc)
@@ -171,7 +170,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
         mean_in_domain_acc_list = []
         if args.attack_type == 'None':
             contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
-        fed_method.net_cls_counts = private_dataset.net_cls_counts # label stastic
+        fed_method.net_cls_counts = private_dataset.net_cls_counts  # label stastic
     elif args.task == 'domain_skew':
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
@@ -224,7 +223,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 print(log_msg(f"The {epoch_index} Epoch: Out Domain {cfg[args.task].out_domain} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
 
         else:
-            if 'mean_in_domain_acc_list' in locals() and args.task =='label_skew':
+            if 'mean_in_domain_acc_list' in locals() and args.task == 'label_skew':
                 print("进行 mean_in_domain_acc_list 评估")
                 top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
                 mean_in_domain_acc_list.append(top1acc)
@@ -233,9 +232,9 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             if 'contribution_match_degree_list' in locals():
                 print("进行 contribution_match_degree_list 评估")
                 if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
-                    if args.task =='label_skew':
+                    if args.task == 'label_skew':
                         domain_list = None
-                    elif args.task  == 'domain_skew':
+                    elif args.task == 'domain_skew':
                         domain_list = private_dataset.domain_list
                     con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
                                                          domain_list=domain_list, task=args.task)
@@ -273,7 +272,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         elif args.task == 'label_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
-            if args.attack_type =='None':
+            if args.attack_type == 'None':
                 csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
 
         elif args.task == 'domain_skew':

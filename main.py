@@ -28,17 +28,17 @@ def parse_args():
     '''
     Task: OOD label_skew domain_skew
     '''
-    parser.add_argument('--task', type=str, default='domain_skew')
+    parser.add_argument('--task', type=str, default='label_skew')
     '''
     label_skew:   fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
     domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome
     '''
-    parser.add_argument('--dataset', type=str, default='OfficeCaltech',
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',
                         help='Which scenario to perform experiments on.')
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='byzantine')
+    parser.add_argument('--attack_type', type=str, default='None')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
