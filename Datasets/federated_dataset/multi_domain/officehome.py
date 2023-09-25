@@ -7,7 +7,7 @@ from Datasets.utils.transforms import TwoCropsTransform
 import numpy as np
 
 
-class ImageFolder_Custom():
+class ImageFolder_Custom:
     def __init__(self, data_name, root, train=True, transform=None, target_transform=None, subset_train_num=7, subset_capacity=10):
         self.data_name = data_name
         self.root = root

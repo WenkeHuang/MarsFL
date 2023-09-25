@@ -24,26 +24,31 @@ import os
 
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
-    parser.add_argument('--device_id', type=int, default=0, help='The Device Id for Experiment')
-
+    parser.add_argument('--device_id', type=int, default=5, help='The Device Id for Experiment')
+    '''
+    Task: OOD label_skew domain_skew
+    '''
     parser.add_argument('--task', type=str, default='domain_skew')
-    # OOD label_skew domain_skew
-    parser.add_argument('--dataset', type=str, default='Digits',
+    '''
+    label_skew:   fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
+    domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome
+    '''
+    parser.add_argument('--dataset', type=str, default='OfficeCaltech',
                         help='Which scenario to perform experiments on.')
-    # fl_cifar10 fl_cifar100 fl_mnist fl_fashionmnist fl_tinyimagenet
-    # Digits,OfficeCaltech, PACS PACScomb OfficeHome
-    parser.add_argument('--attack_type', type=str, default='None')
-    # byzantine backdoor None
+    '''
+    Attack: byzantine backdoor None
+    '''
+    parser.add_argument('--attack_type', type=str, default='byzantine')
+
+    '''
+    Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
+    '''
+    parser.add_argument('--method', type=str, default='MOON',
+                        help='Federated Method name.', choices=Fed_Methods_NAMES)
 
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
-    '''
-    Federated Optimizer Hyper-Parameter 
-    '''
-    parser.add_argument('--method', type=str, default='FedNTD',
-                        help='Federated Method name.', choices=Fed_Methods_NAMES)
-    # FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
     Aggregations Strategy Hyper-Parameter
     '''
@@ -51,12 +56,10 @@ def parse_args():
     # Weight Equal
 
     parser.add_argument('--seed', type=int, default=0, help='The random seed.')
-    # parser.add_argument('--note', type=str,default='DKDWeight', help='Something extra')
 
     parser.add_argument('--csv_log', action='store_true', default=False, help='Enable csv logging')
     parser.add_argument('--csv_name', type=str, default=None, help='Predefine the csv name')
     parser.add_argument('--save_checkpoint', action='store_true', default=False)
-    # parser.add_argument('--use_random_domain', action='store_true',default=False)
 
     parser.add_argument("opts", default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
@@ -201,9 +204,9 @@ def main(args=None):
 
     # print(log_msg("CONFIG:\n{}".format(particial_cfg.dump()), "INFO"))
     if args.csv_name is None:
-        setproctitle.setproctitle('{}_{}'.format(args.method, args.task))
+        setproctitle.setproctitle('{}_{}_{}'.format(args.method, args.task,args.dataset))
     else:
-        setproctitle.setproctitle('{}_{}_{}'.format(args.method, args.task, args.csv_name))
+        setproctitle.setproctitle('{}_{}_{}_{}'.format(args.method, args.task,args.dataset, args.csv_name))
     train(fed_method, private_dataset, args, particial_cfg, client_domain_list)
 
 

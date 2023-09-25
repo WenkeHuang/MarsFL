@@ -58,11 +58,11 @@ CFG.DATASET.beta = 0.5
 
 '''attack'''
 CFG.attack = CN()
-CFG.attack.bad_client_rate = 0.4
+CFG.attack.bad_client_rate = 0.2
 CFG.attack.noise_data_rate = 0.5
 
 CFG.attack.byzantine = CN()
-CFG.attack.byzantine.evils = 'min_sum'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
+CFG.attack.byzantine.evils = 'PairFlip'  # PairFlip SymFlip RandomNoise lie_attack min_max min_sum
 CFG.attack.byzantine.dataset_type = 'single_domain'
 
 # attack para for min_max and min_sum
@@ -147,7 +147,7 @@ CFG.Local.FedProxLocal = CN()
 CFG.Local.FedProxLocal.mu = 0.01
 
 CFG.Local.MOONLocal = CN()
-CFG.Local.MOONLocal.mu = 5
+CFG.Local.MOONLocal.mu = 1
 CFG.Local.MOONLocal.temperature_moon = 0.5
 
 CFG.Local.FedProtoLocal = CN()
@@ -176,7 +176,7 @@ CFG.Local.FedRSLocal = CN()
 CFG.Local.FedRSLocal.alpha = 0.5
 
 CFG.Local.FedDCLocal = CN()
-CFG.Local.FedDCLocal.alpha_coef = 0.1
+CFG.Local.FedDCLocal.alpha_coef = 0.5
 CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
@@ -184,8 +184,6 @@ CFG.Local.qffeAVGLocal.q = 0.05
 
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100
-
-
 
 '''Federated Method'''
 # qffeAVG
@@ -201,7 +199,7 @@ CFG.FedAVG.global_method = 'BaseSever'
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'BaseSever'
+CFG.FedProx.global_method = 'BaseSever' # MultiKrumSever
 
 # FedProxGA
 CFG.FedProxGA = CN()

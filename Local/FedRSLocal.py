@@ -4,21 +4,23 @@ import torch.nn as nn
 from tqdm import tqdm
 import torch
 
+
 class FedRSLocal(LocalMethod):
     NAME = 'FedRSLocal'
 
     def __init__(self, args, cfg):
         super(FedRSLocal, self).__init__(args, cfg)
         self.alpha = cfg.Local[self.NAME].alpha
+
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
         net_cls_counts = kwargs['net_cls_counts']
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], priloader_list[i],net_cls_counts)
+            self.train_net(i, nets_list[i], priloader_list[i], net_cls_counts)
 
-    def train_net(self, index, net, train_loader,net_cls_counts):
+    def train_net(self, index, net, train_loader, net_cls_counts):
         net.train()
         if self.cfg.OPTIMIZER.type == 'SGD':
             optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
