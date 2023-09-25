@@ -238,7 +238,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                     elif args.task  == 'domain_skew':
                         domain_list = private_dataset.domain_list
                     con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
-                                                         domain_list=None, task=args.task)
+                                                         domain_list=domain_list, task=args.task)
                     contribution_match_degree_list.append(con_fair_metric)
                 else:
                     con_fair_metric = 0
