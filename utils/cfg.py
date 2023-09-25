@@ -26,7 +26,6 @@ def simplify_cfg(args, cfg):
         dump_cfg['attack'] = CN()
         dump_cfg['attack'].bad_client_rate = cfg['attack'].bad_client_rate
         dump_cfg['attack'].noise_data_rate = cfg['attack'].bad_client_rate
-
         dump_cfg['attack'][args.attack_type] = cfg['attack'][args.attack_type]
 
     return dump_cfg
@@ -160,6 +159,10 @@ CFG.Local.FedDynLocal.reg_lamb = 1e-2
 CFG.Local.FPLLocal = CN()
 CFG.Local.FPLLocal.infoNCET = 0.2
 
+CFG.Local.FedNTDLocal = CN()
+CFG.Local.FedNTDLocal.tau = 3.0
+CFG.Local.FedNTDLocal.beta = 1.0
+
 CFG.Local.ScaffoldLocal = CN()
 CFG.Local.ScaffoldLocal.max_grad_norm = 100
 
@@ -248,6 +251,11 @@ CFG.FedLC.global_method = 'BaseSever'
 CFG.FedRS = CN()
 CFG.FedRS.local_method = 'FedRSLocal'
 CFG.FedRS.global_method = 'BaseSever'
+
+# FedNTD
+CFG.FedNTD = CN()
+CFG.FedNTD.local_method = 'FedNTDLocal'
+CFG.FedNTD.global_method = 'BaseSever'
 
 # FedNova
 CFG.FedNova = CN()

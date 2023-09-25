@@ -224,7 +224,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 print(log_msg(f"The {epoch_index} Epoch: Out Domain {cfg[args.task].out_domain} Acc: {out_domain_acc} Method: {args.method} CSV: {args.csv_name}", "OOD"))
 
         else:
-            if 'mean_in_domain_acc_list' in locals():
+            if 'mean_in_domain_acc_list' in locals() and args.task =='label_skew':
                 print("进行 mean_in_domain_acc_list 评估")
                 top1acc, _ = cal_top_one_five(fed_method.global_net, private_dataset.test_loader, fed_method.device)
                 mean_in_domain_acc_list.append(top1acc)
@@ -233,6 +233,10 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
             if 'contribution_match_degree_list' in locals():
                 print("进行 contribution_match_degree_list 评估")
                 if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
+                    if args.task =='label_skew':
+                        domain_list = None
+                    elif args.task  == 'domain_skew':
+                        domain_list = private_dataset.domain_list
                     con_fair_metric = cal_sim_con_weight(optimizer=fed_method, test_loader=private_dataset.test_loader,
                                                          domain_list=None, task=args.task)
                     contribution_match_degree_list.append(con_fair_metric)
@@ -269,7 +273,8 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
 
         elif args.task == 'label_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
-            csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
+            if args.attack_type =='None':
+                csv_writer.write_acc(contribution_match_degree_list, name='contribution_fairness', mode='MEAN')
 
         elif args.task == 'domain_skew':
             csv_writer.write_acc(mean_in_domain_acc_list, name='in_domain', mode='MEAN')
