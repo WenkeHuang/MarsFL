@@ -91,3 +91,62 @@ class FedNTDLocal(LocalMethod):
                 loss.backward()
                 iterator.desc = "Local Participant %d loss = %0.3f" % (index, loss)
                 optimizer.step()
+
+        # import datetime
+        #
+        # begin_time = datetime.datetime.now()
+        # # print(begin_time)
+        # net = net.to(self.device)
+        # net.train()
+        # if self.cfg.OPTIMIZER.type == 'SGD':
+        #     optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
+        #                           momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
+        # criterion = nn.CrossEntropyLoss()
+        # criterion.to(self.device)
+        # iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
+        # global_net = global_net.to(self.device)
+        # global_weight_collector = list(global_net.parameters())
+
+        # for _ in iterator:
+        #     for batch_idx, (images, labels) in enumerate(train_loader):
+        #         images = images.to(self.device)
+        #         labels = labels.to(self.device)
+        #         outputs = net(images)
+        #         loss = criterion(outputs, labels)
+        #         fed_prox_reg = 0.0
+        #         for param_index, param in enumerate(net.parameters()):
+        #             fed_prox_reg += ((0.01 / 2) * torch.norm((param - global_weight_collector[param_index])) ** 2)
+        #         loss += 0.01 * fed_prox_reg
+        #         optimizer.zero_grad()
+        #         loss.backward()
+        #         iterator.desc = "Local Participant %d loss = %0.3f" % (index, loss)
+        #         optimizer.step()
+        # end_time = datetime.datetime.now()
+        # # print(end_time)
+        # print((end_time - begin_time))
+        #
+        #
+        # begin_time = datetime.datetime.now()
+        # # print(begin_time)
+        # net = net.to(self.device)
+        # net.train()
+        # if self.cfg.OPTIMIZER.type == 'SGD':
+        #     optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
+        #                           momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
+        # # self.criterion.to(self.device)
+        # iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
+        # global_net = global_net.to(self.device)
+        # for _ in iterator:
+        #     for batch_idx, (images, labels) in enumerate(train_loader):
+        #         images = images.to(self.device)
+        #         labels = labels.to(self.device)
+        #         logits = net(images)
+        #         loss = criterion(logits, labels) + criterion(logits, labels)
+        #         # loss = self.criterion(logits, labels, global_logits)
+        #         optimizer.zero_grad()
+        #         loss.backward()
+        #         iterator.desc = "Local Participant %d loss = %0.3f" % (index, loss)
+        #         optimizer.step()
+        # end_time = datetime.datetime.now()
+        # # print(end_time)
+        # print((end_time - begin_time))
