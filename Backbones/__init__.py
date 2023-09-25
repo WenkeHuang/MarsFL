@@ -1,6 +1,5 @@
 from Backbones.ResNet import resnet10, resnet12, resnet20, resnet18, resnet34, resnet50
 from Backbones.ResNet_pretrain import resnet18_pretrained
-
 from Backbones.SimpleCNN import SimpleCNN, SimpleCNN_sr
 
 Backbone_NAMES = {
@@ -8,6 +7,7 @@ Backbone_NAMES = {
     'resnet10': resnet10,
     'resnet18': resnet18,
     'resnet18_pretrained': resnet18_pretrained,
+    'resnet34':resnet34,
     'resnet50': resnet50
 }
 

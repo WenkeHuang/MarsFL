@@ -85,9 +85,7 @@ class FLOfficeCaltech(MultiDomainDataset):
 
         self.train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
-             transforms.RandomHorizontalFlip(),
-             transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
-             transforms.RandomGrayscale(),
+             # transforms.RandomHorizontalFlip(),
              transforms.ToTensor(),
              transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
              ])
