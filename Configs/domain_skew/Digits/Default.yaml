@@ -18,4 +18,4 @@ OPTIMIZER:
   local_train_batch: 64
   local_test_batch: 64
   val_batch: 64
-  local_train_lr: 1e-2 # 0.01
+  local_train_lr: 0.001 # 0.01

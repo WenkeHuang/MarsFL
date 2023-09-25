@@ -66,6 +66,7 @@ class FedNTDLocal(LocalMethod):
         priloader_list = kwargs['priloader_list']
         global_net = kwargs['global_net']
         for i in online_clients_list:  # 遍历循环当前的参与者
+            i = 1
             self.train_net(i, nets_list[i], global_net, priloader_list[i])
 
     def train_net(self, index, net, global_net, train_loader):
@@ -106,7 +107,7 @@ class FedNTDLocal(LocalMethod):
         # iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
         # global_net = global_net.to(self.device)
         # global_weight_collector = list(global_net.parameters())
-
+        #
         # for _ in iterator:
         #     for batch_idx, (images, labels) in enumerate(train_loader):
         #         images = images.to(self.device)
@@ -133,16 +134,17 @@ class FedNTDLocal(LocalMethod):
         # if self.cfg.OPTIMIZER.type == 'SGD':
         #     optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
         #                           momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
-        # # self.criterion.to(self.device)
+        # for batch_idx, (images, _) in enumerate(train_loader):
+        #     images = images.to(self.device)
+        #     with torch.no_grad():
+        #         global_logits = global_net(images)
         # iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
-        # global_net = global_net.to(self.device)
         # for _ in iterator:
         #     for batch_idx, (images, labels) in enumerate(train_loader):
         #         images = images.to(self.device)
         #         labels = labels.to(self.device)
         #         logits = net(images)
         #         loss = criterion(logits, labels) + criterion(logits, labels)
-        #         # loss = self.criterion(logits, labels, global_logits)
         #         optimizer.zero_grad()
         #         loss.backward()
         #         iterator.desc = "Local Participant %d loss = %0.3f" % (index, loss)
