@@ -175,11 +175,17 @@ CFG.Local.FedNovaLocal.rho = 0.9
 CFG.Local.FedRSLocal = CN()
 CFG.Local.FedRSLocal.alpha = 0.5
 
+CFG.Local.FedDCLocal = CN()
+CFG.Local.FedDCLocal.alpha_coef = 0.5
+CFG.Local.FedDCLocal.max_norm = 10.0
+
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
 
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100
+
+
 
 '''Federated Method'''
 # qffeAVG
@@ -261,6 +267,11 @@ CFG.FedNTD.global_method = 'BaseSever'
 CFG.FedNova = CN()
 CFG.FedNova.local_method = 'FedNovaLocal'
 CFG.FedNova.global_method = 'FedNovaSever'
+
+# FedNova
+CFG.FedDC = CN()
+CFG.FedDC.local_method = 'FedDCLocal'
+CFG.FedDC.global_method = 'FedDCSever'
 
 # KD3A
 CFG.KD3A = CN()
