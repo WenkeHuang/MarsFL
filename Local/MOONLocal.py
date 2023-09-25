@@ -15,6 +15,7 @@ class MOONLocal(LocalMethod):
         self.mu = cfg.Local[self.NAME].mu
         self.temperature_moon = cfg.Local[self.NAME].temperature_moon
         # self.global_lr = cfg.Sever[self.NAME].global_lr
+
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
@@ -28,7 +29,7 @@ class MOONLocal(LocalMethod):
     def train_net(self, index, net, global_net, prev_net, train_loader):
         net = net.to(self.device)
         prev_net = prev_net.to(self.device)
-        if self.cfg.OPTIMIZER.type =='SGD':
+        if self.cfg.OPTIMIZER.type == 'SGD':
             optimizer = optim.SGD(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
                                   momentum=self.cfg.OPTIMIZER.momentum, weight_decay=self.cfg.OPTIMIZER.weight_decay)
         criterion = nn.CrossEntropyLoss()
@@ -41,8 +42,10 @@ class MOONLocal(LocalMethod):
                 images = images.to(self.device)
                 labels = labels.to(self.device)
                 f = net.features(images)
-                pre_f = prev_net.features(images)
-                g_f = global_net.features(images)
+                outputs = net.classifier(f)
+                with torch.no_grad():
+                    pre_f = prev_net.features(images)
+                    g_f = global_net.features(images)
                 posi = cos(f, g_f)
                 temp = posi.reshape(-1, 1)
                 nega = cos(f, pre_f)
@@ -51,7 +54,7 @@ class MOONLocal(LocalMethod):
                 temp = temp.to(self.device)
                 targets = torch.zeros(labels.size(0)).to(self.device).long()
                 lossCON = self.mu * criterion(temp, targets)
-                outputs = net(images)
+
                 lossCE = criterion(outputs, labels)
                 loss = lossCE + lossCON
                 optimizer.zero_grad()
