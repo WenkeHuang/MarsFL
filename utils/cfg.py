@@ -176,7 +176,7 @@ CFG.Local.FedRSLocal = CN()
 CFG.Local.FedRSLocal.alpha = 0.5
 
 CFG.Local.FedDCLocal = CN()
-CFG.Local.FedDCLocal.alpha_coef = 0.5
+CFG.Local.FedDCLocal.alpha_coef = 0.1
 CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
