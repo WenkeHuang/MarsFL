@@ -1,7 +1,7 @@
 DATASET:
   dataset : "fl_tinyimagenet"
   communication_epoch : 100
-  n_classes: 100
+  n_classes: 200
   parti_num: 10
   aug: "weak"
   beta: 0.5
