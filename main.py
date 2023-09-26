@@ -36,12 +36,12 @@ def parse_args():
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='None')
+    parser.add_argument('--attack_type', type=str, default='byzantine')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
-    parser.add_argument('--method', type=str, default='MOON',
+    parser.add_argument('--method', type=str, default='FedProx',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
 
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
