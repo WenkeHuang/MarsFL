@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import os
 
+
 def log_msg(msg, mode="INFO"):
     color_map = {
         "INFO": 36,
@@ -13,6 +14,7 @@ def log_msg(msg, mode="INFO"):
     }
     msg = "\033[{}m[{}] {}\033[0m".format(color_map[mode], mode, msg)
     return msg
+
 
 def create_if_not_exists(path: str) -> None:
     """
@@ -48,7 +50,10 @@ def ini_client_domain(rand_domain_select, domains_list, parti_num):
             else:
                 is_ok = True
     else:
-        selected_domain_dict = {'MNIST': 6, 'USPS': 4, 'SVHN': 3, 'SYN': 7}  # base
+        selected_domain_dict = {}
+        for domain in domains_list:
+            selected_domain_dict[domain] = parti_num // domains_len
+        # selected_domain_dict = {'MNIST': 6, 'USPS': 4, 'SVHN': 3, 'SYN': 7}  # base
         selected_domain_list = []
         for k in selected_domain_dict:
             domain_num = selected_domain_dict[k]
@@ -122,6 +127,7 @@ def get_para(net, part_str):
 
     return used_net_para
 
+
 def row_into_parameters(row, parameters):
     offset = 0
     for param in parameters:
@@ -130,6 +136,7 @@ def row_into_parameters(row, parameters):
 
         param.data[:] = torch.from_numpy(current_data.reshape(param.shape))
         offset += new_size
+
 
 def HE(probs):
     mean = probs.mean(dim=0)

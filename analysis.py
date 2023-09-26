@@ -65,16 +65,16 @@ aim_args_dict = {
 
 
 aim_cfg_dict = {
-    'DATASET': {
-        'beta':0.5
-        # 'backbone': "resnet18"
-    },
-    'attack':{
-        'bad_client_rate':0.2,
-        'byzantine':{
-            'evils': 'PairFlip'
-        }
-    }
+    # 'DATASET': {
+    #     'beta':0.5
+    #     # 'backbone': "resnet18"
+    # },
+    # 'attack':{
+    #     'bad_client_rate':0.2,
+    #     'byzantine':{
+    #         'evils': 'PairFlip'
+    #     }
+    # }
 }
 # PairFlip RandomNoise
 def mean_metric(structure_path, metric):
