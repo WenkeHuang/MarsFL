@@ -43,7 +43,6 @@ def parse_args():
     '''
     parser.add_argument('--method', type=str, default='FedProx',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
-
     parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
@@ -85,7 +84,7 @@ def main(args=None):
 
     particial_cfg = simplify_cfg(args, cfg)
 
-    show_cfg(particial_cfg,args.method)
+    show_cfg(args,particial_cfg,args.method)
     if args.seed is not None:
         set_random_seed(args.seed)
 
@@ -101,7 +100,6 @@ def main(args=None):
         '''
         Define clients domain
         '''
-
         in_domain_list = copy.deepcopy(private_dataset.domain_list)
         if cfg[args.task].out_domain != "NONE":
             in_domain_list.remove(cfg[args.task].out_domain)
