@@ -201,7 +201,7 @@ CFG.FedAVG.global_method = 'BaseSever'
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'DncSever' # MultiKrumSever DncSever
+CFG.FedProx.global_method = 'BaseSever' # MultiKrumSever DncSever BaseSever
 
 # FedProxGA
 CFG.FedProxGA = CN()
