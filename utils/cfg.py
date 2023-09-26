@@ -31,7 +31,7 @@ def simplify_cfg(args, cfg):
     return dump_cfg
 
 
-def show_cfg(args,cfg, method):
+def show_cfg(args, cfg,method):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
     dump_cfg.OPTIMIZER = cfg.OPTIMIZER
@@ -133,6 +133,10 @@ CFG.Sever.KD3ASever = CN()
 CFG.Sever.KD3ASever.confidence_gate_begin = 0.9
 CFG.Sever.KD3ASever.confidence_gate_end = 0.95
 
+CFG.Sever.AFLSever = CN()
+CFG.Sever.AFLSever.drfa_gamma = 0.01
+
+
 CFG.Sever.FedProxGASever = CN()
 CFG.Sever.FedProxGASever.base_step_size = 0.2
 
@@ -162,7 +166,7 @@ CFG.Local.FPLLocal = CN()
 CFG.Local.FPLLocal.infoNCET = 0.2
 
 CFG.Local.FedNTDLocal = CN()
-CFG.Local.FedNTDLocal.tau = 3.0
+CFG.Local.FedNTDLocal.tau = 1.0
 CFG.Local.FedNTDLocal.beta = 1.0
 
 CFG.Local.ScaffoldLocal = CN()
@@ -183,6 +187,7 @@ CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 0.05
+
 
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100
@@ -282,6 +287,11 @@ CFG.KD3A.global_method = 'KD3ASever'
 CFG.FADA = CN()
 CFG.FADA.local_method = 'BaseLocal'
 CFG.FADA.global_method = 'FADASever'
+
+# AFL
+CFG.AFL = CN()
+CFG.AFL.local_method = 'AFLLocal'
+CFG.AFL.global_method = 'AFLSever'
 
 # COPADA
 CFG.COPADA = CN()

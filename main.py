@@ -36,7 +36,7 @@ def parse_args():
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='byzantine')
+    parser.add_argument('--attack_type', type=str, default='None')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
