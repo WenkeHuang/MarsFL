@@ -62,16 +62,7 @@ class FLOfficeCaltech(MultiDomainDataset):
     NAME = 'OfficeCaltech'
     SETTING = 'Domain'
 
-    # N_CLASS = 65
     N_CLASS = 10
-
-    # Nor_TRANSFORM = utils.Compose(
-    #     [utils.Resize((32, 32)),
-    #      utils.RandomCrop(32, padding=4),
-    #      utils.RandomHorizontalFlip(),
-    #      utils.ToTensor(),
-    #      utils.Normalize((0.485, 0.456, 0.406),
-    #                           (0.229, 0.224, 0.225))])
 
     def __init__(self, args, cfg) -> None:
         super().__init__(args, cfg)

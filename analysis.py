@@ -7,17 +7,23 @@ from yacs.config import CfgNode as CN
 path = './data/'
 
 task = 'label_skew'
-# label_skew domain_skew
-attack_type = 'None'
+'''
+label_skew domain_skew OOD
+'''
+attack_type = 'byzantine'
+'''
+byzantine backdoor None
+'''
 dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
-
+'''
+label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
+domain_skew: Digits OfficeCaltech PACS
+OOD:
+'''
 averaging = 'Weight'
-# Weight Equal
-# fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
-# Digits: MNIST, USPS, SVHN, SYN
-# PACS: 'photo', 'art_painting', 'cartoon', 'sketch'
-# OfficeCaltech 'caltech', 'amazon','webcam','dslr'
-
+'''
+Weight Equal
+'''
 method_list = ['FedAVG', 'FedProx', 'FedProc']
 
 Dataset_info = {
@@ -47,7 +53,8 @@ Dataset_info = {
 
 metrics_dict = \
     {
-        'label_skew' : ['in_domain_mean_acc','performance_fairness_mean_acc'],
+        'label_skew' : ['in_domain_mean_acc'],
+        # 'label_skew': ['in_domain_mean_acc','performance_fairness_mean_acc'],
         'domain_skew': ['in_domain_mean_acc','in_domain_all_acc','performance_variance_mean_acc','contribution_fairness_mean_acc'],
         'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
     }
@@ -59,11 +66,16 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
+        'beta':0.5
         # 'backbone': "resnet18"
     },
+    'attack':{
+        'bad_client_rate':0.2,
+        'byzantine':{
+            'evils': 'PairFlip'
+        }
+    }
 }
-
-
 def mean_metric(structure_path, metric):
     acc_dict = {}
     experiment_index = 0
@@ -78,7 +90,7 @@ def mean_metric(structure_path, metric):
                     cfg_path = para_path + '/cfg.yaml'
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
-                        if len(os.listdir(para_path)) > 3:
+                        if len(os.listdir(para_path)) >= 3:
                             data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values
@@ -95,7 +107,6 @@ def mean_metric(structure_path, metric):
                             experiment_index += 1
     return acc_dict
 
-
 def all_metric(structure_path, metric, scale_num):
     acc_dict = {}
     experiment_index = 0
@@ -110,7 +121,7 @@ def all_metric(structure_path, metric, scale_num):
                     cfg_path = para_path + '/cfg.yaml'
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
-                        if len(os.listdir(para_path)) > 3:
+                        if len(os.listdir(para_path)) >= 3:
                             data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values[:, 1:]
@@ -130,7 +141,6 @@ def all_metric(structure_path, metric, scale_num):
                             acc_dict[experiment_index] = [model, para] + mean_acc_value
                             experiment_index += 1
     return acc_dict, scale_num
-
 
 def select_para(args_path, cfg_path):
     args_pd = pd.read_table(args_path, sep=",")
@@ -154,26 +164,81 @@ def select_para(args_path, cfg_path):
         result = f.read()
         now_dict = yaml.full_load(result)
 
-    for sub_k in aim_cfg_dict:
-        try:
-            now_sub_dict = now_dict[sub_k]
-            aim_sub_dict = aim_cfg_dict[sub_k]
-            for para_name in aim_sub_dict:
-                if aim_sub_dict[para_name] != now_sub_dict[para_name]:
-                    is_same = False
-                    break
-        except:
-            pass
 
-        if not is_same:
-            break
+    is_same = dict_eval(aim_cfg_dict,now_dict,is_same)
+    # for sub_k in aim_cfg_dict:
+    #     try:
+    #         now_sub_dict = now_dict[sub_k]
+    #         aim_sub_dict = aim_cfg_dict[sub_k]
+    #         for para_name in aim_sub_dict:
+    #             if aim_sub_dict[para_name] != now_sub_dict[para_name]:
+    #                 is_same = False
+    #                 break
+    #     except:
+    #         pass
+    #
+    #     if not is_same:
+    #         break
 
     return is_same
 
+# def dict_eval(aim_cfg_dict,now_dict,is_same):
+#     for sub_k in aim_cfg_dict:
+#         # try:
+#         now_sub = now_dict[sub_k]
+#         aim_sub = aim_cfg_dict[sub_k]
+#         for para_name in aim_sub:
+#             if isinstance(aim_sub[para_name], dict):
+#                 is_same = dict_eval(aim_sub[para_name], now_sub[para_name],is_same)
+#                 if is_same == False:
+#                     return is_same
+#             if aim_sub[para_name] != now_sub[para_name]:
+#                 if is_same == False:
+#                     return is_same
+#         # except:
+#         #     pass
+#         if is_same == False:
+#             return is_same
+#     return is_same
+def dict_eval(aim_cfg_dict,now_dict,is_same):
+    for sub_k in aim_cfg_dict:
+        # try:
+        now_sub = now_dict[sub_k]
+        aim_sub = aim_cfg_dict[sub_k]
+        if isinstance(now_sub,dict):
+            for para_name in aim_sub:
+                if isinstance(aim_sub[para_name], dict):
+                    is_same = dict_eval(aim_sub[para_name], now_sub[para_name], is_same)
+                    return is_same
+                else:
+                    if aim_sub[para_name] != now_sub[para_name]:
+                        is_same = False
+                        return is_same
+        else:
+            if now_sub != aim_sub:
+                is_same = False
+                return is_same
+        # for para_name in aim_sub:
+        #     if isinstance(aim_sub[para_name], dict):
+        #         is_same = dict_eval(aim_sub[para_name], now_sub[para_name],is_same)
+        #         if is_same == False:
+        #             return is_same
+        #     if aim_sub[para_name] != now_sub[para_name]:
+        #         if is_same == False:
+        #             return is_same
+        # # except:
+        # #     pass
+        # if is_same == False:
+        #     return is_same
+    return is_same
 
 if __name__ == '__main__':
     print('**************************************************************')
+    # if attack_type == 'None':
+    #     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    # else:
     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
         if "all" in metric:

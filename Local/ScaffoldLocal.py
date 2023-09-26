@@ -4,6 +4,8 @@ import torch.nn as nn
 from tqdm import tqdm
 import copy
 import torch
+
+
 class ScaffoldOptimizer(torch.optim.Optimizer):
     def __init__(self, params, lr, weight_decay):
         defaults = dict(
@@ -38,6 +40,8 @@ class ScaffoldOptimizer(torch.optim.Optimizer):
                 t += 1
         # assert t == ng
         return loss
+
+
 class ScaffoldLocal(LocalMethod):
     NAME = 'ScaffoldLocal'
 
@@ -56,8 +60,8 @@ class ScaffoldLocal(LocalMethod):
         delta_models = kwargs['delta_models']
         delta_controls = kwargs['delta_controls']
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], priloader_list[i],global_net,local_controls,global_control,delta_models)
-            self.update_local_control(i,local_controls,global_control,delta_models,delta_controls)
+            self.train_net(i, nets_list[i], priloader_list[i], global_net, local_controls, global_control, delta_models)
+            self.update_local_control(i, local_controls, global_control, delta_models, delta_controls)
 
     def train_net(self, index, net, train_loader, global_net, local_controls, global_control, delta_models):
         net = net.to(self.device)
@@ -71,7 +75,7 @@ class ScaffoldLocal(LocalMethod):
         criterion = nn.CrossEntropyLoss()
         criterion.to(self.device)
         iterator = tqdm(range(self.cfg.OPTIMIZER.local_epoch))
-        self.cnt=0
+        self.cnt = 0
         for _ in iterator:
             for batch_idx, (images, labels) in enumerate(train_loader):
                 images = images.to(self.device)
@@ -87,12 +91,12 @@ class ScaffoldLocal(LocalMethod):
 
                 iterator.desc = "Local Pariticipant %d loss = %0.3f" % (index, loss)
                 optimizer.step(server_control=global_control, client_control=local_controls[index])
-                self.cnt+=1
+                self.cnt += 1
 
         delta_model = self.get_delta_model(global_net, net)
         delta_models[index] = copy.deepcopy(delta_model)
 
-    def update_local_control(self, index, local_controls, global_control,delta_models,delta_controls):
+    def update_local_control(self, index, local_controls, global_control, delta_models, delta_controls):
         client_control = local_controls[index]
         delta_model = delta_models[index]
 
@@ -119,5 +123,3 @@ class ScaffoldLocal(LocalMethod):
             param1 = model_1.state_dict()[name]
             state_dict[name] = param0.detach() - param1.detach()
         return state_dict
-
-

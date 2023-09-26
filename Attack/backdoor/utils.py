@@ -20,7 +20,7 @@ def semantic_backdoor(cfg, img, target, noise_data_rate):
             target = cfg.attack.backdoor.backdoor_label
 
             # img, _ = dataset.__getitem__(used_index)
-            # img = img + torch.randn(img.size()) * 0.05
+            img = img + torch.randn(img.size()) * 0.05
 
     return img, target
 

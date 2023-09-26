@@ -3,7 +3,8 @@ import numpy as np
 import copy
 import torch
 
-def set_client_from_params(mdl, params,device):
+
+def set_client_from_params(mdl, params, device):
     dict_param = copy.deepcopy(dict(mdl.named_parameters()))
     idx = 0
     for name, param in mdl.named_parameters():
@@ -14,6 +15,7 @@ def set_client_from_params(mdl, params,device):
 
     mdl.load_state_dict(dict_param)
     return mdl
+
 
 class FedDCSever(SeverMethod):
     NAME = 'FedDCSever'
@@ -33,16 +35,14 @@ class FedDCSever(SeverMethod):
         state_gadient_diffs = kwargs['state_gadient_diffs']
         parameter_drifts = kwargs['parameter_drifts']
 
-
-
         avg_mdl_param_sel = np.mean(clnt_params_list[online_clients_list], axis=0)
         delta_g_cur = 1 / len(nets_list) * delta_g_sum
         state_gadient_diffs[-1] += delta_g_cur
 
         cld_mdl_param = avg_mdl_param_sel + np.mean(parameter_drifts, axis=0)
 
-        all_model = set_client_from_params(global_net, avg_mdl_param_sel,self.device)
-        global_net = set_client_from_params(global_net, cld_mdl_param,self.device)
+        all_model = set_client_from_params(global_net, avg_mdl_param_sel, self.device)
+        global_net = set_client_from_params(global_net, cld_mdl_param, self.device)
 
         for _, net in enumerate(nets_list):
             net.load_state_dict(all_model.state_dict())
