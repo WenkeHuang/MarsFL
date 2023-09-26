@@ -10,7 +10,7 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'byzantine'
+attack_type = 'None'
 '''
 byzantine backdoor None
 '''
@@ -24,7 +24,7 @@ averaging = 'Weight'
 '''
 Weight Equal
 '''
-method_list = ['FedAVG', 'FedProx', 'FedProc']
+method_list = ['FedNova', 'FedNTD', 'FedDC', 'Scaffold']
 
 Dataset_info = {
     'fl_cifar10': {
@@ -53,8 +53,8 @@ Dataset_info = {
 
 metrics_dict = \
     {
-        'label_skew' : ['in_domain_mean_acc'],
-        # 'label_skew': ['in_domain_mean_acc','performance_fairness_mean_acc'],
+        # 'label_skew' : ['in_domain_mean_acc'],
+        'label_skew': ['in_domain_mean_acc','contribution_fairness_mean_acc'],
         'domain_skew': ['in_domain_mean_acc','in_domain_all_acc','performance_variance_mean_acc','contribution_fairness_mean_acc'],
         'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
     }
@@ -65,16 +65,16 @@ aim_args_dict = {
 
 
 aim_cfg_dict = {
-    'DATASET': {
-        'beta':0.5
-        # 'backbone': "resnet18"
-    },
-    'attack':{
-        'bad_client_rate':0.2,
-        'byzantine':{
-            'evils': 'PairFlip'
-        }
-    }
+    # 'DATASET': {
+    #     'beta':0.5
+    #     # 'backbone': "resnet18"
+    # }
+    # 'attack':{
+    #     'bad_client_rate':0.2,
+    #     'byzantine':{
+    #         'evils': 'PairFlip'
+    #     }
+    # }
 }
 def mean_metric(structure_path, metric):
     acc_dict = {}

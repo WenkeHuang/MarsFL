@@ -18,8 +18,7 @@ class ScaffoldSever(SeverMethod):
         global_control = kwargs['global_control']
         delta_models = kwargs['delta_models']
         delta_controls = kwargs['delta_controls']
-        new_control = self.update_global_control(global_control,delta_controls)
-        global_control = copy.deepcopy(new_control)
+
 
 
         freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
@@ -30,12 +29,3 @@ class ScaffoldSever(SeverMethod):
         return freq
 
 
-    def update_global_control(self,global_control,delta_controls):
-        new_control = copy.deepcopy(global_control)
-        for name, c in global_control.items():
-            mean_ci = []
-            for _, delta_control in delta_controls.items():
-                mean_ci.append(delta_control[name])
-            ci = torch.stack(mean_ci).mean(dim=0)
-            new_control[name] = c - ci
-        return new_control

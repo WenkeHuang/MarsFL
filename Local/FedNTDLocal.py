@@ -86,7 +86,6 @@ class FedNTDLocal(LocalMethod):
                 logits = net(images)
                 with torch.no_grad():
                     global_logits = global_net(images)
-
                 loss = self.criterion(logits, labels, global_logits)
                 optimizer.zero_grad()
                 loss.backward()
