@@ -22,7 +22,7 @@ import os
 
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
-    parser.add_argument('--device_id', type=int, default=5, help='The Device Id for Experiment')
+    parser.add_argument('--device_id', type=int, default=1, help='The Device Id for Experiment')
     '''
     Task: OOD label_skew domain_skew
     '''
@@ -36,14 +36,14 @@ def parse_args():
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='byzantine')
+    parser.add_argument('--attack_type', type=str, default='None')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
-    parser.add_argument('--method', type=str, default='FedProx',
+    parser.add_argument('--method', type=str, default='FedNova',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
-    parser.add_argument('--rand_domain_select', type=bool, default=True, help='The Local Domain Selection')
+    parser.add_argument('--rand_domain_select', type=bool, default=False, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
 
     '''
