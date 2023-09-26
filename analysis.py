@@ -6,15 +6,15 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'label_skew'
+task = 'domain_skew'
 '''
 label_skew domain_skew OOD
 '''
 attack_type = 'None'
 '''
-byzantine backdoor None
+byzantine backdoor None PairFlip
 '''
-dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+dataset = 'Digits'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
 domain_skew: Digits OfficeCaltech PACS
@@ -65,17 +65,18 @@ aim_args_dict = {
 
 
 aim_cfg_dict = {
-    # 'DATASET': {
-    #     'beta':0.5
-    #     # 'backbone': "resnet18"
-    # }
-    # 'attack':{
-    #     'bad_client_rate':0.2,
-    #     'byzantine':{
-    #         'evils': 'PairFlip'
-    #     }
-    # }
+    'DATASET': {
+        'beta':0.5
+        # 'backbone': "resnet18"
+    },
+    'attack':{
+        'bad_client_rate':0.2,
+        'byzantine':{
+            'evils': 'PairFlip'
+        }
+    }
 }
+# PairFlip RandomNoise
 def mean_metric(structure_path, metric):
     acc_dict = {}
     experiment_index = 0
@@ -202,7 +203,6 @@ def select_para(args_path, cfg_path):
 #     return is_same
 def dict_eval(aim_cfg_dict,now_dict,is_same):
     for sub_k in aim_cfg_dict:
-        # try:
         now_sub = now_dict[sub_k]
         aim_sub = aim_cfg_dict[sub_k]
         if isinstance(now_sub,dict):
@@ -218,26 +218,15 @@ def dict_eval(aim_cfg_dict,now_dict,is_same):
             if now_sub != aim_sub:
                 is_same = False
                 return is_same
-        # for para_name in aim_sub:
-        #     if isinstance(aim_sub[para_name], dict):
-        #         is_same = dict_eval(aim_sub[para_name], now_sub[para_name],is_same)
-        #         if is_same == False:
-        #             return is_same
-        #     if aim_sub[para_name] != now_sub[para_name]:
-        #         if is_same == False:
-        #             return is_same
-        # # except:
-        # #     pass
-        # if is_same == False:
-        #     return is_same
     return is_same
 
 if __name__ == '__main__':
     print('**************************************************************')
-    # if attack_type == 'None':
-    #     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
-    # else:
-    specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    if attack_type == 'None':
+        specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    else:
+        specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.001',averaging)
     # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
