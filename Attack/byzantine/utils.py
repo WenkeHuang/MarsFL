@@ -2,6 +2,7 @@ import copy
 from numpy.testing import assert_array_almost_equal
 import numpy as np
 import torch
+from torch.utils.data import DataLoader, SubsetRandomSampler
 from utils.utils import row_into_parameters
 
 # attack攻击类型
@@ -108,7 +109,7 @@ def attack_dataset(args, cfg, private_dataset, client_type):
     if attack_type_dict[cfg['attack'].byzantine.evils] == 'dataset':
         for i in range(len(client_type)):
             if not client_type[i]:
-                dataset = private_dataset.train_loaders[i].dataset
+                dataset = copy.deepcopy(private_dataset.train_loaders[i].dataset)
                 train_labels = np.asarray([[dataset.targets[i]] for i in range(len(dataset.targets))])
                 train_noisy_labels, actual_noise_rate = noisify(
                     train_labels=train_labels,
@@ -118,8 +119,11 @@ def attack_dataset(args, cfg, private_dataset, client_type):
 
                 train_noisy_labels = train_noisy_labels.reshape(-1)
                 dataset.targets = train_noisy_labels
-
-
+                private_dataset.train_loaders[i] = DataLoader(dataset,
+                                                              batch_size=private_dataset.train_loaders[i].batch_size,
+                                                              sampler=private_dataset.train_loaders[i].sampler,
+                                                              num_workers=4, drop_last=True)
+                # print(id(private_dataset.train_loaders[i].dataset))
 # 网络参数攻击
 def attack_net_para(args, cfg, fed_method):
     temp_net = copy.deepcopy(fed_method.global_net)

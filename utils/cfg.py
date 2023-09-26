@@ -31,11 +31,13 @@ def simplify_cfg(args, cfg):
     return dump_cfg
 
 
-def show_cfg(cfg, method):
+def show_cfg(args,cfg, method):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
     dump_cfg.OPTIMIZER = cfg.OPTIMIZER
     dump_cfg[method] = cfg[method]
+    if args.attack_type != 'None':
+        dump_cfg['attack'] = cfg['attack']
     print(log_msg("CONFIG:\n{}".format(dump_cfg.dump()), "INFO"))
     return dump_cfg
 
@@ -199,7 +201,7 @@ CFG.FedAVG.global_method = 'BaseSever'
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'BaseSever' # MultiKrumSever
+CFG.FedProx.global_method = 'DncSever' # MultiKrumSever DncSever
 
 # FedProxGA
 CFG.FedProxGA = CN()
