@@ -7,17 +7,23 @@ from yacs.config import CfgNode as CN
 path = './data/'
 
 task = 'label_skew'
-# label_skew domain_skew
-attack_type = 'None'
+'''
+label_skew domain_skew OOD
+'''
+attack_type = 'byzantine'
+'''
+byzantine backdoor None
+'''
 dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
-
+'''
+label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
+domain_skew: Digits OfficeCaltech PACS
+OOD:
+'''
 averaging = 'Weight'
-# Weight Equal
-# fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
-# Digits: MNIST, USPS, SVHN, SYN
-# PACS: 'photo', 'art_painting', 'cartoon', 'sketch'
-# OfficeCaltech 'caltech', 'amazon','webcam','dslr'
-
+'''
+Weight Equal
+'''
 method_list = ['FedAVG', 'FedProx', 'FedProc']
 
 Dataset_info = {
@@ -47,7 +53,8 @@ Dataset_info = {
 
 metrics_dict = \
     {
-        'label_skew' : ['in_domain_mean_acc','performance_fairness_mean_acc'],
+        'label_skew' : ['in_domain_mean_acc'],
+        # 'label_skew': ['in_domain_mean_acc','performance_fairness_mean_acc'],
         'domain_skew': ['in_domain_mean_acc','in_domain_all_acc','performance_variance_mean_acc','contribution_fairness_mean_acc'],
         'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
     }
@@ -59,8 +66,13 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
+        'beta':0.5
         # 'backbone': "resnet18"
     },
+    'attack':{
+        'bad_client_rate':0.2,
+        'evils':'PairFlip'
+    }
 }
 
 
@@ -78,7 +90,7 @@ def mean_metric(structure_path, metric):
                     cfg_path = para_path + '/cfg.yaml'
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
-                        if len(os.listdir(para_path)) > 3:
+                        if len(os.listdir(para_path)) >= 3:
                             data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values
@@ -110,7 +122,7 @@ def all_metric(structure_path, metric, scale_num):
                     cfg_path = para_path + '/cfg.yaml'
                     is_same = select_para(args_path, cfg_path)
                     if is_same:
-                        if len(os.listdir(para_path)) > 3:
+                        if len(os.listdir(para_path)) >= 3:
                             data = pd.read_table(para_path + '/' + metric + '.csv', sep=",")
                             data = data.loc[:, data.columns]
                             acc_value = data.values[:, 1:]
@@ -173,7 +185,11 @@ def select_para(args_path, cfg_path):
 
 if __name__ == '__main__':
     print('**************************************************************')
+    # if attack_type == 'None':
+    #     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    # else:
     specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+    # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.01',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
         if "all" in metric:

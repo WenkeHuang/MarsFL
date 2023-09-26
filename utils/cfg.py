@@ -25,7 +25,7 @@ def simplify_cfg(args, cfg):
     if args.attack_type != 'None':
         dump_cfg['attack'] = CN()
         dump_cfg['attack'].bad_client_rate = cfg['attack'].bad_client_rate
-        dump_cfg['attack'].noise_data_rate = cfg['attack'].bad_client_rate
+        dump_cfg['attack'].noise_data_rate = cfg['attack'].noise_data_rate
         dump_cfg['attack'][args.attack_type] = cfg['attack'][args.attack_type]
 
     return dump_cfg

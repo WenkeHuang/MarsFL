@@ -1,8 +1,6 @@
 import numpy as np
-import torch
-from torch.utils.data import DataLoader
 from Aggregations import Aggregation_NAMES
-from Attack.backdoor.utils import BackdoorDataset, backdoor_attack
+from Attack.backdoor.utils import backdoor_attack
 from Attack.byzantine.utils import attack_dataset
 from Datasets.federated_dataset.single_domain import single_domain_dataset_name, get_single_domain_dataset
 from Methods import Fed_Methods_NAMES, get_fed_method
@@ -10,7 +8,7 @@ from utils.conf import set_random_seed, config_path
 from Datasets.federated_dataset.multi_domain import multi_domain_dataset_name, get_multi_domain_dataset
 from Backbones import get_private_backbones
 from utils.cfg import CFG as cfg, simplify_cfg,show_cfg
-from utils.utils import ini_client_domain, log_msg
+from utils.utils import ini_client_domain
 from argparse import ArgumentParser
 from utils.training import train
 import setproctitle
@@ -166,8 +164,10 @@ def main(args=None):
         bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
         good_scale = particial_cfg.DATASET.parti_num - bad_scale
         client_type = np.repeat(True, good_scale).tolist() + (np.repeat(False, bad_scale)).tolist()
+
         # 攻击类型是数据集攻击 那么修改数据集的内容
-        attack_dataset(args, cfg, private_dataset, client_type)
+        attack_dataset(args, particial_cfg, private_dataset, client_type)
+
     elif args.attack_type == 'backdoor':
         # 攻击和未被攻击的客户端数量
         bad_scale = int(particial_cfg.DATASET.parti_num * particial_cfg['attack'].bad_client_rate)
