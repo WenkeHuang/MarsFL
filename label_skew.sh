@@ -31,15 +31,15 @@ python main.py --task label_skew --dataset fl_cifar10 --method FedProc --device_
 python main.py --task label_skew --dataset fl_cifar10 --method FedProc --device_id 3 --csv_log --csv_name beta_0.5 --save_checkpoint DATASET.beta 0.5 &
 python main.py --task label_skew --dataset fl_cifar10 --method FedProc --device_id 5 --csv_log --csv_name beta_0.1 --save_checkpoint DATASET.beta 0.1 &
 
-python main.py --task label_skew --dataset fl_cifar10 --method MOON --device_id 0 --csv_log --csv_name beta_1.0 --save_checkpoint DATASET.beta 1.0 &
-python main.py --task label_skew --dataset fl_cifar10 --method MOON --device_id 2 --csv_log --csv_name beta_0.3 --save_checkpoint DATASET.beta 0.3 &
-python main.py --task label_skew --dataset fl_cifar10 --method MOON --device_id 3 --csv_log --csv_name beta_0.5 --save_checkpoint DATASET.beta 0.5 &
-python main.py --task label_skew --dataset fl_cifar10 --method MOON --device_id 5 --csv_log --csv_name beta_0.1 --save_checkpoint DATASET.beta 0.1 &
-
-python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 0 --csv_log --csv_name beta_1.0 --save_checkpoint DATASET.beta 1.0 &
-python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 2 --csv_log --csv_name beta_0.3 --save_checkpoint DATASET.beta 0.3 &
-python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 3 --csv_log --csv_name beta_0.5 --save_checkpoint DATASET.beta 0.5 &
-python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 5 --csv_log --csv_name beta_0.1 --save_checkpoint DATASET.beta 0.1 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FPL --device_id 0 --csv_log --csv_name beta_1.0 --save_checkpoint DATASET.beta 1.0 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FPL --device_id 2 --csv_log --csv_name beta_0.3 --save_checkpoint DATASET.beta 0.3 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FPL --device_id 3 --csv_log --csv_name beta_0.5 --save_checkpoint DATASET.beta 0.5 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FPL --device_id 5 --csv_log --csv_name beta_0.1 --save_checkpoint DATASET.beta 0.1 &
+#
+#python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 0 --csv_log --csv_name beta_1.0 --save_checkpoint DATASET.beta 1.0 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 2 --csv_log --csv_name beta_0.3 --save_checkpoint DATASET.beta 0.3 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 3 --csv_log --csv_name beta_0.5 --save_checkpoint DATASET.beta 0.5 &
+#python main.py --task label_skew --dataset fl_cifar10 --method FedProto --device_id 5 --csv_log --csv_name beta_0.1 --save_checkpoint DATASET.beta 0.1 &
 
 # Cifar-100
 #python main.py --task label_skew --dataset fl_cifar100 --method FedAVG --device_id 0 --csv_log --csv_name beta_1.0 --save_checkpoint DATASET.beta 1.0 &

@@ -43,7 +43,7 @@ class FedLCLocal(LocalMethod):
                 optimizer.step()
 
     def logit_calibrated_loss(self, logit, y, label_distrib):
-        label_distrib[label_distrib == 0] = 1e-8
+        label_distrib[label_distrib == 0] = 1e-5
         cal_logit = torch.exp(
             logit
             - (

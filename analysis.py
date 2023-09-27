@@ -6,7 +6,7 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'domain_skew'
+task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
@@ -14,7 +14,7 @@ attack_type = 'None'
 '''
 byzantine backdoor None PairFlip
 '''
-dataset = 'Digits'  # 'fl_cifar10, PACS
+dataset = 'fl_fashionmnist'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
 domain_skew: Digits OfficeCaltech PACS
@@ -24,7 +24,7 @@ averaging = 'Weight'
 '''
 Weight Equal
 '''
-method_list = ['FedNova', 'FedNTD', 'FedDC', 'Scaffold']
+method_list = ['FedProto']
 
 Dataset_info = {
     'fl_cifar10': {
@@ -226,7 +226,7 @@ if __name__ == '__main__':
         specific_path = os.path.join(path, task,attack_type,dataset,averaging)
     else:
         specific_path = os.path.join(path, task,attack_type,dataset,averaging)
-    specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.001',averaging)
+    # specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.001',averaging)
     # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))

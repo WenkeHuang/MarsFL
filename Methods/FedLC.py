@@ -14,6 +14,7 @@ class FedLC(FederatedMethod):
     def ini(self):
         super().ini()
 
+
     def local_update(self, priloader_list):
         total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
         self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
