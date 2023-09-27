@@ -153,6 +153,20 @@ def global_out_evaluation(optimizer: FederatedMethod, test_loader: dict, out_dom
     return out_acc
 
 
+def fill_blank(net_cls_counts,classes):
+    class1 = [i for i in range(classes)]
+
+    for client, dict_i in net_cls_counts.items():
+        if len(dict_i.keys()) == 10:
+            continue
+        else:
+            for i in class1:
+                if i not in dict_i.keys():
+                    dict_i[i] = 0
+
+    return net_cls_counts
+
+
 def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     if args.csv_log:
         csv_writer = CsvWriter(args, cfg)
@@ -169,8 +183,8 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     elif args.task == 'label_skew':
         mean_in_domain_acc_list = []
         if args.attack_type == 'None':
-            contribution_match_degree_list = []  # Contribution Match Degree \bm{\mathcal{E}}
-        fed_method.net_cls_counts = private_dataset.net_cls_counts  # label stastic
+            contribution_match_degree_list = []
+        fed_method.net_cls_counts = fill_blank(private_dataset.net_cls_counts,cfg.DATASET.n_classes)
     elif args.task == 'domain_skew':
         in_domain_accs_dict = {}  # Query-Client Accuracy \bm{\mathcal{A}}}^{u}
         mean_in_domain_acc_list = []  # Cross-Client Accuracy A^U \bm{\mathcal{A}}}^{\mathcal{U}
