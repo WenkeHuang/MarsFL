@@ -4,7 +4,7 @@ DATASET:
   n_classes: 10
   parti_num: 4
   online_ratio: 1.0
-  domain_ratio: 0.5 # 扩大了到1.0
+  domain_ratio: 0.1 # 扩大了到1.0
   train_eval_domain_ratio: 0.1
   backbone: "resnet18"
   pretrained: False # True False
