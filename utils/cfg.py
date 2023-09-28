@@ -73,7 +73,7 @@ CFG.attack.byzantine.lamda = 10.0
 CFG.attack.byzantine.threshold_diff = 1e-5
 
 CFG.attack.backdoor = CN()
-CFG.attack.backdoor.evils = 'semantic_backdoor'  # base_backdoor semantic_backdoor
+CFG.attack.backdoor.evils = 'base_backdoor'  # base_backdoor semantic_backdoor
 CFG.attack.backdoor.backdoor_label = 2
 CFG.attack.backdoor.trigger_position = [
     [0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 4], [0, 0, 5], [0, 0, 6],
@@ -186,8 +186,8 @@ CFG.Local.FedDCLocal.alpha_coef = 0.5
 CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
-CFG.Local.qffeAVGLocal.q = 0.05
-
+# CFG.Local.qffeAVGLocal.q = 0.05
+CFG.Local.qffeAVGLocal.q = 1.05
 
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100

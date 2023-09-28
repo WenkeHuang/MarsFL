@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
@@ -32,7 +34,7 @@ def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
         for client_index in range(cfg.DATASET.parti_num):
             if not client_type[client_index]:
 
-                dataset = private_dataset.train_loaders[client_index].dataset
+                dataset = copy.deepcopy(private_dataset.train_loaders[client_index].dataset)
 
                 all_targets = []
                 all_imgs = []
@@ -40,10 +42,10 @@ def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
                 for i in range(len(dataset)):
                     img, target = dataset.__getitem__(i)
                     if cfg.attack.backdoor.evils == 'base_backdoor':
-                        img, target = base_backdoor(cfg, img, target, noise_data_rate)
+                        img, target = base_backdoor(cfg, copy.deepcopy(img), copy.deepcopy(target), noise_data_rate)
 
                     if cfg.attack.backdoor.evils == 'semantic_backdoor':
-                        img, target = semantic_backdoor(cfg, img, target, noise_data_rate)
+                        img, target = semantic_backdoor(cfg, copy.deepcopy(img), copy.deepcopy(target), noise_data_rate)
 
                     all_targets.append(target)
                     all_imgs.append(img.numpy())
@@ -58,7 +60,7 @@ def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
     else:
 
         if args.task == 'label_skew':
-            dataset = private_dataset.test_loader.dataset
+            dataset = copy.deepcopy(private_dataset.test_loader.dataset)
 
             all_targets = []
             all_imgs = []
@@ -66,13 +68,13 @@ def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
             for i in range(len(dataset)):
                 img, target = dataset.__getitem__(i)
                 if cfg.attack.backdoor.evils == 'base_backdoor':
-                    img, target = base_backdoor(cfg, img, target, noise_data_rate)
+                    img, target = base_backdoor(cfg, copy.deepcopy(img), copy.deepcopy(target), noise_data_rate)
 
                     all_targets.append(target)
                     all_imgs.append(img.numpy())
                 elif cfg.attack.backdoor.evils == 'semantic_backdoor':
                     if target == cfg.attack.backdoor.semantic_backdoor_label:
-                        img, target = semantic_backdoor(cfg, img, target, noise_data_rate)
+                        img, target = semantic_backdoor(cfg, copy.deepcopy(img), copy.deepcopy(target), noise_data_rate)
                         all_targets.append(target)
                         all_imgs.append(img.numpy())
 

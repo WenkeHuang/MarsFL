@@ -22,7 +22,7 @@ import os
 
 def parse_args():
     parser = ArgumentParser(description='Federated Learning', allow_abbrev=False)
-    parser.add_argument('--device_id', type=int, default=1, help='The Device Id for Experiment')
+    parser.add_argument('--device_id', type=int, default=2, help='The Device Id for Experiment')
     '''
     Task: OOD label_skew domain_skew
     '''
@@ -36,7 +36,7 @@ def parse_args():
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='backdoor')
+    parser.add_argument('--attack_type', type=str, default='None')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
