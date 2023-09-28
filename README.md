@@ -99,7 +99,7 @@ Zekun Shi
 | Method | Venue      | Code | Paper
 |--------|------------|----  |----  |
 | **AFL** | ICML'19 | [Code](https://github.com/Chelsiehi/Agnostic-Federated-Learning/tree/master)| [Paper](https://arxiv.org/abs/1902.00146)|
-| **qFFL**   | ICLR‘20    | [Code](https://github.com/illidanlab/FADE)| [Paper](https://arxiv.org/abs/1905.10497)|
+| **qFFL**   | ICLR‘20    | [Code](https://github.com/litian96/fair_flearn)| [Paper](https://arxiv.org/abs/1905.10497)|
 | FADE   | SIGKDD'21  |[Code](https://github.com/illidanlab/FADE)| [Paper]()|
 | FCFL   | NeurIPS'21 | [Code](https://github.com/cuis15/FCFL)| [Paper](https://arxiv.org/pdf/2108.08435.pdf)|
 | FedFV  | IJCAI'21   | [Code](https://github.com/WwZzz/easyFL)| [Paper](https://arxiv.org/abs/2104.14937)|
