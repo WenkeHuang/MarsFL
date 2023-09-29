@@ -6,15 +6,15 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'label_skew'
+task = 'domain_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'RandomNoise'
+attack_type = 'None'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
-dataset = 'fl_fashionmnist'  # 'fl_cifar10, PACS
+dataset = 'OfficeCaltech'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
 domain_skew: Digits OfficeCaltech PACS
@@ -65,16 +65,16 @@ aim_args_dict = {
 
 
 aim_cfg_dict = {
-    'DATASET': {
-        'beta':0.3
-        # 'backbone': "resnet18"
-    },
-    'attack':{
-        'bad_client_rate':0.4,
-        'byzantine':{
-            'evils': attack_type
-        }
-    }
+    # 'DATASET': {
+    #     'beta':0.3
+    #     # 'backbone': "resnet18"
+    # },
+    # 'attack':{
+    #     'bad_client_rate':0.2,
+    #     'byzantine':{
+    #         'evils': attack_type
+    #     }
+    # }
 }
 # PairFlip RandomNoise min_sum
 def mean_metric(structure_path, metric):
@@ -227,7 +227,7 @@ if __name__ == '__main__':
     else:
         specific_path = os.path.join(path, task,attack_type,dataset,averaging)
     # specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.01',averaging)
-    # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
+    specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
         if "all" in metric:
