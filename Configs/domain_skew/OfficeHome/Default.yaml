@@ -15,7 +15,7 @@ OPTIMIZER:
   momentum: 0.9
   weight_decay: 1e-5
   local_epoch: 10 # 10
-  local_train_batch: 64
-  local_test_batch: 64
+  local_train_batch: 32
+  local_test_batch: 32
   val_batch: 64
   local_train_lr: 0.005 # 0.01

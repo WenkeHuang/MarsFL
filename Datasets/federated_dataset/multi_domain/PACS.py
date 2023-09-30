@@ -195,7 +195,7 @@ class FLPACS(MultiDomainDataset):
 
         train_transform = self.train_transform
 
-        if self.cfg.DATASET.use_two_crop == 'WEAK':
+        if self.cfg.DATASET.aug == 'WEAK':
             # 构造非对称aug
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
         else:
