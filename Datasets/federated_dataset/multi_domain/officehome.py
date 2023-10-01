@@ -71,11 +71,24 @@ class FLOfficeHome(MultiDomainDataset):
 
         self.train_eval_domain_ratio = {'Art': cfg.DATASET.train_eval_domain_ratio, 'Clipart': cfg.DATASET.train_eval_domain_ratio,
                                         'Product': cfg.DATASET.train_eval_domain_ratio, 'Real_World': cfg.DATASET.train_eval_domain_ratio}
+        # self.train_transform = transforms.Compose(
+        #     [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
+        #      transforms.RandomHorizontalFlip(),
+        #      transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
+        #      transforms.RandomGrayscale(),
+        #      transforms.ToTensor(),
+        #      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        #      ])
+        #
+        # self.test_transform = transforms.Compose(
+        #     [transforms.Resize([224, 224]),
+        #      transforms.ToTensor(),
+        #      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        #      ])
+
         self.train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
-             transforms.RandomHorizontalFlip(),
-             transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
-             transforms.RandomGrayscale(),
+             # transforms.RandomHorizontalFlip(),
              transforms.ToTensor(),
              transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
              ])
