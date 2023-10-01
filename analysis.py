@@ -14,7 +14,7 @@ attack_type = 'None'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
-dataset = 'PACS'  # 'fl_cifar10, PACS
+dataset = 'OfficeCaltech'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -44,22 +44,22 @@ Dataset_info = {
         'communication_epoch': 100
     },
     'Digits': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     },
     'OfficeCaltech': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     },
     'OfficeHome': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     },
     'PACS': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     }
@@ -80,7 +80,7 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     # 'DATASET': {
-    #     'beta':0.3
+    #     'beta':0.5
     #     # 'backbone': "resnet18"
     # },
     # 'attack':{
