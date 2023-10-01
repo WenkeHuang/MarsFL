@@ -6,7 +6,7 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'label_skew'
+task = 'domain_skew'
 '''
 label_skew domain_skew OOD
 '''
@@ -14,7 +14,7 @@ attack_type = 'None'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
-dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+dataset = 'PACS'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -54,6 +54,11 @@ Dataset_info = {
         'communication_epoch': 50
     },
     'OfficeHome': {
+        'backbone': 'resnet18',
+        'parti_num': 4,
+        'communication_epoch': 50
+    },
+    'PACS': {
         'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
