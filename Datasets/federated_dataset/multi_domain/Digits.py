@@ -227,7 +227,7 @@ class FLDigits(MultiDomainDataset):
             train_val_transform = TwoCropsTransform(self.strong_transform, self.strong_transform)
             one_channel_train_val_transform = TwoCropsTransform(self.one_channel_strong_transform,
                                                                 self.one_channel_strong_transform)
-        else:
+        elif self.cfg.DATASET.aug == 'weak':
             train_val_transform = self.train_transform
             one_channel_train_val_transform = self.one_channel_train_transform
 

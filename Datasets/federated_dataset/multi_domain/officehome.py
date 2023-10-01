@@ -88,16 +88,16 @@ class FLOfficeHome(MultiDomainDataset):
 
         self.train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
-             # transforms.RandomHorizontalFlip(),
+             transforms.RandomHorizontalFlip(),
+             transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
+             transforms.RandomGrayscale(),
              transforms.ToTensor(),
-             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-             ])
+             self.get_normalization_transform()])
 
         self.test_transform = transforms.Compose(
             [transforms.Resize([224, 224]),
              transforms.ToTensor(),
-             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-             ])
+             self.get_normalization_transform()])
 
     def get_data_loaders(self, selected_domain_list=[]):
 
@@ -110,13 +110,13 @@ class FLOfficeHome(MultiDomainDataset):
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
 
-        train_transform = self.train_transform
-
         if self.cfg.DATASET.aug == 'two_weak':
             # 构造非对称aug
+            train_transform = self.train_transform
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
-        else:
-            train_val_transform = self.test_transform
+        elif self.cfg.DATASET.aug == 'weak':
+            train_transform = self.train_transform
+            train_val_transform = self.train_transform
 
         for _, domain in enumerate(self.domain_list):
             train_dataset = ImageFolder_Custom(data_name=domain, root=multi_domain_data_path(), train=True,

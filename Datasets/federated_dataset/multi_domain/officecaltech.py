@@ -76,16 +76,16 @@ class FLOfficeCaltech(MultiDomainDataset):
 
         self.train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
-             # transforms.RandomHorizontalFlip(),
+             transforms.RandomHorizontalFlip(),
+             transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.4),
+             transforms.RandomGrayscale(),
              transforms.ToTensor(),
-             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-             ])
+             self.get_normalization_transform()])
 
         self.test_transform = transforms.Compose(
             [transforms.Resize([224, 224]),
              transforms.ToTensor(),
-             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-             ])
+             self.get_normalization_transform()])
         # self.train_transform = transforms.Compose(
         #     [transforms.Resize((32, 32)),
         #      transforms.RandomCrop(32, padding=4),
@@ -110,10 +110,11 @@ class FLOfficeCaltech(MultiDomainDataset):
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
 
-        train_transform = self.train_transform
         if self.cfg.DATASET.aug == 'two_weak':
+            train_transform = self.train_transform
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
-        else:
+        elif self.cfg.DATASET.aug == 'weak':
+            train_transform = self.train_transform
             train_val_transform = self.train_transform
 
         for _, domain in enumerate(self.domain_list):
