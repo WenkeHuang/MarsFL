@@ -8,7 +8,7 @@ DATASET:
   train_eval_domain_ratio: 1.0
   backbone: "resnet18" # resnet18_lora
   pretrained: False
-  aug: "two_weak"
+  aug: "weak"
 
 OPTIMIZER:
   type: 'SGD'
