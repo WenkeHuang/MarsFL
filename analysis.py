@@ -6,7 +6,7 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
-task = 'domain_skew'
+task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
@@ -14,10 +14,10 @@ attack_type = 'None'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
-dataset = 'OfficeCaltech'  # 'fl_cifar10, PACS
+dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
 '''
-label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
-domain_skew: Digits OfficeCaltech PACS
+label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist
+domain_skew: Digits OfficeCaltech PACS OfficeHome
 OOD:
 '''
 averaging = 'Weight'
@@ -39,12 +39,21 @@ Dataset_info = {
         'parti_num': 10,
         'communication_epoch': 100
     },
+    'fl_mnist': {
+        'parti_num': 10,
+        'communication_epoch': 100
+    },
     'Digits': {
         'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     },
     'OfficeCaltech': {
+        'backbone': 'resnet18',
+        'parti_num': 4,
+        'communication_epoch': 50
+    },
+    'OfficeHome': {
         'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
@@ -227,7 +236,7 @@ if __name__ == '__main__':
     else:
         specific_path = os.path.join(path, task,attack_type,dataset,averaging)
     # specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.01',averaging)
-    specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
+    # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
         print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
         if "all" in metric:
