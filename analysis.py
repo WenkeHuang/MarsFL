@@ -6,6 +6,7 @@ from yacs.config import CfgNode as CN
 
 path = './data/'
 
+
 task = 'domain_skew'
 '''
 label_skew domain_skew OOD
