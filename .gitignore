@@ -1,6 +1,3 @@
-.idea
-utils/conf.py
-analysis.py
-main.py
-lc.sh
-ins
+
+*.xml
+*.iml

@@ -7,12 +7,12 @@ from yacs.config import CfgNode as CN
 path = './data/'
 
 
-task = 'domain_skew'
+task = 'label_skew'
 
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'PairFlip'
+attack_type = 'min_sum'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
