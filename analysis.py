@@ -8,14 +8,15 @@ path = './data/'
 
 
 task = 'domain_skew'
+
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'None'
+attack_type = 'RandomNoise'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
-dataset = 'OfficeCaltech'  # 'fl_cifar10, PACS
+dataset = 'fl_mnist'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -80,16 +81,16 @@ aim_args_dict = {
 
 
 aim_cfg_dict = {
-    # 'DATASET': {
-    #     'beta':0.5
-    #     # 'backbone': "resnet18"
-    # },
-    # 'attack':{
-    #     'bad_client_rate':0.2,
-    #     'byzantine':{
-    #         'evils': attack_type
-    #     }
-    # }
+    'DATASET': {
+        'beta':0.5
+        # 'backbone': "resnet18"
+    },
+    'attack':{
+        'bad_client_rate':0.2,
+        'byzantine':{
+            'evils': attack_type
+        }
+    }
 }
 # PairFlip RandomNoise min_sum
 def mean_metric(structure_path, metric):
