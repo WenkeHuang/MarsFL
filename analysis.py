@@ -12,7 +12,7 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'SymFlip'
+attack_type = 'min_sum'
 '''
 byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
 '''
@@ -82,7 +82,7 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
-        'beta':0.3
+        'beta':0.5
         # 'backbone': "resnet18"
     },
     'attack':{
