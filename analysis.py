@@ -82,7 +82,7 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
-        'beta':0.5
+        'beta':0.3
         # 'backbone': "resnet18"
     },
     'attack':{
