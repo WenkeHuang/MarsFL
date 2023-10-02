@@ -4,10 +4,10 @@ DATASET:
   n_classes: 10
   parti_num: 4 #
   online_ratio: 1.0
-  domain_ratio: 0.5 # 扩大了到1.0
+  domain_ratio: 0.1 # 扩大了到1.0
   train_eval_domain_ratio: 0.1
-  backbone: "simple_cnn" # simple_cnn resnet18_pretrained resnet18
-  pretrained: True # True False
+  backbone: "resnet18" # simple_cnn resnet18_pretrained resnet18
+  pretrained: False # True False
   aug: "weak"
 
 OPTIMIZER:
@@ -15,7 +15,7 @@ OPTIMIZER:
   momentum: 0.9
   weight_decay: 1e-5
   local_epoch: 10 # 10
-  local_train_batch: 64
-  local_test_batch: 64
-  val_batch: 64
+  local_train_batch: 16
+  local_test_batch: 16
+  val_batch: 16
   local_train_lr: 1e-2 # 0.01

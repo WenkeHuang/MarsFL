@@ -4,9 +4,9 @@ DATASET:
   n_classes: 65
   parti_num: 4
   online_ratio: 1.0
-  domain_ratio: 0.1 # 扩大了到1.0
-  train_eval_domain_ratio: 0.1
-  backbone: "resnet18"
+  domain_ratio: 0.3 # 扩大了到1.0
+  train_eval_domain_ratio: 0.3
+  backbone: "resnet34"
   pretrained: False # True False
   aug: "weak"
 
@@ -15,7 +15,7 @@ OPTIMIZER:
   momentum: 0.9
   weight_decay: 1e-5
   local_epoch: 10 # 10
-  local_train_batch: 64
-  local_test_batch: 64
-  val_batch: 32
+  local_train_batch: 16
+  local_test_batch: 16
+  val_batch: 16
   local_train_lr: 0.001 # 0.01

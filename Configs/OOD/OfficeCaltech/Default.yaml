@@ -5,9 +5,9 @@ DATASET:
   n_classes: 10
   parti_num: 4
   online_ratio: 1.0
-  domain_ratio: 0.5
-  train_eval_domain_ratio: 1.0
-  backbone: "resnet18" # resnet18_lora
+  domain_ratio: 0.3
+  train_eval_domain_ratio: 0.3
+  backbone: "resnet34" # resnet18_lora
   pretrained: False
   aug: "weak"
 
@@ -16,8 +16,9 @@ OPTIMIZER:
   momentum: 0.9
   weight_decay: 1e-5
   local_epoch: 1 # 10
-  local_train_batch: 64
-  local_test_batch: 64
-  local_train_lr: 1e-2 # 0.01
+  local_train_batch: 16
+  local_test_batch: 16
+  val_batch: 16
+  local_train_lr: 1e-3 # 0.01
 
 
