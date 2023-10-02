@@ -216,7 +216,7 @@ CFG.FedProxGA.global_method = 'FedProxGASever'
 # FedProxDefense
 CFG.FedProxDefense = CN()
 CFG.FedProxDefense.local_method = 'FedProxLocal'
-CFG.FedProxDefense.global_method = 'DncSever'
+CFG.FedProxDefense.global_method = 'SageFlowSever'
 
 # FedProc
 CFG.FedProc = CN()

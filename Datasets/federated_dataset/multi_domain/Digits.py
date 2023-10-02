@@ -8,6 +8,8 @@ from utils.conf import multi_domain_data_path
 import torch.utils.data as data
 from typing import Tuple
 from PIL import Image
+
+
 class MyDigits(data.Dataset):
     def __init__(self, root, train=True, transform=None,
                  target_transform=None, download=False, data_name=None) -> None:
@@ -56,6 +58,7 @@ class MyDigits(data.Dataset):
         if self.target_transform is not None:
             target = self.target_transform(target)
         return img, target
+
     def __len__(self):
         return len(self.dataset)
 
