@@ -20,13 +20,14 @@ class CsvWriter:
 
     def model_folder_path(self):
         if self.args.task == 'OOD':
-            model_path = os.path.join(log_path(), self.args.task,self.args.attack_type, self.args.dataset, self.cfg.OOD.out_domain, self.args.averaging, self.args.method)
+            model_path = os.path.join(log_path(), self.args.task, self.args.attack_type, self.args.dataset, self.cfg.OOD.out_domain, self.args.averaging,
+                                      self.args.method)
         else:
             if self.args.attack_type == 'None':
-                model_path = os.path.join(log_path(), self.args.task,self.args.attack_type, self.args.dataset, self.args.averaging, self.args.method)
+                model_path = os.path.join(log_path(), self.args.task, self.args.attack_type, self.args.dataset, self.args.averaging, self.args.method)
             else:
-                model_path = os.path.join(log_path(), self.args.task,self.cfg.attack[self.args.attack_type].evils,
-                self.args.dataset, self.args.averaging, self.args.method)
+                model_path = os.path.join(log_path(), self.args.task, self.cfg.attack[self.args.attack_type].evils,
+                                          self.args.dataset, self.args.averaging, self.args.method)
         create_if_not_exists(model_path)
         return model_path
 
@@ -85,59 +86,77 @@ class CsvWriter:
         paragroup_dirs = os.listdir(self.model_path)  # 获取所有存储的参数组
         n_para = len(paragroup_dirs)  # 获取长度
         final_check = False  # 假定不存在！
-        # 判断是否参数一致
-        for para in paragroup_dirs:
-            exist_para_args = True  # 默认不存在对应的参数组 args!
-            exist_para_cfg = True
-            dict_from_csv = {}
-            key_value_list = []
-            para_path = os.path.join(self.model_path, para)
-            args_path = para_path + '/args.csv'
-            with open(args_path, mode='r') as inp:
-                reader = csv.reader(inp)
-                for rows in reader:
-                    key_value_list.append(rows)
-            for index, _ in enumerate(key_value_list[0]):
-                dict_from_csv[key_value_list[0][index]] = key_value_list[1][index]
-            if args != dict_from_csv:  # 如果对应不上
-                exist_para_args = False  # 不存在对应的args！
-            cfg_path = para_path + '/cfg.yaml'
-            query_cfg = copy.deepcopy(cfg)
-            query_cfg.merge_from_file(cfg_path)
-            for name, value1 in cfg.items():
-                if isinstance(value1, CN):
-                    if name not in query_cfg or self.cfg_to_dict(query_cfg[name]) != self.cfg_to_dict(value1):
-                        exist_para_cfg = False  # 存在不一样的
-            if exist_para_args == True and exist_para_cfg == True:
-                final_check = True
-                break
-        if final_check == False:
-            '''
-            定义存储的名字
-            '''
-            if self.args.csv_name == None:
-                path = os.path.join(self.model_path, 'para' + str(n_para + 1))
-                k = 1
-                while os.path.exists(path):
-                    path = os.path.join(self.model_path, 'para' + str(n_para + k))
-                    k = k + 1
-            else:
-                path = os.path.join(self.model_path, self.args.csv_name)
 
+        if self.args.csv_name is not None:
+
+            path = os.path.join(self.model_path, self.args.csv_name)
             create_if_not_exists(path)
-            columns = list(args.keys())
-            write_headers = True
             args_path = path + '/args.csv'
             cfg_path = path + '/cfg.yaml'
-            with open(args_path, 'a') as tmp:
+            columns = list(args.keys())
+            with open(args_path, 'w') as tmp:
                 writer = csv.DictWriter(tmp, fieldnames=columns)
-                if write_headers:
-                    writer.writeheader()
+
+                writer.writeheader()
                 writer.writerow(args)
             with open(cfg_path, 'w') as f:
                 f.write(yaml.dump(self.cfg_to_dict(cfg)))
         else:
-            path = para_path
+
+            # 判断是否参数一致
+            for para in paragroup_dirs:
+                exist_para_args = True  # 默认不存在对应的参数组 args!
+                exist_para_cfg = True
+                dict_from_csv = {}
+                key_value_list = []
+                para_path = os.path.join(self.model_path, para)
+                args_path = para_path + '/args.csv'
+                with open(args_path, mode='r') as inp:
+                    reader = csv.reader(inp)
+                    for rows in reader:
+                        key_value_list.append(rows)
+                for index, _ in enumerate(key_value_list[0]):
+                    dict_from_csv[key_value_list[0][index]] = key_value_list[1][index]
+                if args != dict_from_csv:  # 如果对应不上
+                    exist_para_args = False  # 不存在对应的args！
+                cfg_path = para_path + '/cfg.yaml'
+                query_cfg = copy.deepcopy(cfg)
+                query_cfg.merge_from_file(cfg_path)
+                for name, value1 in cfg.items():
+                    if isinstance(value1, CN):
+                        if name not in query_cfg or self.cfg_to_dict(query_cfg[name]) != self.cfg_to_dict(value1):
+                            exist_para_cfg = False  # 存在不一样的
+                if exist_para_args == True and exist_para_cfg == True:
+                    final_check = True
+                    break
+
+            if not final_check:
+                '''
+                定义存储的名字
+                '''
+                if self.args.csv_name is None:
+                    path = os.path.join(self.model_path, 'para' + str(n_para + 1))
+                    k = 1
+                    while os.path.exists(path):
+                        path = os.path.join(self.model_path, 'para' + str(n_para + k))
+                        k = k + 1
+                else:
+                    path = os.path.join(self.model_path, self.args.csv_name)
+
+                create_if_not_exists(path)
+                columns = list(args.keys())
+                write_headers = True
+                args_path = path + '/args.csv'
+                cfg_path = path + '/cfg.yaml'
+                with open(args_path, 'a') as tmp:
+                    writer = csv.DictWriter(tmp, fieldnames=columns)
+                    if write_headers:
+                        writer.writeheader()
+                    writer.writerow(args)
+                with open(cfg_path, 'w') as f:
+                    f.write(yaml.dump(self.cfg_to_dict(cfg)))
+            else:
+                path = para_path
         return path
 
     def write_mean_acc(self, mean_path, acc_list):
