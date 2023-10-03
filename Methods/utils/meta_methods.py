@@ -79,12 +79,13 @@ class FederatedMethod(nn.Module):
         return
 
     def ini(self):
-        self.global_net = copy.deepcopy(self.nets_list[0])
-        self.global_net = self.global_net.to(self.device)
+        if self.args.structure == 'homogeneity':
+            self.global_net = copy.deepcopy(self.nets_list[0])
+            self.global_net = self.global_net.to(self.device)
 
-        global_w = self.nets_list[0].state_dict()
-        for _, net in enumerate(self.nets_list):
-            net.load_state_dict(global_w)
+            global_w = self.nets_list[0].state_dict()
+            for _, net in enumerate(self.nets_list):
+                net.load_state_dict(global_w)
 
     def col_update(self, publoader):
         pass
