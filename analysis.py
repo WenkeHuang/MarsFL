@@ -11,7 +11,7 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'SymFlip'
+attack_type = 'PairFlip'
 '''
 byzantine backdoor None PairFlip SymFlip RandomNoise min_sum
 '''
