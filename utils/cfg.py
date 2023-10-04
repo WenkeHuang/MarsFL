@@ -127,7 +127,7 @@ CFG.Sever.SageFlowSever.public_dataset_name = 'pub_svhn'
 CFG.Sever.SageFlowSever.pub_len = 5000
 CFG.Sever.SageFlowSever.pub_aug = 'weak'
 CFG.Sever.SageFlowSever.public_batch_size = 64
-CFG.Sever.SageFlowSever.public_epoch = 20
+# CFG.Sever.SageFlowSever.public_epoch = 20
 
 CFG.Sever.FedDfSever = CN()
 CFG.Sever.FedDfSever.public_dataset_name = 'pub_svhn'

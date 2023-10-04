@@ -26,12 +26,12 @@ def parse_args():
     '''
     Task: OOD label_skew domain_skew
     '''
-    parser.add_argument('--task', type=str, default='domain_skew')
+    parser.add_argument('--task', type=str, default='label_skew')
     '''
     label_skew:   fl_cifar10 fl_cifar100 fl_mnist fl_usps fl_fashionmnist fl_tinyimagenet
     domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome
     '''
-    parser.add_argument('--dataset', type=str, default='Digits',
+    parser.add_argument('--dataset', type=str, default='fl_mnist',
                         help='Which scenario to perform experiments on.')
     '''
     Attack: byzantine backdoor None
@@ -41,7 +41,7 @@ def parse_args():
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
-    parser.add_argument('--method', type=str, default='FcclPlus',
+    parser.add_argument('--method', type=str, default='FedProxDefense',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     parser.add_argument('--rand_domain_select', type=bool, default=False, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity
