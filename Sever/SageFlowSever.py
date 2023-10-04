@@ -23,7 +23,7 @@ class SageFlowSever(SeverMethod):
         pub_len = cfg.Sever[self.NAME].pub_len
         pub_aug = cfg.Sever[self.NAME].pub_aug
         public_batch_size = cfg.Sever[self.NAME].public_batch_size
-        self.public_epoch = cfg.Sever[self.NAME].public_epoch
+        # self.public_epoch = cfg.Sever[self.NAME].public_epoch
         self.public_dataset = get_public_dataset(args, cfg, public_dataset_name=public_dataset_name,
                                                  pub_len=pub_len, pub_aug=pub_aug, public_batch_size=public_batch_size)
         self.public_dataset.get_data_loaders()
@@ -82,11 +82,11 @@ class SageFlowSever(SeverMethod):
 
         sum_alpha = sum(alpha)
 
-        if sum_alpha <= 0.0001:
-            pass
-        else:
-            for k in range(0, len(alpha)):
-                alpha[k] = alpha[k] / sum_alpha
+        # if sum_alpha <= 0.0001:
+        #     pass
+        # else:
+        for k in range(0, len(alpha)):
+            alpha[k] = alpha[k] / sum_alpha
 
         freq = alpha
 
