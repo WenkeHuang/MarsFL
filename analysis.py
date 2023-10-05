@@ -88,7 +88,7 @@ aim_cfg_dict = {
         # 'backbone': "resnet18"
     },
     'attack': {
-        'bad_client_rate': 0.2,
+        'bad_client_rate': 0.4,
         'byzantine': {
             'evils': attack_type
         }
