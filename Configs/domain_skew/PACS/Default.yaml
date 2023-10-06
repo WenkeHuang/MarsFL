@@ -1,12 +1,12 @@
 DATASET:
-  dataset : "Digits"
+  dataset : "PACS"
   communication_epoch : 50
-  n_classes: 10
-  parti_num: 4 #
+  n_classes: 7
+  parti_num: 4
   online_ratio: 1.0
-  domain_ratio: 0.1 # 扩大了到1.0
-  train_eval_domain_ratio: 0.1
-  backbone: "resnet18" # simple_cnn resnet18_pretrained resnet18
+  domain_ratio: 0.3
+  train_eval_domain_ratio: 0.3
+  backbone: "resnet34" # resnet18_lora
   pretrained: False # True False
   aug: "weak"
 
@@ -18,4 +18,6 @@ OPTIMIZER:
   local_train_batch: 16
   local_test_batch: 16
   val_batch: 16
-  local_train_lr: 1e-2 # 0.01
+  local_train_lr: 0.001 # 0.01
+
+

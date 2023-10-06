@@ -31,7 +31,7 @@ def simplify_cfg(args, cfg):
     return dump_cfg
 
 
-def show_cfg(args, cfg,method):
+def show_cfg(args, cfg, method):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
     dump_cfg.OPTIMIZER = cfg.OPTIMIZER
@@ -96,7 +96,7 @@ CFG.OOD = CN()
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 # OfficeHome 'Art', 'Clipart', 'Product', 'Real_World'
 # DomainNet 'clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'
-CFG.OOD.out_domain = 'MNIST'
+CFG.OOD.out_domain = 'caltech'
 
 '''Federated OPTIMIZER'''
 CFG.OPTIMIZER = CN()
@@ -127,7 +127,23 @@ CFG.Sever.SageFlowSever.public_dataset_name = 'pub_svhn'
 CFG.Sever.SageFlowSever.pub_len = 5000
 CFG.Sever.SageFlowSever.pub_aug = 'weak'
 CFG.Sever.SageFlowSever.public_batch_size = 64
-CFG.Sever.SageFlowSever.public_epoch = 20
+# CFG.Sever.SageFlowSever.public_epoch = 20
+
+CFG.Sever.FedDfSever = CN()
+CFG.Sever.FedDfSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FedDfSever.pub_len = 5000
+CFG.Sever.FedDfSever.pub_aug = 'weak'
+CFG.Sever.FedDfSever.public_batch_size = 64
+CFG.Sever.FedDfSever.public_epoch = 1
+CFG.Sever.FedDfSever.public_lr = 1e-3
+
+CFG.Sever.FedMdSever = CN()
+CFG.Sever.FedMdSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FedMdSever.pub_len = 5000
+CFG.Sever.FedMdSever.pub_aug = 'weak'
+CFG.Sever.FedMdSever.public_batch_size = 64
+CFG.Sever.FedMdSever.public_epoch = 1
+CFG.Sever.FedMdSever.public_lr = 1e-3
 
 CFG.Sever.KD3ASever = CN()
 CFG.Sever.KD3ASever.confidence_gate_begin = 0.9
@@ -135,7 +151,6 @@ CFG.Sever.KD3ASever.confidence_gate_end = 0.95
 
 CFG.Sever.AFLSever = CN()
 CFG.Sever.AFLSever.drfa_gamma = 0.01
-
 
 CFG.Sever.FedProxGASever = CN()
 CFG.Sever.FedProxGASever.base_step_size = 0.2
@@ -145,6 +160,16 @@ CFG.Sever.CRFLSever.param_clip_thres = 15
 CFG.Sever.CRFLSever.epoch_index_weight = 0.1
 CFG.Sever.CRFLSever.epoch_index_bias = 2
 CFG.Sever.CRFLSever.sigma = 0.01
+
+CFG.Sever.FcclPlusSever = CN()
+CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FcclPlusSever.pub_len = 5000
+CFG.Sever.FcclPlusSever.pub_aug = 'weak'
+CFG.Sever.FcclPlusSever.public_batch_size = 64
+CFG.Sever.FcclPlusSever.public_epoch = 1
+CFG.Sever.FcclPlusSever.public_lr = 1e-3
+CFG.Sever.FcclPlusSever.dis_power = 3
+CFG.Sever.FcclPlusSever.temp=0.02
 
 '''Local'''
 CFG.Local = CN()
@@ -192,6 +217,9 @@ CFG.Local.qffeAVGLocal.q = 1.05
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 100
 
+CFG.Local.FcclPlusLocal = CN()
+CFG.Local.FcclPlusLocal.local_dis_power = 3
+
 '''Federated Method'''
 # qffeAVG
 CFG.qffeAVG = CN()
@@ -206,7 +234,7 @@ CFG.FedAVG.global_method = 'BaseSever'
 # FedProx
 CFG.FedProx = CN()
 CFG.FedProx.local_method = 'FedProxLocal'
-CFG.FedProx.global_method = 'BaseSever' # MultiKrumSever DncSever BaseSever
+CFG.FedProx.global_method = 'BaseSever'  # MultiKrumSever DncSever BaseSever
 
 # FedProxGA
 CFG.FedProxGA = CN()
@@ -216,7 +244,7 @@ CFG.FedProxGA.global_method = 'FedProxGASever'
 # FedProxDefense
 CFG.FedProxDefense = CN()
 CFG.FedProxDefense.local_method = 'FedProxLocal'
-CFG.FedProxDefense.global_method = 'DncSever'
+CFG.FedProxDefense.global_method = 'SageFlowSever'
 
 # FedProc
 CFG.FedProc = CN()
@@ -307,3 +335,18 @@ CFG.COPADG.global_method = 'COPADGSever'
 CFG.CRFL = CN()
 CFG.CRFL.local_method = 'CRFLLocal'
 CFG.CRFL.global_method = 'CRFLSever'
+
+# FedDf
+CFG.FedDf = CN()
+CFG.FedDf.local_method = 'BaseLocal'
+CFG.FedDf.global_method = 'FedDfSever'
+
+# FedMd
+CFG.FedMd = CN()
+CFG.FedMd.local_method = 'BaseLocal'
+CFG.FedMd.global_method = 'FedMdSever'
+
+# FcclPlus
+CFG.FcclPlus = CN()
+CFG.FcclPlus.local_method = 'FcclPlusLocal'
+CFG.FcclPlus.global_method = 'FcclPlusSever'

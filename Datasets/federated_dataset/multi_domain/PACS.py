@@ -190,16 +190,15 @@ class FLPACS(MultiDomainDataset):
         domain_training_dataset_dict = {}
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
-        # ood_dataset = None
+
         # 是否使用两个数据相同的数据增强
-
-        train_transform = self.train_transform
-
-        if self.cfg.DATASET.use_two_crop == 'WEAK':
+        if self.cfg.DATASET.aug == 'two_weak':
             # 构造非对称aug
+            train_transform = TwoCropsTransform(self.train_transform, self.train_transform)
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
-        else:
-            train_val_transform = self.test_transform
+        elif self.cfg.DATASET.aug == 'weak':
+            train_transform = self.train_transform
+            train_val_transform = self.train_transform
 
         # 对于feddg 使用fft
         if 'FedDG' in self.cfg:

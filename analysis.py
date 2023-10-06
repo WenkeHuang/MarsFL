@@ -10,14 +10,14 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'None'
+attack_type = 'min_sum'
 '''
-byzantine backdoor None PairFlip RandomNoise SymFlip min_sum
+byzantine backdoor None PairFlip SymFlip RandomNoise min_sum
 '''
 dataset = 'fl_cifar100'  # 'fl_cifar10, PACS
 '''
-label_skew: fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet
-domain_skew: Digits OfficeCaltech PACS
+label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist fl_usps
+domain_skew: Digits OfficeCaltech PACS OfficeHome
 OOD:
 '''
 averaging = 'Weight'
@@ -28,7 +28,7 @@ method_list = ['FedNova', 'FedNTD', 'FedDC', 'Scaffold']
 
 Dataset_info = {
     'fl_cifar10': {
-        'parti_num':10,
+        'parti_num': 10,
         'communication_epoch': 100
     },
     'fl_cifar100': {
@@ -39,13 +39,31 @@ Dataset_info = {
         'parti_num': 10,
         'communication_epoch': 100
     },
+    'fl_mnist': {
+        'parti_num': 10,
+        'communication_epoch': 100
+    },
+    'fl_usps': {
+        'parti_num': 10,
+        'communication_epoch': 100
+    },
     'Digits': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     },
     'OfficeCaltech': {
-        'backbone': 'resnet18',
+        # 'backbone': 'resnet18',
+        'parti_num': 4,
+        'communication_epoch': 50
+    },
+    'OfficeHome': {
+        # 'backbone': 'resnet18',
+        'parti_num': 4,
+        'communication_epoch': 50
+    },
+    'PACS': {
+        # 'backbone': 'resnet18',
         'parti_num': 4,
         'communication_epoch': 50
     }
@@ -53,36 +71,37 @@ Dataset_info = {
 
 metrics_dict = \
     {
-        'label_skew' : ['in_domain_mean_acc'],
+        'label_skew': ['in_domain_mean_acc'],
         # 'label_skew': ['in_domain_mean_acc','contribution_fairness_mean_acc'],
-        'domain_skew': ['in_domain_mean_acc','in_domain_all_acc','performance_variance_mean_acc','contribution_fairness_mean_acc'],
-        'ood': ['in_domain_mean_acc', 'in_domain_all_acc','out_domain_all_acc']
+        'domain_skew': ['in_domain_mean_acc', 'in_domain_all_acc', 'performance_variance_mean_acc', 'contribution_fairness_mean_acc'],
+        'ood': ['in_domain_mean_acc', 'in_domain_all_acc', 'out_domain_all_acc']
     }
 
 aim_args_dict = {
     # 'parti_num': 1,
 }
 
-
 aim_cfg_dict = {
-    # 'DATASET': {
-    #     'beta':0.3
-    #     # 'backbone': "resnet18"
-    # },
-    # 'attack':{
-    #     'bad_client_rate':0.2,
-    #     'byzantine':{
-    #         'evils': attack_type
-    #     }
-    # }
+    'DATASET': {
+        'beta': 0.5
+        # 'backbone': "resnet18"
+    },
+    'attack': {
+        'bad_client_rate': 0.4,
+        'byzantine': {
+            'evils': attack_type
+        }
+    }
 }
+
+
 # PairFlip RandomNoise min_sum
 def mean_metric(structure_path, metric):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
         if model != '':
-        # if model != '' and model in method_list:
+            # if model != '' and model in method_list:
             model_path = os.path.join(structure_path, model)
             if os.path.isdir(model_path):
                 for para in os.listdir(model_path):
@@ -108,12 +127,13 @@ def mean_metric(structure_path, metric):
                             experiment_index += 1
     return acc_dict
 
+
 def all_metric(structure_path, metric, scale_num):
     acc_dict = {}
     experiment_index = 0
     for model in os.listdir(structure_path):
         if model != '':
-        # if model != '' and model in method_list:
+            # if model != '' and model in method_list:
             model_path = os.path.join(structure_path, model)
             if os.path.isdir(model_path):  # Check this path = path to folder
                 for para in os.listdir(model_path):
@@ -143,6 +163,7 @@ def all_metric(structure_path, metric, scale_num):
                             experiment_index += 1
     return acc_dict, scale_num
 
+
 def select_para(args_path, cfg_path):
     args_pd = pd.read_table(args_path, sep=",")
     # aim_cfg.merge_from_file(cfg_path)
@@ -165,8 +186,7 @@ def select_para(args_path, cfg_path):
         result = f.read()
         now_dict = yaml.full_load(result)
 
-
-    is_same = dict_eval(aim_cfg_dict,now_dict,is_same)
+    is_same = dict_eval(aim_cfg_dict, now_dict, is_same)
     # for sub_k in aim_cfg_dict:
     #     try:
     #         now_sub_dict = now_dict[sub_k]
@@ -182,6 +202,7 @@ def select_para(args_path, cfg_path):
     #         break
 
     return is_same
+
 
 # def dict_eval(aim_cfg_dict,now_dict,is_same):
 #     for sub_k in aim_cfg_dict:
@@ -201,11 +222,11 @@ def select_para(args_path, cfg_path):
 #         if is_same == False:
 #             return is_same
 #     return is_same
-def dict_eval(aim_cfg_dict,now_dict,is_same):
+def dict_eval(aim_cfg_dict, now_dict, is_same):
     for sub_k in aim_cfg_dict:
         now_sub = now_dict[sub_k]
         aim_sub = aim_cfg_dict[sub_k]
-        if isinstance(now_sub,dict):
+        if isinstance(now_sub, dict):
             for para_name in aim_sub:
                 if isinstance(aim_sub[para_name], dict):
                     is_same = dict_eval(aim_sub[para_name], now_sub[para_name], is_same)
@@ -220,16 +241,17 @@ def dict_eval(aim_cfg_dict,now_dict,is_same):
                 return is_same
     return is_same
 
+
 if __name__ == '__main__':
     print('**************************************************************')
     if attack_type == 'None':
-        specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+        specific_path = os.path.join(path, task, attack_type, dataset, averaging)
     else:
-        specific_path = os.path.join(path, task,attack_type,dataset,averaging)
+        specific_path = os.path.join(path, task, attack_type, dataset, averaging)
     # specific_path = os.path.join(path, task,attack_type,'Digits_resnet18_0.01',averaging)
     # specific_path = os.path.join(path, task,attack_type,'OfficeCaltech_224_0.005',averaging)
     for _, metric in enumerate(metrics_dict[task]):
-        print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task,attack_type,dataset,averaging,metric))
+        print("Task: {} Attack: {} Dataset: {} Averaging: {} Metric {}".format(task, attack_type, dataset, averaging, metric))
         if "all" in metric:
             each_acc_dict, n_participants = all_metric(specific_path, metric, scale_num=Dataset_info[dataset]['parti_num'])
             each_df = pd.DataFrame(each_acc_dict)
@@ -244,7 +266,7 @@ if __name__ == '__main__':
             mean_df = pd.DataFrame(mean_acc_dict)
             mean_df = mean_df.T
             column_mean_acc_list = ['method', 'para'] + ['E: ' + str(i) for i in
-            range(Dataset_info[dataset]['communication_epoch'])] + ['MEAN']
+                                                         range(Dataset_info[dataset]['communication_epoch'])] + ['MEAN']
             mean_df.columns = column_mean_acc_list
             print(mean_df)
     print('**************************************************************')
