@@ -7,7 +7,6 @@ from yacs.config import CfgNode as CN
 path = './data/'
 
 task = 'label_skew'
-
 '''
 label_skew domain_skew OOD
 '''
@@ -15,7 +14,7 @@ attack_type = 'min_sum'
 '''
 byzantine backdoor None PairFlip SymFlip RandomNoise min_sum
 '''
-dataset = 'fl_usps'  # 'fl_cifar10, PACS
+dataset = 'fl_mnist'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist fl_usps
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -88,7 +87,7 @@ aim_cfg_dict = {
         # 'backbone': "resnet18"
     },
     'attack': {
-        'bad_client_rate': 0.4,
+        'bad_client_rate': 0.2,
         'byzantine': {
             'evils': attack_type
         }
