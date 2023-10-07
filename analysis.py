@@ -10,11 +10,11 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'min_sum'
+attack_type = 'RandomNoise'
 '''
 byzantine backdoor None PairFlip SymFlip RandomNoise min_sum
 '''
-dataset = 'fl_mnist'  # 'fl_cifar10, PACS
+dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist fl_usps
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -83,11 +83,11 @@ aim_args_dict = {
 
 aim_cfg_dict = {
     'DATASET': {
-        'beta': 0.5
+        'beta': 0.3
         # 'backbone': "resnet18"
     },
     'attack': {
-        'bad_client_rate': 0.2,
+        'bad_client_rate': 0.4,
         'byzantine': {
             'evils': attack_type
         }
@@ -159,7 +159,7 @@ def all_metric(structure_path, metric, scale_num):
                             mean_acc_value = [round(item, 3) for item in mean_acc_value]
                             mean_acc_value.append(np.mean(mean_acc_value))
                             # Specific parameter value
-                            acc_dict[experiment_index] = [model, para] + mean_acc_value
+                            acc_dict[experiment_index] = [model+str(times), para] + mean_acc_value
                             experiment_index += 1
     return acc_dict, scale_num
 
