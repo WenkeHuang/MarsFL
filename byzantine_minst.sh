@@ -1,4 +1,12 @@
 '''byzantine'''
+python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
+
+python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
+
 
 '''
 fl_mnist 0.5 0.2 PairFlip
@@ -28,9 +36,9 @@ fl_mnist 0.5 0.4 PairFlip
 '''
 fl_mnist 0.3 0.2 PairFlip
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils PairFlip attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
+#python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+#       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+#       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils PairFlip attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
 
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 1 \
@@ -45,10 +53,6 @@ python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --me
 '''
 fl_mnist-10 0.3 0.4 PairFlip
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils PairFlip attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
-
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 4 \
 #       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_FLTrustSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
@@ -166,10 +170,10 @@ fl_mnist-10 0.3 0.4 RandomNoise
 '''
 fl_mnist 0.5 0.2 min_sum
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
-
+#python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+#       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+#       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
+#
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 1 \
 #       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.2_FLTrustSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
@@ -183,10 +187,6 @@ python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --me
 '''
 fl_mnist 0.5 0.4 min_sum
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
-
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 4 \
 #       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.4_FLTrustSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
@@ -199,9 +199,9 @@ python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --me
 '''
 fl_mnist 0.3 0.2 min_sum
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
+#python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+#       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.2_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+#       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.2 FedProx.global_method BulyanSever &
 
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 1 \
@@ -216,9 +216,9 @@ python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --me
 '''
 fl_mnist-10 0.3 0.4 min_sum
 '''
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
+#python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+#       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+#       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
 
 
 #python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 4 \
