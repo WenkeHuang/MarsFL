@@ -155,6 +155,9 @@ CFG.Sever.AFLSever.drfa_gamma = 0.01
 CFG.Sever.FedProxGASever = CN()
 CFG.Sever.FedProxGASever.base_step_size = 0.2
 
+CFG.Sever.ScaffoldSever = CN()
+CFG.Sever.ScaffoldSever.global_lr = 0.05
+
 CFG.Sever.CRFLSever = CN()
 CFG.Sever.CRFLSever.param_clip_thres = 15
 CFG.Sever.CRFLSever.epoch_index_weight = 0.1

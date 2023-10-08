@@ -43,9 +43,9 @@ class Scaffold(FederatedMethod):
                                     delta_controls=self.delta_controls
                                     )
 
+
+
     def sever_update(self, priloader_list):
-        new_control = self.update_global_control(self.global_control,self.delta_controls)
-        self.global_control = copy.deepcopy(new_control)
         self.aggregation_weight_list = self.sever_model.sever_update(fed_aggregation=self.fed_aggregation,
                                                                      online_clients_list=self.online_clients_list,
                                                                      priloader_list=priloader_list,
@@ -56,6 +56,8 @@ class Scaffold(FederatedMethod):
                                                                      delta_models=self.delta_models,
                                                                      delta_controls=self.delta_controls
                                                                      )
+        new_control = self.update_global_control(self.global_control,self.delta_controls)
+        self.global_control = copy.deepcopy(new_control)
     def update_global_control(self,global_control,delta_controls):
         new_control = copy.deepcopy(global_control)
         for name, c in global_control.items():
