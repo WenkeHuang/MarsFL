@@ -245,7 +245,7 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
                 mean_in_domain_acc_list.append(top1acc)
                 print(log_msg(f'The {epoch_index} Epoch: Acc:{top1acc}', "TEST"))
 
-            if 'contribution_match_degree_list' in locals():
+            if 'contribution_match_degree_list' in locals() and fed_method.aggregation_weight_list is not None:
                 print("进行 contribution_match_degree_list 评估")
                 if epoch_index % 10 == 0 or epoch_index == communication_epoch - 1:
                     if args.task == 'label_skew':

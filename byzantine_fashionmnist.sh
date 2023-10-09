@@ -1,5 +1,7 @@
 '''byzantine'''
-
+python main.py --task label_skew --attack_type byzantine --dataset fl_fashionmnist --method FedProx --device_id 5 \
+       --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_Rfa --save_checkpoint Local.FedProxLocal.mu 0.01 \
+       DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils PairFlip attack.bad_client_rate 0.4 FedProx.global_method RfaSever &
 
 '''
 fl_fashionmnist 0.5 0.2 RandomNoise
