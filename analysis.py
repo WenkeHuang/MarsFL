@@ -10,11 +10,11 @@ task = 'label_skew'
 '''
 label_skew domain_skew OOD
 '''
-attack_type = 'RandomNoise'
+attack_type = 'None'
 '''
 byzantine backdoor None PairFlip SymFlip RandomNoise min_sum
 '''
-dataset = 'fl_cifar10'  # 'fl_cifar10, PACS
+dataset = 'fl_mnist'  # 'fl_cifar10, PACS
 '''
 label_skew: fl_cifar100, fl_cifar10,fl_fashionmnist, fl_cifar100 fl_tyimagenet fl_mnist fl_usps
 domain_skew: Digits OfficeCaltech PACS OfficeHome
@@ -82,16 +82,16 @@ aim_args_dict = {
 }
 
 aim_cfg_dict = {
-    'DATASET': {
-        'beta': 0.3
-        # 'backbone': "resnet18"
-    },
-    'attack': {
-        'bad_client_rate': 0.4,
-        'byzantine': {
-            'evils': attack_type
-        }
-    }
+    # 'DATASET': {
+    #     'beta': 0.3
+    #     # 'backbone': "resnet18"
+    # },
+    # 'attack': {
+    #     'bad_client_rate': 0.4,
+    #     'byzantine': {
+    #         'evils': attack_type
+    #     }
+    # }
 }
 
 
@@ -265,6 +265,7 @@ if __name__ == '__main__':
             mean_acc_dict = mean_metric(specific_path, metric)
             mean_df = pd.DataFrame(mean_acc_dict)
             mean_df = mean_df.T
+            mean_df.to_excel(os.path.join(specific_path + '_output.xlsx'), na_rep=True)
             column_mean_acc_list = ['method', 'para'] + ['E: ' + str(i) for i in
                                                          range(Dataset_info[dataset]['communication_epoch'])] + ['MEAN']
             mean_df.columns = column_mean_acc_list
