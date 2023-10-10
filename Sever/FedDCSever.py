@@ -48,6 +48,6 @@ class FedDCSever(SeverMethod):
             net.load_state_dict(all_model.state_dict())
 
         # 获取参与者的聚合权重
-        freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
+        # freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
-        return freq
+        # return freq
