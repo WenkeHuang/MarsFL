@@ -3,9 +3,9 @@ python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --me
        --csv_log --csv_name beta_0.3_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
        DATASET.parti_num 10 DATASET.beta 0.3 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
 
-python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
-       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
-       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
+#python main.py --task label_skew --attack_type byzantine --dataset fl_mnist --method FedProx --device_id 0 \
+#       --csv_log --csv_name beta_0.5_mu_0.01_bcr_0.4_BulyanSever --save_checkpoint Local.FedProxLocal.mu 0.01 \
+#       DATASET.parti_num 10 DATASET.beta 0.5 attack.byzantine.evils min_sum attack.bad_client_rate 0.4 FedProx.global_method BulyanSever &
 
 
 '''
