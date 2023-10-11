@@ -1,3 +1,6 @@
 
 *.xml
 *.iml
+analysis.py
+mnist.sh
+data
