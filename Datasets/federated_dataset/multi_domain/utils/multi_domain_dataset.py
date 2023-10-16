@@ -90,7 +90,8 @@ class MultiDomainDataset:
                 y_train = value.train_data_list[:, 1]
             elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
                 y_train = value.train_data_list[:, 1]
-
+            elif key in ['caltech', 'labelme', 'pascal', 'sun']:
+                y_train = value.train_data_list[:, 1]
             not_used_index_dict[key] = np.arange(len(y_train))
             ini_len_dict[key] = len(y_train)
 
@@ -124,7 +125,8 @@ class MultiDomainDataset:
                 y_train_eval = value.test_data_list[:, 1]
             elif key in ['Art', 'Clipart', 'Product', 'Real_World']:
                 y_train_eval = value.test_data_list[:, 1]
-
+            elif key in ['caltech', 'labelme', 'pascal', 'sun']:
+                y_train_eval = value.test_data_list[:, 1]
             ini_len_dict[key] = len(y_train_eval)
             not_used_index_dict[key] = np.arange(len(y_train_eval))
         '''

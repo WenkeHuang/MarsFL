@@ -1,0 +1,24 @@
+
+DATASET:
+  dataset : "Office31"
+  communication_epoch : 50
+  n_classes: 31
+  parti_num: 3
+  online_ratio: 1.0
+  domain_ratio: 0.3
+  train_eval_domain_ratio: 0.3
+  backbone: "resnet34" # resnet18_lora
+  pretrained: False
+  aug: "two_weak"
+
+OPTIMIZER:
+  type: 'SGD'
+  momentum: 0.9
+  weight_decay: 1e-5
+  local_epoch: 10 # 10
+  local_train_batch: 16
+  local_test_batch: 16
+  val_batch: 16
+  local_train_lr: 1e-3 # 0.01
+
+

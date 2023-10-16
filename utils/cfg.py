@@ -96,7 +96,8 @@ CFG.OOD = CN()
 # OfficeCaltech 'caltech', 'amazon','webcam','dslr'
 # OfficeHome 'Art', 'Clipart', 'Product', 'Real_World'
 # DomainNet 'clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'
-CFG.OOD.out_domain = 'caltech'
+# Office31 'amazon', 'dslr', 'webcam'
+CFG.OOD.out_domain = 'amazon'
 
 '''Federated OPTIMIZER'''
 CFG.OPTIMIZER = CN()
