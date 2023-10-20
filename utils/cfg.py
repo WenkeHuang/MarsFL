@@ -328,7 +328,7 @@ CFG.AFL.global_method = 'AFLSever'
 # COPADA
 CFG.COPADA = CN()
 CFG.COPADA.local_method = 'COPALocal'
-CFG.COPADA.global_method = 'COPAGSever'
+CFG.COPADA.global_method = 'COPADASever'
 
 # COPADG
 CFG.COPADG = CN()
