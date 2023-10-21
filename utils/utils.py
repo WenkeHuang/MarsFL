@@ -86,48 +86,6 @@ def cal_client_weight(online_clients_list, client_domain_list, freq):
     return client_weight
 
 
-# lora fc相关参数是否需要梯度
-def set_lora_fc_para_grad(net, required_grad):
-    for para_name, para in net.named_parameters():
-        if 'lora_' in para_name or 'cls' in para_name:
-            para.requires_grad = required_grad
-
-
-# lora fc非相关参数是否需要梯度
-def set_not_lora_fc_para_grad(net, required_grad):
-    for para_name, para in net.named_parameters():
-        if 'lora_' not in para_name and 'cls' not in para_name:
-            para.requires_grad = required_grad
-
-
-# backbone相关参数是否需要梯度
-def set_backbone_para_grad(net, required_grad):
-    for para_name, para in net.named_parameters():
-        if 'cls' not in para_name:
-            para.requires_grad = required_grad
-
-
-# fc非相关参数是否需要梯度
-def set_fc_para_grad(net, required_grad):
-    for para_name, para in net.named_parameters():
-        if 'cls' in para_name:
-            para.requires_grad = required_grad
-
-
-# part_str=lora_ cls 分别是lora和cls的 如果是空就是backbone
-def get_para(net, part_str):
-    used_net_para = {}
-    for para_name, para in net.named_parameters():
-        if part_str != '':
-            if part_str in para_name:
-                used_net_para[para_name] = para
-        else:
-            if 'lora_' not in para_name and 'cls' not in para_name:
-                used_net_para[para_name] = para
-
-    return used_net_para
-
-
 def row_into_parameters(row, parameters):
     offset = 0
     for param in parameters:
@@ -136,18 +94,3 @@ def row_into_parameters(row, parameters):
 
         param.data[:] = torch.from_numpy(current_data.reshape(param.shape))
         offset += new_size
-
-
-def HE(probs):
-    mean = probs.mean(dim=0)
-    ent = - (mean * (mean + 1e-5).log()).sum()
-    return ent
-
-
-def EH(probs, weight=None):
-    ent = - (probs * (probs + 1e-5).log()).sum(dim=1)
-    if weight == None:
-        mean = torch.mean(ent)
-    else:
-        mean = torch.mean(ent * weight)
-    return mean

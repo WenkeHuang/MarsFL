@@ -131,7 +131,7 @@ CFG.Sever.SageFlowSever.public_batch_size = 64
 # CFG.Sever.SageFlowSever.public_epoch = 20
 
 CFG.Sever.FedDfSever = CN()
-CFG.Sever.FedDfSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FedDfSever.public_dataset_name = 'pub_tyimagenet'
 CFG.Sever.FedDfSever.pub_len = 5000
 CFG.Sever.FedDfSever.pub_aug = 'weak'
 CFG.Sever.FedDfSever.public_batch_size = 64
@@ -139,7 +139,7 @@ CFG.Sever.FedDfSever.public_epoch = 1
 CFG.Sever.FedDfSever.public_lr = 1e-3
 
 CFG.Sever.FedMdSever = CN()
-CFG.Sever.FedMdSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FedMdSever.public_dataset_name = 'pub_tyimagenet'
 CFG.Sever.FedMdSever.pub_len = 5000
 CFG.Sever.FedMdSever.pub_aug = 'weak'
 CFG.Sever.FedMdSever.public_batch_size = 64
@@ -166,7 +166,7 @@ CFG.Sever.CRFLSever.epoch_index_bias = 2
 CFG.Sever.CRFLSever.sigma = 0.01
 
 CFG.Sever.FcclPlusSever = CN()
-CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_tyimagenet'
 CFG.Sever.FcclPlusSever.pub_len = 5000
 CFG.Sever.FcclPlusSever.pub_aug = 'weak'
 CFG.Sever.FcclPlusSever.public_batch_size = 64

@@ -198,7 +198,6 @@ def train(fed_method, private_dataset, args, cfg, client_domain_list) -> None:
     for epoch_index in range(communication_epoch):
         fed_method.epoch_index = epoch_index
 
-
         # Client 端操作
         fed_method.test_loader = private_dataset.test_loader
         fed_method.local_update(private_dataset.train_loaders)

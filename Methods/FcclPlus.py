@@ -20,7 +20,6 @@ class FcclPlus(FederatedMethod):
     def local_update(self, priloader_list):
         total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
         self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
-
         self.local_model.loc_update(online_clients_list=self.online_clients_list, nets_list=self.nets_list, global_net=self.global_net,
                                     prev_nets_list=self.prev_nets_list, priloader_list=priloader_list)
         self.copy_nets2_prevnets()
