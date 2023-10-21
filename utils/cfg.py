@@ -186,7 +186,7 @@ CFG.Sever.FcclPlusSever.dis_power = 3
 CFG.Sever.FcclPlusSever.temp=0.02
 
 CFG.Sever.RHFLSever = CN()
-CFG.Sever.RHFLSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.RHFLSever.public_dataset_name = 'pub_tyimagenet'
 CFG.Sever.RHFLSever.pub_len = 5000
 CFG.Sever.RHFLSever.pub_aug = 'weak'
 CFG.Sever.RHFLSever.public_batch_size = 64

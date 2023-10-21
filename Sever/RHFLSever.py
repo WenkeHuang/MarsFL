@@ -31,6 +31,8 @@ class RHFLSever(SeverMethod):
         self.alpha = cfg.Sever[self.NAME].alpha
         self.beta = cfg.Sever[self.NAME].beta
 
+        self.current_mean_loss_list = []
+
 
     def sever_update(self, **kwargs):
         fed_aggregation = kwargs['fed_aggregation']
@@ -44,7 +46,7 @@ class RHFLSever(SeverMethod):
                Calculate Client Confidence with label quality and model performance
                '''
         beta = 0.5
-        N_Participants = len(self.nets_list)
+        N_Participants = len(nets_list)
         amount_with_quality = [1 / (N_Participants - 1) for i in range(N_Participants)]
         weight_with_quality = []
         quality_list = []
@@ -52,9 +54,9 @@ class RHFLSever(SeverMethod):
         last_mean_loss_list = self.current_mean_loss_list
         self.current_mean_loss_list = []
         for participant_index in range(N_Participants):
-            train_loader = self.trainloaders[participant_index]
+            train_loader = priloader_list[participant_index]
             participant_loss_list = []
-            net = self.nets_list[participant_index]
+            net = nets_list[participant_index]
             net = net.to(self.device)
             criterion = SCELoss(alpha=self.alpha, beta=self.beta, device=self.device)
             criterion.to(self.device)
@@ -92,7 +94,7 @@ class RHFLSever(SeverMethod):
             outputs_list = []
             targets_list = []
             images = images.to(self.device)
-            for _, net in enumerate(self.nets_list):
+            for _, net in enumerate(nets_list):
                 net = net.to(self.device)
                 net.train()
                 outputs = net(images)
@@ -101,11 +103,11 @@ class RHFLSever(SeverMethod):
                 targets_list.append(target)
             criterion = nn.KLDivLoss(reduction='batchmean')
             criterion.to(self.device)
-            for net_idx, net in enumerate(self.nets_list):
+            for net_idx, net in enumerate(nets_list):
                 optimizer = optim.Adam(net.parameters(), lr=self.public_lr, weight_decay=1e-3)
                 optimizer.zero_grad()
                 loss = torch.tensor(0)
-                for i, net in enumerate(self.nets_list):
+                for i, net in enumerate(nets_list):
                     if i != net_idx:
                         weight_index = weight_with_quality[i]
                         loss_batch_sample = criterion(outputs_list[net_idx], targets_list[i])
