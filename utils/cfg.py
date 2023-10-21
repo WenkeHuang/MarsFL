@@ -165,15 +165,9 @@ CFG.Sever.CRFLSever.epoch_index_weight = 0.1
 CFG.Sever.CRFLSever.epoch_index_bias = 2
 CFG.Sever.CRFLSever.sigma = 0.01
 
-CFG.Sever.FcclPlusSever = CN()
-CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_tyimagenet'
-CFG.Sever.FcclPlusSever.pub_len = 5000
-CFG.Sever.FcclPlusSever.pub_aug = 'weak'
-CFG.Sever.FcclPlusSever.public_batch_size = 64
-CFG.Sever.FcclPlusSever.public_epoch = 1
-CFG.Sever.FcclPlusSever.public_lr = 1e-3
-CFG.Sever.FcclPlusSever.dis_power = 3
-CFG.Sever.FcclPlusSever.temp=0.02
+CFG.Sever.RLRSever = CN()
+CFG.Sever.RLRSever.server_lr = 1.0
+CFG.Sever.RLRSever.robustLR_threshold = 4.0
 
 CFG.Sever.FcclPlusSever = CN()
 CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_tyimagenet'
@@ -183,7 +177,17 @@ CFG.Sever.FcclPlusSever.public_batch_size = 64
 CFG.Sever.FcclPlusSever.public_epoch = 1
 CFG.Sever.FcclPlusSever.public_lr = 1e-3
 CFG.Sever.FcclPlusSever.dis_power = 3
-CFG.Sever.FcclPlusSever.temp=0.02
+CFG.Sever.FcclPlusSever.temp = 0.02
+
+CFG.Sever.FcclPlusSever = CN()
+CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_tyimagenet'
+CFG.Sever.FcclPlusSever.pub_len = 5000
+CFG.Sever.FcclPlusSever.pub_aug = 'weak'
+CFG.Sever.FcclPlusSever.public_batch_size = 64
+CFG.Sever.FcclPlusSever.public_epoch = 1
+CFG.Sever.FcclPlusSever.public_lr = 1e-3
+CFG.Sever.FcclPlusSever.dis_power = 3
+CFG.Sever.FcclPlusSever.temp = 0.02
 
 CFG.Sever.RHFLSever = CN()
 CFG.Sever.RHFLSever.public_dataset_name = 'pub_tyimagenet'
@@ -363,6 +367,11 @@ CFG.COPADG.global_method = 'COPADGSever'
 CFG.CRFL = CN()
 CFG.CRFL.local_method = 'CRFLLocal'
 CFG.CRFL.global_method = 'CRFLSever'
+
+# RLR
+CFG.RLR = CN()
+CFG.RLR.local_method = 'BaseLocal'
+CFG.RLR.global_method = 'RLRSever'
 
 # FedDf
 CFG.FedDf = CN()
