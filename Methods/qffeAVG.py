@@ -1,7 +1,5 @@
-from Aggregations import get_fed_aggregation
-from Methods.utils.meta_methods import FederatedMethod
 
-import copy
+from Methods.utils.meta_methods import FederatedMethod
 
 
 class qffeAVG(FederatedMethod):

@@ -3,9 +3,7 @@ import copy
 from Aggregations import get_fed_aggregation
 from Sever import get_sever_method
 from Local import get_local_method
-from utils.conf import get_device, checkpoint_path, net_path
-from utils.utils import create_if_not_exists
-
+from utils.conf import get_device
 import torch.nn as nn
 import numpy as np
 import torch

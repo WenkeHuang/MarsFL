@@ -175,6 +175,26 @@ CFG.Sever.FcclPlusSever.public_lr = 1e-3
 CFG.Sever.FcclPlusSever.dis_power = 3
 CFG.Sever.FcclPlusSever.temp=0.02
 
+CFG.Sever.FcclPlusSever = CN()
+CFG.Sever.FcclPlusSever.public_dataset_name = 'pub_tyimagenet'
+CFG.Sever.FcclPlusSever.pub_len = 5000
+CFG.Sever.FcclPlusSever.pub_aug = 'weak'
+CFG.Sever.FcclPlusSever.public_batch_size = 64
+CFG.Sever.FcclPlusSever.public_epoch = 1
+CFG.Sever.FcclPlusSever.public_lr = 1e-3
+CFG.Sever.FcclPlusSever.dis_power = 3
+CFG.Sever.FcclPlusSever.temp=0.02
+
+CFG.Sever.RHFLSever = CN()
+CFG.Sever.RHFLSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.RHFLSever.pub_len = 5000
+CFG.Sever.RHFLSever.pub_aug = 'weak'
+CFG.Sever.RHFLSever.public_batch_size = 64
+CFG.Sever.RHFLSever.public_epoch = 1
+CFG.Sever.RHFLSever.public_lr = 1e-3
+CFG.Sever.RHFLSever.alpha = 0.1
+CFG.Sever.RHFLSever.beta = 1.0
+
 '''Local'''
 CFG.Local = CN()
 
@@ -223,6 +243,10 @@ CFG.Local.CRFLLocal.scale_factor = 100
 
 CFG.Local.FcclPlusLocal = CN()
 CFG.Local.FcclPlusLocal.local_dis_power = 3
+
+CFG.Local.RHFLLocal = CN()
+CFG.Local.RHFLLocal.alpha = 0.1
+CFG.Local.RHFLLocal.beta = 1.0
 
 '''Federated Method'''
 # qffeAVG
@@ -354,3 +378,8 @@ CFG.FedMd.global_method = 'FedMdSever'
 CFG.FcclPlus = CN()
 CFG.FcclPlus.local_method = 'FcclPlusLocal'
 CFG.FcclPlus.global_method = 'FcclPlusSever'
+
+# RHFL
+CFG.RHFL = CN()
+CFG.RHFL.local_method = 'RHFLLocal'
+CFG.RHFL.global_method = 'RHFLSever'
