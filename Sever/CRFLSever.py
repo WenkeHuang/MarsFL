@@ -26,13 +26,13 @@ def clip_weight_norm(model, clip):
 
 
 def dp_noise(param, sigma):
-    noised_layer = torch.cuda.FloatTensor(param.shape).normal_(mean=0, std=sigma)
+    noised_layer = torch.FloatTensor(param.shape).normal_(mean=0, std=sigma)
     return noised_layer
 
 
 def smooth_model(target_model, sigma):
     for name, param in target_model.state_dict().items():
-        param.add_(dp_noise(param, sigma))
+        param.add_(dp_noise(param, sigma).to(param.device))
 
 
 class CRFLSever(SeverMethod):
