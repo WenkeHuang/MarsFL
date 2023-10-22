@@ -1,8 +1,7 @@
-from Aggregations import get_fed_aggregation
 from Methods.utils.meta_methods import FederatedMethod
 import numpy as np
-import copy
-import torch
+
+
 def get_mdl_params(model_list, n_par=None):
     if n_par == None:
         exp_mdl = model_list[0]
@@ -20,19 +19,6 @@ def get_mdl_params(model_list, n_par=None):
     return np.copy(param_mat)
 
 
-def set_client_from_params(mdl, params,device):
-    dict_param = copy.deepcopy(dict(mdl.named_parameters()))
-    idx = 0
-    for name, param in mdl.named_parameters():
-        weights = param.data
-        length = len(weights.reshape(-1))
-        dict_param[name].data.copy_(torch.tensor(params[idx:idx + length].reshape(weights.shape)).to(device))
-        idx += length
-
-    mdl.load_state_dict(dict_param)
-    return mdl
-
-
 class FedDC(FederatedMethod):
     NAME = 'FedDC'
     COMPATIBILITY = ['homogeneity']
@@ -48,6 +34,7 @@ class FedDC(FederatedMethod):
         init_par_list = get_mdl_params([self.nets_list[0]], self.n_par)[0]
         self.clnt_params_list = np.ones(n_clnt).astype('float32').reshape(-1, 1) * init_par_list.reshape(1, -1)  # n_clnt X n_par
         self.state_gadient_diffs = np.zeros((n_clnt + 1, self.n_par)).astype('float32')
+
     def ini(self):
         super().ini()
 
@@ -68,8 +55,8 @@ class FedDC(FederatedMethod):
                                     state_gadient_diffs=self.state_gadient_diffs,
                                     weight_list=self.weight_list,
                                     parameter_drifts=self.parameter_drifts,
-                                    delta_g_sum = self.delta_g_sum,
-                                    clnt_params_list = self.clnt_params_list
+                                    delta_g_sum=self.delta_g_sum,
+                                    clnt_params_list=self.clnt_params_list
                                     )
 
     def sever_update(self, priloader_list):

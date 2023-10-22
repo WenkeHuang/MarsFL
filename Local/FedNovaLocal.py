@@ -11,7 +11,6 @@ class FedNovaLocal(LocalMethod):
     def __init__(self, args, cfg):
         super(FedNovaLocal, self).__init__(args, cfg)
         self.rho = cfg.Local[self.NAME].rho
-        # self.temperature_moon = cfg.Local[self.NAME].temperature_moon
 
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
