@@ -66,7 +66,7 @@ class PublicDataset:
         if public_len != None:
             idxs = idxs[0:public_len]
         train_sampler = SubsetRandomSampler(idxs)
-        train_loader = DataLoader(train_dataset, batch_size=public_batch_size, sampler=train_sampler, num_workers=1)
+        train_loader = DataLoader(train_dataset, batch_size=public_batch_size, sampler=train_sampler, num_workers=4)
         return train_loader
 
 
