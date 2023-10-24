@@ -221,11 +221,11 @@ class FLPACS(MultiDomainDataset):
 
         self.partition_domain_loaders(client_domain_name_list, domain_training_dataset_dict, domain_testing_dataset_dict, domain_train_eval_dataset_dict)
 
-    @staticmethod
-    def get_transform():
-        transform = transforms.Compose(
-            [transforms.ToPILImage(), FLPACS.Nor_TRANSFORM])
-        return transform
+    # @staticmethod
+    # def get_transform():
+    #     transform = transforms.Compose(
+    #         [transforms.ToPILImage(), FLPACS.Nor_TRANSFORM])
+    #     return transform
 
     @staticmethod
     def get_normalization_transform():

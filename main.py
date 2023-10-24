@@ -26,12 +26,12 @@ def parse_args():
     '''
     Task: OOD label_skew domain_skew
     '''
-    parser.add_argument('--task', type=str, default='label_skew')
+    parser.add_argument('--task', type=str, default='domain_skew')
     '''
     label_skew:   fl_cifar10 fl_cifar100 fl_mnist fl_usps fl_fashionmnist fl_tinyimagenet
-    domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome Office31
+    domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome Office31 VLCS
     '''
-    parser.add_argument('--dataset', type=str, default='fl_cifar10',
+    parser.add_argument('--dataset', type=str, default='VLCS',
                         help='Which scenario to perform experiments on.')
     '''
     Attack: byzantine backdoor None
