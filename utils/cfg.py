@@ -157,7 +157,7 @@ CFG.Sever.FedProxGASever = CN()
 CFG.Sever.FedProxGASever.base_step_size = 0.2
 
 CFG.Sever.ScaffoldSever = CN()
-CFG.Sever.ScaffoldSever.global_lr = 0.05
+CFG.Sever.ScaffoldSever.global_lr = 0.25
 
 CFG.Sever.CRFLSever = CN()
 CFG.Sever.CRFLSever.param_clip_thres = 15
