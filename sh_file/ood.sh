@@ -1,6 +1,9 @@
 '''OfficeCaltech'''
 # caltech
-#python main.py --task OOD --dataset OfficeCaltech --method FedNova --device_id 3 --csv_log --save_checkpoint OOD.out_domain caltech &
+#python main.py --task OOD --dataset OfficeCaltech --method FedRS --device_id 6 --csv_log --save_checkpoint OOD.out_domain caltech &
+#python main.py --task OOD --dataset OfficeCaltech --method FedNova --device_id 7 --csv_log --save_checkpoint OOD.out_domain caltech &
+#python main.py --task OOD --dataset OfficeCaltech --method Scaffold --device_id 7 --csv_log --save_checkpoint OOD.out_domain caltech &
+
 #python main.py --task OOD --dataset OfficeCaltech --method FedProc --device_id 5 --csv_log --save_checkpoint OOD.out_domain caltech &
 #python main.py --task OOD --dataset OfficeCaltech --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain caltech &
 #python main.py --task OOD --dataset OfficeCaltech --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain caltech &
@@ -101,12 +104,12 @@
 #python main.py --task OOD --dataset PACS --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain photo &
 #python main.py --task OOD --dataset PACS --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain photo &
 
-python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain photo &
-python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain photo &
-python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain photo &
-python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain photo &
-
-wait
+#python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain photo &
+#python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain photo &
+#python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain photo &
+#python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain photo &
+#
+#wait
 
 ## art_painting
 #python main.py --task OOD --dataset PACS --method FedNova --device_id 3 --csv_log --save_checkpoint OOD.out_domain art_painting &
@@ -114,24 +117,24 @@ wait
 #python main.py --task OOD --dataset PACS --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain art_painting &
 #python main.py --task OOD --dataset PACS --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain art_painting &
 
-python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain art_painting &
-python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain art_painting &
-python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain art_painting &
-python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain art_painting &
-
-wait
+#python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain art_painting &
+#python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain art_painting &
+#python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain art_painting &
+#python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain art_painting &
+#
+#wait
 
 ## cartoon
 #python main.py --task OOD --dataset PACS --method FedNova --device_id 3 --csv_log --save_checkpoint OOD.out_domain cartoon &
 #python main.py --task OOD --dataset PACS --method FedProc --device_id 5 --csv_log --save_checkpoint OOD.out_domain cartoon &
 #python main.py --task OOD --dataset PACS --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain cartoon &
 #python main.py --task OOD --dataset PACS --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain cartoon &
-python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain cartoon &
-python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain cartoon &
-python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain cartoon &
-python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain cartoon &
-
-wait
+#python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain cartoon &
+#python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain cartoon &
+#python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain cartoon &
+#python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain cartoon &
+#
+#wait
 
 ## sketch
 #python main.py --task OOD --dataset PACS --method FedNova --device_id 3 --csv_log --save_checkpoint OOD.out_domain sketch &
@@ -139,26 +142,38 @@ wait
 #python main.py --task OOD --dataset PACS --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain sketch &
 #python main.py --task OOD --dataset PACS --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain sketch &
 
-python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain sketch &
-python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain sketch &
-python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain sketch &
-python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain sketch &
+#python main.py --task OOD --dataset PACS --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain sketch &
+#python main.py --task OOD --dataset PACS --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain sketch &
+#python main.py --task OOD --dataset PACS --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain sketch &
+#python main.py --task OOD --dataset PACS --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain sketch &
 
 
 '''Office31'''
-# amazon dslr webcam
-#python main.py --task OOD --dataset Office31 --method FedNova --device_id 0 --csv_log --save_checkpoint OOD.out_domain amazon &
-#python main.py --task OOD --dataset Office31 --method FedProc --device_id 1 --csv_log --save_checkpoint OOD.out_domain amazon &
-#python main.py --task OOD --dataset Office31 --method FedOpt --device_id 2 --csv_log --save_checkpoint OOD.out_domain amazon &
-#python main.py --task OOD --dataset Office31 --method FedProto --device_id 3 --csv_log --save_checkpoint OOD.out_domain amazon &
-
+# amazon
+#python main.py --task OOD --dataset Office31 --method FedNova --device_id 1 --csv_log --save_checkpoint OOD.out_domain amazon &
+#python main.py --task OOD --dataset Office31 --method FedProc --device_id 3 --csv_log --save_checkpoint OOD.out_domain amazon &
+#python main.py --task OOD --dataset Office31 --method FedOpt --device_id 5 --csv_log --save_checkpoint OOD.out_domain amazon &
+#python main.py --task OOD --dataset Office31 --method FedProto --device_id 6 --csv_log --save_checkpoint OOD.out_domain amazon &
+python main.py --task OOD --dataset Office31 --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain amazon &
+python main.py --task OOD --dataset Office31 --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain amazon &
+python main.py --task OOD --dataset Office31 --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain amazon &
+python main.py --task OOD --dataset Office31 --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain amazon &
+wait
 # dslr
-#python main.py --task OOD --dataset Office31 --method FedNova --device_id 4 --csv_log --save_checkpoint OOD.out_domain dslr &
-#python main.py --task OOD --dataset Office31 --method FedProc --device_id 5 --csv_log --save_checkpoint OOD.out_domain dslr &
-#python main.py --task OOD --dataset Office31 --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain dslr &
-#python main.py --task OOD --dataset Office31 --method FedProto --device_id 7 --csv_log --save_checkpoint OOD.out_domain dslr &
-#wait
+#python main.py --task OOD --dataset Office31 --method FedNova --device_id 1 --csv_log --save_checkpoint OOD.out_domain dslr &
+#python main.py --task OOD --dataset Office31 --method FedProc --device_id 3 --csv_log --save_checkpoint OOD.out_domain dslr &
+#python main.py --task OOD --dataset Office31 --method FedOpt --device_id 5 --csv_log --save_checkpoint OOD.out_domain dslr &
+#python main.py --task OOD --dataset Office31 --method FedProto --device_id 6 --csv_log --save_checkpoint OOD.out_domain dslr &
+python main.py --task OOD --dataset Office31 --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain dslr &
+python main.py --task OOD --dataset Office31 --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain dslr &
+python main.py --task OOD --dataset Office31 --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain dslr &
+python main.py --task OOD --dataset Office31 --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain dslr &
+wait
 # webcam
+python main.py --task OOD --dataset Office31 --method COPADA --device_id 1 --csv_log --save_checkpoint OOD.out_domain webcam &
+python main.py --task OOD --dataset Office31 --method KD3A --device_id 3 --csv_log --save_checkpoint OOD.out_domain webcam &
+python main.py --task OOD --dataset Office31 --method COPADG --device_id 6 --csv_log --save_checkpoint OOD.out_domain webcam &
+python main.py --task OOD --dataset Office31 --method FedProxGA --device_id 7 --csv_log --save_checkpoint OOD.out_domain webcam &
 #python main.py --task OOD --dataset Office31 --method FedNova --device_id 3 --csv_log --save_checkpoint OOD.out_domain webcam &
 #python main.py --task OOD --dataset Office31 --method FedProc --device_id 5 --csv_log --save_checkpoint OOD.out_domain webcam &
 #python main.py --task OOD --dataset Office31 --method FedOpt --device_id 6 --csv_log --save_checkpoint OOD.out_domain webcam &

@@ -13,6 +13,7 @@ def set_client_from_params(mdl, params, device):
         dict_param[name].data.copy_(torch.tensor(params[idx:idx + length].reshape(weights.shape)).to(device))
         idx += length
 
+    # mdl.load_state_dict(dict_param,strict=False)
     mdl.load_state_dict(dict_param)
     return mdl
 
@@ -46,7 +47,7 @@ class FedDCSever(SeverMethod):
 
         for _, net in enumerate(nets_list):
             net.load_state_dict(all_model.state_dict())
-
+        global_net.load_state_dict(all_model.state_dict())
         # 获取参与者的聚合权重
         # freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
