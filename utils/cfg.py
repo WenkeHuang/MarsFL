@@ -117,14 +117,14 @@ CFG.Sever.FedOptSever = CN()
 CFG.Sever.FedOptSever.global_lr = 0.5
 
 CFG.Sever.FLTrustSever = CN()
-CFG.Sever.FLTrustSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.FLTrustSever.public_dataset_name = 'pub_minst'
 CFG.Sever.FLTrustSever.pub_len = 5000
 CFG.Sever.FLTrustSever.pub_aug = 'weak'
 CFG.Sever.FLTrustSever.public_batch_size = 64
 CFG.Sever.FLTrustSever.public_epoch = 20
 
 CFG.Sever.SageFlowSever = CN()
-CFG.Sever.SageFlowSever.public_dataset_name = 'pub_svhn'
+CFG.Sever.SageFlowSever.public_dataset_name = 'pub_minst'
 CFG.Sever.SageFlowSever.pub_len = 5000
 CFG.Sever.SageFlowSever.pub_aug = 'weak'
 CFG.Sever.SageFlowSever.public_batch_size = 64

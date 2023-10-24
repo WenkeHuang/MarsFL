@@ -67,13 +67,13 @@ class PublicSVHN(PublicDataset):
             torchvision_normalization
         ]
     )
+
     def __init__(self, args, cfg, **kwargs) -> None:
-        super().__init__(args, cfg,**kwargs)
+        super().__init__(args, cfg, **kwargs)
 
-        self.pub_len=kwargs['pub_len']
-        self.public_batch_size=kwargs['public_batch_size']
-        self.aug=kwargs['pub_aug']
-
+        self.pub_len = kwargs['pub_len']
+        self.public_batch_size = kwargs['public_batch_size']
+        self.aug = kwargs['pub_aug']
 
     def get_data_loaders(self):
 
