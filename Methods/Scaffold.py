@@ -32,6 +32,8 @@ class Scaffold(FederatedMethod):
         }
 
     def local_update(self, priloader_list):
+        self.delta_models = {}
+        self.delta_controls = {}
         total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
         self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
 
@@ -54,7 +56,7 @@ class Scaffold(FederatedMethod):
                                                                      local_controls=self.local_controls,
                                                                      global_control=self.global_control,
                                                                      delta_models=self.delta_models,
-                                                                     delta_controls=self.delta_controls
+                                                                    delta_controls=self.delta_controls
                                                                      )
         new_control = self.update_global_control(self.global_control,self.delta_controls)
         self.global_control = copy.deepcopy(new_control)
