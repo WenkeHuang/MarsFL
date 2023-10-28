@@ -161,8 +161,8 @@ CFG.Sever.ScaffoldSever.global_lr = 0.25
 
 CFG.Sever.CRFLSever = CN()
 CFG.Sever.CRFLSever.param_clip_thres = 15
-CFG.Sever.CRFLSever.epoch_index_weight = 0.1
-CFG.Sever.CRFLSever.epoch_index_bias = 2
+CFG.Sever.CRFLSever.epoch_index_weight = 2
+CFG.Sever.CRFLSever.epoch_index_bias = 10
 CFG.Sever.CRFLSever.sigma = 0.01
 
 CFG.Sever.RLRSever = CN()

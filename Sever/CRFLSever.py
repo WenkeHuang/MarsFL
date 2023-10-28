@@ -51,7 +51,7 @@ class CRFLSever(SeverMethod):
         priloader_list = kwargs['priloader_list']
         # client_domain_list = kwargs['client_domain_list']
         global_net = kwargs['global_net']
-        # nets_list = kwargs['nets_list']
+        nets_list = kwargs['nets_list']
         submit_params_update_dict = kwargs['submit_params_update_dict']
         epoch_index = kwargs['epoch_index']
 
@@ -85,4 +85,7 @@ class CRFLSever(SeverMethod):
         if epoch_index < self.cfg.DATASET.communication_epoch - 1:
             smooth_model(global_net, self.sigma)
 
+        global_w = global_net.state_dict()
+        for _, net in enumerate(nets_list):
+            net.load_state_dict(global_w)
         return freq
