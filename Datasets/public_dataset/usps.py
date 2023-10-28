@@ -1,8 +1,7 @@
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
-from torchvision.datasets import SVHN, MNIST
-
+from torchvision.datasets import USPS
 import torchvision.transforms as T
 
 from Datasets.public_dataset.utils.public_dataset import PublicDataset, GaussianBlur
@@ -10,7 +9,7 @@ from Datasets.utils.transforms import DeNormalize, TwoCropsTransform
 from utils.conf import single_domain_data_path
 
 
-class MyMNIST(torch.utils.data.Dataset):
+class MyUSPS(torch.utils.data.Dataset):
     def __init__(self, root, train=True, transform=None,
                  target_transform=None, download=False, data_name=None) -> None:
         self.not_aug_transform = transforms.Compose([transforms.ToTensor()])
@@ -35,7 +34,7 @@ class MyMNIST(torch.utils.data.Dataset):
             self.data = self.data.numpy()
 
     def __build_truncated_dataset__(self):
-        dataobj = MNIST(self.root, self.train, self.transform, self.target_transform, self.download)
+        dataobj = USPS(self.root, self.train, self.transform, self.target_transform, self.download)
 
         return dataobj
 
@@ -56,8 +55,8 @@ class MyMNIST(torch.utils.data.Dataset):
         return img, target
 
 
-class PublicMNIST(PublicDataset):
-    NAME = 'pub_minst'
+class PublicUSPS(PublicDataset):
+    NAME = 'pub_usps'
 
 
     def __init__(self, args, cfg, **kwargs) -> None:
@@ -96,7 +95,7 @@ class PublicMNIST(PublicDataset):
         else:
             train_transform = self.weak_aug
 
-        train_dataset = MyMNIST(data_name='mnist', root=single_domain_data_path(),
+        train_dataset = MyUSPS(data_name='usps', root=single_domain_data_path(),
                                transform=train_transform)
 
         self.traindl = self.random_loaders(train_dataset, self.pub_len, self.public_batch_size)

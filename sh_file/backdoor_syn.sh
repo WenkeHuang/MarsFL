@@ -70,12 +70,12 @@ python main.py --task label_skew --attack_type backdoor --dataset fl_syn --metho
 #       DATASET.parti_num 10 DATASET.beta 0.3 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 FedAVG.global_method RfaSever &
 
 python main.py --task label_skew --attack_type backdoor --dataset fl_syn --method FedAVG --device_id 7 \
-       --csv_log --csv_name beta_0.3_bcr_0.2_FLTrustSever --save_checkpoint  \
+       --csv_log --csv_name beta_0.3_bcr_0.2_FLTrustSever --save_checkpoint Sever.FLTrustSever.public_dataset_name pub_svhn \
        DATASET.parti_num 10 DATASET.beta 0.3 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 FedAVG.global_method FLTrustSever &
 
-#python main.py --task label_skew --attack_type backdoor --dataset fl_syn --method FedAVG --device_id 7 \
-#       --csv_log --csv_name beta_0.3_bcr_0.2_SageFlowSever --save_checkpoint  \
-#       DATASET.parti_num 10 DATASET.beta 0.3 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 FedAVG.global_method SageFlowSever &
+python main.py --task label_skew --attack_type backdoor --dataset fl_syn --method FedAVG --device_id 7 \
+       --csv_log --csv_name beta_0.3_bcr_0.2_SageFlowSever --save_checkpoint Sever.SageFlowSever.public_dataset_name pub_svhn \
+       DATASET.parti_num 10 DATASET.beta 0.3 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 FedAVG.global_method SageFlowSever &
 
 #python main.py --task label_skew --attack_type backdoor --dataset fl_syn --method CRFL --device_id 5 \
 #       --csv_log --csv_name beta_0.3_bcr_0.2 --save_checkpoint \
