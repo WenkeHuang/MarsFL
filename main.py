@@ -26,22 +26,22 @@ def parse_args():
     '''
     Task: OOD label_skew domain_skew
     '''
-    parser.add_argument('--task', type=str, default='domain_skew')
+    parser.add_argument('--task', type=str, default='label_skew')
     '''
     label_skew:   fl_cifar10 fl_cifar100 fl_mnist fl_usps fl_fashionmnist fl_tinyimagenet
     domain_skew: Digits,OfficeCaltech, PACS PACScomb OfficeHome Office31 VLCS
     '''
-    parser.add_argument('--dataset', type=str, default='VLCS',
+    parser.add_argument('--dataset', type=str, default='fl_cifar10',
                         help='Which scenario to perform experiments on.')
     '''
     Attack: byzantine backdoor None
     '''
-    parser.add_argument('--attack_type', type=str, default='None')
+    parser.add_argument('--attack_type', type=str, default='backdoor')
 
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
-    parser.add_argument('--method', type=str, default='RLR',
+    parser.add_argument('--method', type=str, default='CRFL',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     parser.add_argument('--rand_domain_select', type=bool, default=False, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity

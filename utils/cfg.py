@@ -243,7 +243,7 @@ CFG.Local.qffeAVGLocal = CN()
 CFG.Local.qffeAVGLocal.q = 1.05
 
 CFG.Local.CRFLLocal = CN()
-CFG.Local.CRFLLocal.scale_factor = 100
+CFG.Local.CRFLLocal.scale_factor = 1
 
 CFG.Local.FcclPlusLocal = CN()
 CFG.Local.FcclPlusLocal.local_dis_power = 3
