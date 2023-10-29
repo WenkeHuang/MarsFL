@@ -18,16 +18,17 @@ class FcclPlusLocal(LocalMethod):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
-        prev_nets_list = kwargs['prev_nets_list']
+        # prev_nets_list = kwargs['prev_nets_list']
+        global_net = kwargs['global_net']
 
         for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], prev_nets_list[i], priloader_list[i])
+            self.train_net(i, nets_list[i], global_net, priloader_list[i])
 
-    def train_net(self, index, net, inter_net, train_loader):
+    def train_net(self, index, net, teacher_net, train_loader):
         T = self.local_dis_power
 
         net = net.to(self.device)
-        inter_net = inter_net.to(self.device)
+        teacher_net = teacher_net.to(self.device)
         optimizer = optim.Adam(net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr, weight_decay=1e-5)
 
         criterionCE = nn.CrossEntropyLoss()
@@ -48,7 +49,7 @@ class FcclPlusLocal(LocalMethod):
                 non_target_logsoft_outputs = torch.log(non_target_soft_outputs)
 
                 with torch.no_grad():
-                    inter_outputs = inter_net(images)
+                    inter_outputs = teacher_net(images)
                     soft_inter_outpus = F.softmax(inter_outputs / T, dim=1)
                     non_target_soft_inter_outputs = soft_inter_outpus[non_targets_mask.bool()].view(bs, class_num - 1)
 
