@@ -30,9 +30,9 @@ Cifar-10 0.5 0.2 base_backdoor
 #       --csv_log --csv_name beta_0.5_bcr_0.2 --save_checkpoint \
 #       DATASET.parti_num 10 DATASET.beta 0.5 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 &
 #
-python main.py --task label_skew --attack_type backdoor --dataset fl_cifar10 --method RLR --device_id 4 \
-       --csv_log --csv_name beta_0.5_bcr_0.2 --save_checkpoint \
-       DATASET.parti_num 10 DATASET.beta 0.5 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 &
+#python main.py --task label_skew --attack_type backdoor --dataset fl_cifar10 --method RLR --device_id 4 \
+#       --csv_log --csv_name beta_0.5_bcr_0.2 --save_checkpoint \
+#       DATASET.parti_num 10 DATASET.beta 0.5 attack.backdoor.evils base_backdoor attack.bad_client_rate 0.2 &
 
 '''
 Cifar-10 0.3 0.2 base_backdoor
