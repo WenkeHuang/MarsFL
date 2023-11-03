@@ -240,7 +240,7 @@ CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
 # CFG.Local.qffeAVGLocal.q = 0.05
-CFG.Local.qffeAVGLocal.q = 1.05
+CFG.Local.qffeAVGLocal.q = 5.0
 
 CFG.Local.CRFLLocal = CN()
 CFG.Local.CRFLLocal.scale_factor = 1
