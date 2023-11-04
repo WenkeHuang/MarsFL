@@ -41,7 +41,7 @@ def parse_args():
     '''
     Federated Method: FedRC FedAVG FedR FedProx FedDyn FedOpt FedProc FedR FedProxRC  FedProxCos FedNTD
     '''
-    parser.add_argument('--method', type=str, default='AFL',
+    parser.add_argument('--method', type=str, default='qffeAVG',
                         help='Federated Method name.', choices=Fed_Methods_NAMES)
     parser.add_argument('--rand_domain_select', type=bool, default=False, help='The Local Domain Selection')
     parser.add_argument('--structure', type=str, default='homogeneity')  # 'homogeneity' heterogeneity

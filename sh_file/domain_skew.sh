@@ -1,14 +1,14 @@
-python main.py --task domain_skew --dataset VLCS --method FedAVG --device_id 0 --csv_log  --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method Scaffold --device_id 1 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method MOON --device_id 2 --csv_name mu_1 --csv_log  --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedAVG --device_id 0 --csv_log  --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method Scaffold --device_id 1 --csv_log --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method MOON --device_id 2 --csv_name mu_1 --csv_log  --save_checkpoint &
 #python main.py --task domain_skew --dataset VLCS --method FedProc --device_id 3 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedDyn --device_id 5  --csv_log  --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedProx --device_id 4 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedOpt --device_id 6 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedProto --device_id 7 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedNTD --device_id 2 --csv_log --csv_name mu_1 --save_checkpoint &
-python main.py --task domain_skew --dataset VLCS --method FedNova --device_id 1 --csv_log  --save_checkpoint --csv_name mu_1 &
-python main.py --task domain_skew --dataset VLCS --method RHFL --device_id 3 --csv_log  --save_checkpoint --csv_name mu_1 &
+#python main.py --task domain_skew --dataset VLCS --method FedDyn --device_id 5  --csv_log  --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedProx --device_id 4 --csv_log --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedOpt --device_id 6 --csv_log --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedProto --device_id 7 --csv_log --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedNTD --device_id 2 --csv_log --csv_name mu_1 --save_checkpoint &
+#python main.py --task domain_skew --dataset VLCS --method FedNova --device_id 1 --csv_log  --save_checkpoint --csv_name mu_1 &
+#python main.py --task domain_skew --dataset VLCS --method RHFL --device_id 3 --csv_log  --save_checkpoint --csv_name mu_1 &
 
 
 #python main.py --task domain_skew --dataset PACS --method Scaffold --device_id 0 --csv_log  --save_checkpoint --csv_name mu_1 &
@@ -16,9 +16,23 @@ python main.py --task domain_skew --dataset VLCS --method RHFL --device_id 3 --c
 #python main.py --task domain_skew --dataset OfficeCaltech --method Scaffold --device_id 2 --csv_log  --save_checkpoint --csv_name mu_1 &
 #
 #
-#python main.py --task domain_skew --dataset PACS --method FedNTD --device_id 3 --csv_log  --save_checkpoint --csv_name mu_1 &
-#python main.py --task domain_skew --dataset Digits --method FedNTD --device_id 4 --csv_log  --save_checkpoint --csv_name mu_1 &
-#python main.py --task domain_skew --dataset OfficeCaltech --method FedNTD --device_id 5 --csv_log  --save_checkpoint --csv_name mu_1 &
+
+
+#python main.py --task domain_skew --dataset PACS --method qffeAVG --device_id 0 --csv_log  --save_checkpoint --csv_name q_0 Local.qffeAVGLocal.q 0.0 &
+#python main.py --task domain_skew --dataset PACS --method qffeAVG --device_id 0 --csv_log  --save_checkpoint --csv_name q_1 Local.qffeAVGLocal.q 1.0 &
+#python main.py --task domain_skew --dataset PACS --method qffeAVG --device_id 1 --csv_log  --save_checkpoint --csv_name q_2 Local.qffeAVGLocal.q 2.0 &
+#
+#python main.py --task domain_skew --dataset OfficeCaltech --method qffeAVG --device_id 1 --csv_log  --save_checkpoint --csv_name q_0 Local.qffeAVGLocal.q 0.0 &
+#python main.py --task domain_skew --dataset OfficeCaltech --method qffeAVG --device_id 2 --csv_log  --save_checkpoint --csv_name q_1 Local.qffeAVGLocal.q 1.0 &
+#python main.py --task domain_skew --dataset OfficeCaltech --method qffeAVG --device_id 2 --csv_log  --save_checkpoint --csv_name q_2 Local.qffeAVGLocal.q 2.0 &
+#
+#python main.py --task domain_skew --dataset Digits --method qffeAVG --device_id 3 --csv_log  --save_checkpoint --csv_name q_0 Local.qffeAVGLocal.q 0.0 &
+#python main.py --task domain_skew --dataset Digits --method qffeAVG --device_id 3 --csv_log  --save_checkpoint --csv_name q_1 Local.qffeAVGLocal.q 1.0 &
+#python main.py --task domain_skew --dataset Digits --method qffeAVG --device_id 3 --csv_log  --save_checkpoint --csv_name q_2 Local.qffeAVGLocal.q 2.0 &
+#
+#python main.py --task domain_skew --dataset PACS --method AFL --device_id 4 --csv_log  --save_checkpoint &
+#python main.py --task domain_skew --dataset OfficeCaltech --method AFL --device_id 4 --csv_log  --save_checkpoint &
+python main.py --task domain_skew --dataset Digits --method AFL --device_id 5 --csv_log  --save_checkpoint &
 
 #python main.py --task domain_skew --dataset PACS --method FedDf --device_id 6 --csv_log  --save_checkpoint --csv_name mu_1 &
 #python main.py --task domain_skew --dataset Digits --method FedDf --device_id 7 --csv_log  --save_checkpoint --csv_name mu_1 &
