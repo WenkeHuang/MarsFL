@@ -41,7 +41,7 @@ class RLRSever(SeverMethod):
         with torch.no_grad():
             update_dict = {
                 online_clients_list[i]:
-                    parameters_to_vector(global_net.parameters()) - parameters_to_vector(nets_list[i].parameters())
+                    parameters_to_vector(nets_list[i].parameters()) - parameters_to_vector(global_net.parameters())
                 for i in range(len(nets_list))
             }
 

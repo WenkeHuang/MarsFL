@@ -161,8 +161,8 @@ CFG.Sever.ScaffoldSever.global_lr = 0.25
 
 CFG.Sever.CRFLSever = CN()
 CFG.Sever.CRFLSever.param_clip_thres = 15
-CFG.Sever.CRFLSever.epoch_index_weight = 0.1
-CFG.Sever.CRFLSever.epoch_index_bias = 2
+CFG.Sever.CRFLSever.epoch_index_weight = 2
+CFG.Sever.CRFLSever.epoch_index_bias = 10
 CFG.Sever.CRFLSever.sigma = 0.01
 
 CFG.Sever.RLRSever = CN()
@@ -240,10 +240,10 @@ CFG.Local.FedDCLocal.max_norm = 10.0
 
 CFG.Local.qffeAVGLocal = CN()
 # CFG.Local.qffeAVGLocal.q = 0.05
-CFG.Local.qffeAVGLocal.q = 1.05
+CFG.Local.qffeAVGLocal.q = 1.0
 
 CFG.Local.CRFLLocal = CN()
-CFG.Local.CRFLLocal.scale_factor = 100
+CFG.Local.CRFLLocal.scale_factor = 1
 
 CFG.Local.FcclPlusLocal = CN()
 CFG.Local.FcclPlusLocal.local_dis_power = 3
