@@ -23,7 +23,7 @@
 
 ### Unknown Generalization
 
-#¥## Federated Domain Adaptation
+#### Federated Domain Adaptation
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
@@ -32,7 +32,7 @@
 | KD3A | ICML‘21 | [Code](https://github.com/FengHZ/KD3A)| [Paper](https://arxiv.org/abs/1911.02054)|
 | MCC-DA  | TCSVT'22 | [Code]| [Paper](https://ieeexplore.ieee.org/document/9940295)|
 
-##¥# Federated Domain Generalization 
+#### Federated Domain Generalization 
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
