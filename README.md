@@ -1,10 +1,10 @@
-# Generalization Federated Learning
+# A Survey on Federated Learning for
+Generalization, Robustness, Fairness
+## Generalization Federated Learning
+###  Crosss Calibration
 
-##  Crosss Calibration
-Guancheng Wan
-
-|  Method   | Venue  | Code | Paper | Check|
-|  ----  | ----  | ----  | ----  |----  |
+|  Method   | Venue  | Code | Paper | 
+|  ----  | ----  | ----  | ----  |
 | FedAvg | AISTATS‘17 | [Code](https://github.com/katsura-jp/fedavg.pytorch)|[Paper](https://arxiv.org/abs/1602.05629)| Yes|
 | FedProx| MLSys'20 | [Code](https://github.com/ki-ljl/FedProx-PyTorch) |[Paper](https://arxiv.org/abs/1812.06127)|Yes|
 |Scaffold|ICML 20| [Code]() | [Paper](https://arxiv.org/abs/1910.06378)| No |
@@ -22,10 +22,9 @@ Guancheng Wan
 | FPL | CVPR'23 | [Code](https://github.com/WenkeHuang/RethinkFL) |[Paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Rethinking_Federated_Learning_With_Domain_Shift_A_Prototype_View_CVPR_2023_paper.pdf)|
 
 
-## Unknown Generalization
+### Unknown Generalization
 
-### Federated Domain Adaptation >=2
-Guancheng Wan
+#¥## Federated Domain Adaptation
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
@@ -34,8 +33,7 @@ Guancheng Wan
 | KD3A | ICML‘21 | [Code](https://github.com/FengHZ/KD3A)| [Paper](https://arxiv.org/abs/1911.02054)|
 | MCC-DA  | TCSVT'22 | [Code]| [Paper](https://ieeexplore.ieee.org/document/9940295)|
 
-### Federated Domain Generalization >=2
-Zekun Shi
+##¥# Federated Domain Generalization 
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
@@ -44,10 +42,8 @@ Zekun Shi
 | FedGA | CVPR 23 | [Code](https://github.com/MediaBrain-SJTU/FedDG-GA)| [Paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Zhang_Federated_Domain_Generalization_With_Generalization_Adjustment_CVPR_2023_paper.pdf)|
 
 
-# Robustness Federated Learning
-Based on FedProx
-
-## Byzantine Attack
+## Robustness
+### Byzantine Attack
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
 | SymF | NeurIPS'15 | | [Paper](https://arxiv.org/abs/1505.07634)|
@@ -58,9 +54,7 @@ Based on FedProx
 | MiMa | NDSS'21  | [Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning) |[ Paper](https://www.ndss-symposium.org/ndss-program/ndss-2021/)|
 | MiSu | NDSS'21 |[Code](https://github.com/vrt1shjwlkr/NDSS21-Model-Poisoning)  |[Paper](https://www.ndss-symposium.org/ndss-program/ndss-2021/)|
 
-## Backdoor Attack
-
-https://github.com/THUYimingLi/backdoor-learning-resources#federated-learning
+### Backdoor Attack
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
@@ -70,20 +64,18 @@ https://github.com/THUYimingLi/backdoor-learning-resources#federated-learning
 | FLIP | ICLR'23 | [Code](https://github.com/KaiyuanZh/FLIP) | [Paper](https://github.com/KaiyuanZh/FLIP)
 
 
-## Byzantine Defense
+### Byzantine Defense
 
-## Backdoor Defense
-Zekun Shi
+### Backdoor Defense
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
 | RLR | AAAI'21 | [Code](https://github.com/TinfoilHat0/Defending-Against-Backdoors-with-Robust-Learning-Rate) | [Paper](https://arxiv.org/pdf/2007.03767.pdf)|
 | CRFL | ICML'21 | [Code](https://github.com/AI-secure/CRFL) | [Paper](https://arxiv.org/pdf/2106.08283.pdf)|
 
 
-# Fairness Federated Learning
+## Fairness Federated Learning
 
-## Collaboration Fairness >=2
-Zekun Shi
+### Collaboration Fairness
 
 |  Method   | Venue  | Code | Paper
 |  ----  | ----  |----  |----  |
@@ -93,9 +85,7 @@ Zekun Shi
 
 
 
-## Performance Fairness
-Zekun Shi
-
+### Performance Fairness
 | Method | Venue      | Code | Paper
 |--------|------------|----  |----  |
 | **AFL** | ICML'19 | [Code](https://github.com/Chelsiehi/Agnostic-Federated-Learning/tree/master)| [Paper](https://arxiv.org/abs/1902.00146)|
