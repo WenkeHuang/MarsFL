@@ -1,5 +1,4 @@
-# A Survey on Federated Learning for
-Generalization, Robustness, Fairness
+# A Survey on Federated Learning for Generalization, Robustness, Fairness
 ## Generalization Federated Learning
 ###  Crosss Calibration
 
