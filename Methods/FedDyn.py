@@ -1,7 +1,7 @@
-from Aggregations import get_fed_aggregation
+
 from Methods.utils.meta_methods import FederatedMethod
 import torch
-import copy
+
 
 
 class FedDyn(FederatedMethod):
@@ -22,8 +22,8 @@ class FedDyn(FederatedMethod):
             grad_dict[key] = torch.zeros_like(params)
         return grad_dict
     def local_update(self, priloader_list):
-        total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
-        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
+        total_clients = list(range(self.cfg.DATASET.parti_num))
+        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()
 
         self.local_model.loc_update(online_clients_list=self.online_clients_list, nets_list=self.nets_list, global_net=self.global_net,
                                     priloader_list=priloader_list,client_grads=self.client_grads)

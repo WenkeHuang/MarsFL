@@ -50,7 +50,3 @@ class FedNovaSever(SeverMethod):
 
         for _, net in enumerate(nets_list):
             net.load_state_dict(global_net.state_dict())
-
-        # freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
-
-        # return freq

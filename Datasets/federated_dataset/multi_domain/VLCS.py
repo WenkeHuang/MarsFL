@@ -3,9 +3,7 @@ from Datasets.utils.transforms import TwoCropsTransform
 from Datasets.federated_dataset.multi_domain.utils.multi_domain_dataset import MultiDomainDataset
 from Datasets.utils.transforms import DeNormalize
 import torchvision.transforms as transforms
-from utils.conf import multi_domain_data_path
 from torchvision.datasets import ImageFolder, DatasetFolder
-from PIL import Image
 from utils.conf import multi_domain_data_path as data_path
 
 
@@ -99,27 +97,14 @@ class FLVLCS(MultiDomainDataset):
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
 
-        # 是否使用两个数据相同的数据增强
         if self.cfg.DATASET.aug == 'two_weak':
-            # 构造非对称aug
             train_transform = TwoCropsTransform(self.train_transform, self.train_transform)
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
         elif self.cfg.DATASET.aug == 'weak':
             train_transform = self.train_transform
             train_val_transform = self.train_transform
 
-        # 对于feddg 使用fft
-        if 'FedDG' in self.cfg:
-            use_fft = True
-        else:
-            use_fft = False
-
         for _, domain in enumerate(self.domain_list):
-
-            if use_fft:
-                prob_domain_name = client_domain_name_list
-            else:
-                prob_domain_name = []
 
             train_dataset = ImageFolder_Custom(data_name=domain, root=data_path(), train=True,
                                                transform=train_transform)

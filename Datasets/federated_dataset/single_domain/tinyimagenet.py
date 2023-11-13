@@ -1,4 +1,3 @@
-from torchvision.datasets import CIFAR10, CIFAR100
 
 from Datasets.federated_dataset.single_domain.utils.single_domain_dataset import SingleDomainDataset
 from Datasets.utils.transforms import DeNormalize
@@ -116,11 +115,6 @@ class FedLeaTinyImagenet(SingleDomainDataset):
 
         self.partition_label_skew_loaders(train_dataset, test_dataset)
 
-    # @staticmethod
-    # def get_transform():
-    #     transform = transforms.Compose(
-    #         [transforms.ToPILImage(), FedLeaTinyImagenet.Nor_TRANSFORM])
-    #     return transform
 
     @staticmethod
     def get_normalization_transform():

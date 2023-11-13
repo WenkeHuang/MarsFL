@@ -2,7 +2,6 @@ from abc import abstractmethod
 from argparse import Namespace
 from torchvision.transforms import transforms
 from torch.utils.data import DataLoader, SubsetRandomSampler
-from torchvision import datasets
 from PIL import ImageFilter
 import numpy as np
 import random

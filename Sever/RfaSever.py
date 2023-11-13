@@ -24,7 +24,6 @@ class RfaSever(SeverMethod):
         nets_list = kwargs['nets_list']
         temp_net = copy.deepcopy(global_net)
 
-        # 算模型差 全局模型参数拉平
         with torch.no_grad():
             all_delta = []
             global_net_para = []

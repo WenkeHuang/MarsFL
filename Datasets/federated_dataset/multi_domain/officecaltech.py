@@ -86,17 +86,6 @@ class FLOfficeCaltech(MultiDomainDataset):
             [transforms.Resize([224, 224]),
              transforms.ToTensor(),
              self.get_normalization_transform()])
-        # self.train_transform = transforms.Compose(
-        #     [transforms.Resize((32, 32)),
-        #      transforms.RandomCrop(32, padding=4),
-        #      transforms.RandomHorizontalFlip(),
-        #      transforms.ToTensor(),
-        #      self.get_normalization_transform()])
-        #
-        # self.test_transform = transforms.Compose(
-        #     [transforms.Resize((32, 32)),
-        #      transforms.ToTensor(),
-        #      self.get_normalization_transform()])
 
     def get_data_loaders(self, selected_domain_list=[]):
 

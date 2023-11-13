@@ -35,7 +35,6 @@ class FLTrustSever(SeverMethod):
         nets_list = kwargs['nets_list']
         temp_net = copy.deepcopy(global_net)
 
-        # 算模型差 全局模型参数拉平
         with torch.no_grad():
             all_delta = []
             global_net_para = []
@@ -59,7 +58,6 @@ class FLTrustSever(SeverMethod):
             all_delta = np.array(all_delta)
             global_net_para = np.array(torch.cat(global_net_para, dim=0).cpu().numpy())
 
-        # 在公开数据集训global
         criterion = nn.CrossEntropyLoss()
         iterator = tqdm(range(self.public_epoch))
         optimizer = optim.SGD(temp_net.parameters(), lr=self.cfg.OPTIMIZER.local_train_lr,
@@ -75,7 +73,6 @@ class FLTrustSever(SeverMethod):
                 loss.backward()
                 optimizer.step()
 
-        # 全局模型的变化量
         with torch.no_grad():
             global_delta = []
             for name, param0 in temp_net.state_dict().items():

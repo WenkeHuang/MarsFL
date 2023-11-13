@@ -1,9 +1,0 @@
-DATASET:
-  use_two_crop: True
-
-
-FedRC:
-  con_T: 0.07
-  weight_epoch: 10
-  weight_lr: 0.005
-  weight_opt_type: "Adam"

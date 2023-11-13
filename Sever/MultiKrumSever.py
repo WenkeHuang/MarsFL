@@ -37,7 +37,6 @@ class MultiKrumSever(SeverMethod):
         nets_list = kwargs['nets_list']
         temp_net = copy.deepcopy(global_net)
 
-        # 算模型梯度
         with torch.no_grad():
             all_grads = []
             for i in online_clients_list:

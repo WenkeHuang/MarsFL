@@ -55,10 +55,8 @@ class CRFLSever(SeverMethod):
         submit_params_update_dict = kwargs['submit_params_update_dict']
         epoch_index = kwargs['epoch_index']
 
-        # 获取参与者的聚合权重
         freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
-        # local更新加权聚合
         agg_params_update = dict()
         for name, data in global_net.state_dict().items():
             agg_params_update[name] = torch.zeros_like(data)

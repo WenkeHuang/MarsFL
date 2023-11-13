@@ -92,14 +92,6 @@ class KD3ASever(SeverMethod):
         else:
             self.domain_weight = update_domain_weight(self.domain_weight, epoch_domain_weight)
 
-
-        # 获取参与者的聚合权重
-        # freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
-
-        # FedAVG 是聚合Bone + cls
-        # fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
-        #                           global_net=global_net, freq=freq, except_part=[], global_only=False)
-
         federated_average(nets_list,self.domain_weight, global_net)
         freq = self.domain_weight
 

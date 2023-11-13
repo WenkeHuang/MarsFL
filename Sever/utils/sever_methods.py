@@ -1,10 +1,5 @@
-from utils.conf import get_device, checkpoint_path, net_path
-from utils.utils import create_if_not_exists
-from argparse import Namespace
+from utils.conf import get_device
 import torch.nn as nn
-import numpy as np
-import torch
-import os
 
 
 class SeverMethod(nn.Module):
@@ -22,4 +17,3 @@ class SeverMethod(nn.Module):
 
     def sever_update(self, **kwargs):
         pass
-

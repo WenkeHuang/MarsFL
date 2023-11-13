@@ -79,7 +79,6 @@ def multi_krum(users_grads, users_count, corrupted_count, n):
     all_error = np.array(all_error)
     sort_index = all_error.argsort()
 
-    # 前n均值
     mean_users_grads = np.mean(users_grads[sort_index[:n]], axis=0)
     return mean_users_grads
 

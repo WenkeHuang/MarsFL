@@ -37,7 +37,6 @@ class SageFlowSever(SeverMethod):
         nets_list = kwargs['nets_list']
         temp_net = copy.deepcopy(global_net)
 
-        # local模型在pub上算权重
         with torch.no_grad():
             criterion = nn.CrossEntropyLoss().to(self.device)
             loss_on_public = []

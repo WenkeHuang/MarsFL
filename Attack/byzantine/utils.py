@@ -2,10 +2,9 @@ import copy
 from numpy.testing import assert_array_almost_equal
 import numpy as np
 import torch
-from torch.utils.data import DataLoader, SubsetRandomSampler
+from torch.utils.data import DataLoader
 from utils.utils import row_into_parameters
 
-# attack攻击类型
 attack_type_dict = {
     'PairFlip': 'dataset',
     'SymFlip': 'dataset',
@@ -103,9 +102,8 @@ def noisify(nb_classes=10, train_labels=None, noise_type=None, noise_rate=0):
     return train_noisy_labels, actual_noise_rate
 
 
-# 数据集攻击
 def attack_dataset(args, cfg, private_dataset, client_type):
-    # 攻击类型是数据集攻击 那么修改数据集的内容
+
     if attack_type_dict[cfg['attack'].byzantine.evils] == 'dataset':
         for i in range(len(client_type)):
             if not client_type[i]:
@@ -123,8 +121,6 @@ def attack_dataset(args, cfg, private_dataset, client_type):
                                                               batch_size=private_dataset.train_loaders[i].batch_size,
                                                               sampler=private_dataset.train_loaders[i].sampler,
                                                               num_workers=4, drop_last=True)
-                # print(id(private_dataset.train_loaders[i].dataset))
-# 网络参数攻击
 def attack_net_para(args, cfg, fed_method):
     temp_net = copy.deepcopy(fed_method.global_net)
     if cfg['attack'].byzantine.evils == 'RandomNoise':
@@ -143,7 +139,7 @@ def attack_net_para(args, cfg, fed_method):
                     param += torch.tensor(copy.deepcopy(noise_weight * (random_net.state_dict()[name] - param)), dtype=param.dtype)
 
     elif cfg['attack'].byzantine.evils == 'lie_attack':
-        # 计算z的值
+
         n = len(fed_method.online_clients_list)
         m = n - sum(fed_method.client_type)
         s = n // 2 + 1 - m
@@ -173,7 +169,6 @@ def attack_net_para(args, cfg, fed_method):
 
     elif cfg['attack'].byzantine.evils == 'min_sum':
 
-        # 计算好客户端的模型变化量和对应均值
         all_net_delta = []
         with torch.no_grad():
             for i in fed_method.online_clients_list:
@@ -233,7 +228,7 @@ def attack_net_para(args, cfg, fed_method):
                 row_into_parameters(mal_update.cpu().numpy(), sele_net.parameters())
 
     elif cfg['attack'].byzantine.evils == 'min_max':
-        # 计算好客户端的模型变化量和对应均值
+
         all_net_delta = []
         with torch.no_grad():
             for i in fed_method.online_clients_list:

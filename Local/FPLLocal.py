@@ -42,7 +42,7 @@ class FPLLocal(LocalMethod):
         local_protos=kwargs['local_protos']
         epoch_index=kwargs['epoch_index']
 
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], global_net, priloader_list[i], global_protos,local_protos,epoch_index)
 
     def train_net(self, index, net, global_net, train_loader, global_protos, local_protos, epoch_index):

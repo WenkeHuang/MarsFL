@@ -18,7 +18,7 @@ class FedProxLocal(LocalMethod):
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
         global_net = kwargs['global_net']
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], global_net, priloader_list[i])
 
     def train_net(self, index, net, global_net, train_loader):

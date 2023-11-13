@@ -1,15 +1,13 @@
-import copy
 
 from torch.utils.data import DataLoader, SubsetRandomSampler
 from torchvision.transforms import transforms
 from yacs.config import CfgNode as CN
-from torchvision import datasets
+
 from abc import abstractmethod
 from argparse import Namespace
 from typing import Tuple
 import numpy as np
 
-from Datasets.utils.utils import record_net_data_stats
 
 dataloader_kwargs = {'num_workers': 2, 'pin_memory': True}
 
@@ -32,9 +30,6 @@ class MultiDomainDataset:
         self.test_loader = {}
         self.args = args
         self.cfg = cfg
-
-        # if self.args.OOD != "NONE":
-        # self.ood_ratio = cfg.DATASET.ood_ratio
 
     @abstractmethod
     def get_data_loaders(self, selected_domain_list=[]) -> Tuple[DataLoader, DataLoader]:
@@ -129,9 +124,7 @@ class MultiDomainDataset:
                 y_train_eval = value.test_data_list[:, 1]
             ini_len_dict[key] = len(y_train_eval)
             not_used_index_dict[key] = np.arange(len(y_train_eval))
-        '''
-        调用Validation的Dataloader
-        '''
+
         for domain_name, value in domain_train_eval_dataset_dict.items():
 
             train_eval_dataset = domain_train_eval_dataset_dict[domain_name]
@@ -145,9 +138,6 @@ class MultiDomainDataset:
                                            batch_size=self.cfg.OPTIMIZER.val_batch, sampler=train_eval_sampler, **dataloader_kwargs)
             self.train_eval_loaders[domain_name] = train_eval_loader
 
-        '''
-        调用Testing的Dataloader
-        '''
         for key, value in domain_testing_dataset_dict.items():
 
             test_dataset = domain_testing_dataset_dict[key]

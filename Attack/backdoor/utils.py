@@ -5,7 +5,6 @@ import torch
 from torch.utils.data import DataLoader
 
 
-# 基础的后门攻击
 def base_backdoor(cfg, img, target, noise_data_rate):
     if torch.rand(1) < noise_data_rate:
         target = cfg.attack.backdoor.backdoor_label
@@ -15,7 +14,6 @@ def base_backdoor(cfg, img, target, noise_data_rate):
     return img, target
 
 
-# 语义攻击
 def semantic_backdoor(cfg, img, target, noise_data_rate):
     if torch.rand(1) < noise_data_rate:
         if target == cfg.attack.backdoor.semantic_backdoor_label:
@@ -27,7 +25,6 @@ def semantic_backdoor(cfg, img, target, noise_data_rate):
     return img, target
 
 
-# 从数据集后面攻击
 def backdoor_attack(args, cfg, client_type, private_dataset, is_train):
     noise_data_rate = cfg.attack.noise_data_rate if is_train else 1.0
     if is_train:

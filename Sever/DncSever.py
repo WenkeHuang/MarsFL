@@ -3,9 +3,8 @@ import copy
 import numpy as np
 import torch
 
-from Backbones import get_private_backbones
 from Sever.utils.sever_methods import SeverMethod
-from Sever.utils.utils import trimmed_mean, fools_gold, geometric_median_update
+
 from utils.utils import row_into_parameters
 
 
@@ -26,7 +25,6 @@ class DncSever(SeverMethod):
         nets_list = kwargs['nets_list']
         temp_net = copy.deepcopy(global_net)
 
-        # 算模型差 全局模型参数拉平
         with torch.no_grad():
             all_delta = []
             global_net_para = []

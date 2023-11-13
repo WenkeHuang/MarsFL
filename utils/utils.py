@@ -32,9 +32,9 @@ def set_requires_grad(net, requires_grad):
 
 def ini_client_domain(rand_domain_select, domains_list, parti_num):
     domains_len = len(domains_list)
-    # 是否随机采样数据集
+
     if rand_domain_select:
-        # 每个数据集最大数量
+
         max_num = 10
         is_ok = False
         while not is_ok:

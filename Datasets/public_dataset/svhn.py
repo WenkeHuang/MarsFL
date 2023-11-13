@@ -78,11 +78,11 @@ class PublicSVHN(PublicDataset):
     def get_data_loaders(self):
 
         if self.aug == 'two_weak':
-            # 构造双弱aug
+
             train_transform = TwoCropsTransform(self.weak_aug, self.weak_aug)
 
         elif self.aug == 'two_strong':
-            # 构造双强aug
+
             train_transform = TwoCropsTransform(self.strong_aug, self.strong_aug)
 
         else:

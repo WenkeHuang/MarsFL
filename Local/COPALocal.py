@@ -16,7 +16,7 @@ class COPALocal(LocalMethod):
         priloader_list = kwargs['priloader_list']
         head_dict = kwargs['head_dict']
 
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], priloader_list[i],head_dict)
 
     def train_net(self, index, net, train_loader,head_dict):
@@ -35,7 +35,6 @@ class COPALocal(LocalMethod):
                 outputs = net.cls(f)
                 loss = criterion(outputs, labels)
 
-                # 其他头的loss
                 loss_other = 0
                 head_ = head_dict[index]
                 for k in head_:

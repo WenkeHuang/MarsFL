@@ -1,4 +1,3 @@
-from Aggregations import get_fed_aggregation
 from Methods.utils.meta_methods import FederatedMethod
 import torch
 import copy
@@ -14,6 +13,7 @@ class Scaffold(FederatedMethod):
         self.global_control = {}
         self.delta_models = {}
         self.delta_controls = {}
+
     def init_control(self, model):
         """ a dict type: {name: params}
         """
@@ -34,8 +34,8 @@ class Scaffold(FederatedMethod):
     def local_update(self, priloader_list):
         self.delta_models = {}
         self.delta_controls = {}
-        total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
-        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
+        total_clients = list(range(self.cfg.DATASET.parti_num))
+        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()
 
         self.local_model.loc_update(online_clients_list=self.online_clients_list, nets_list=self.nets_list, global_net=self.global_net,
                                     priloader_list=priloader_list,
@@ -44,8 +44,6 @@ class Scaffold(FederatedMethod):
                                     delta_models=self.delta_models,
                                     delta_controls=self.delta_controls
                                     )
-
-
 
     def sever_update(self, priloader_list):
         self.aggregation_weight_list = self.sever_model.sever_update(fed_aggregation=self.fed_aggregation,
@@ -56,11 +54,12 @@ class Scaffold(FederatedMethod):
                                                                      local_controls=self.local_controls,
                                                                      global_control=self.global_control,
                                                                      delta_models=self.delta_models,
-                                                                    delta_controls=self.delta_controls
+                                                                     delta_controls=self.delta_controls
                                                                      )
-        new_control = self.update_global_control(self.global_control,self.delta_controls)
+        new_control = self.update_global_control(self.global_control, self.delta_controls)
         self.global_control = copy.deepcopy(new_control)
-    def update_global_control(self,global_control,delta_controls):
+
+    def update_global_control(self, global_control, delta_controls):
         new_control = copy.deepcopy(global_control)
         for name, c in global_control.items():
             mean_ci = []

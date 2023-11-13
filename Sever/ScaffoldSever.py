@@ -1,12 +1,14 @@
 from Sever.utils.sever_methods import SeverMethod
 import copy
 import torch
+
+
 class ScaffoldSever(SeverMethod):
     NAME = 'ScaffoldSever'
 
     def __init__(self, args, cfg):
         super(ScaffoldSever, self).__init__(args, cfg)
-        self.global_lr =cfg.Sever[self.NAME].global_lr
+        self.global_lr = cfg.Sever[self.NAME].global_lr
 
     def sever_update(self, **kwargs):
         fed_aggregation = kwargs['fed_aggregation']
@@ -20,16 +22,9 @@ class ScaffoldSever(SeverMethod):
         delta_models = kwargs['delta_models']
         delta_controls = kwargs['delta_controls']
 
-        self.update_global(global_net,delta_models,nets_list)
+        self.update_global(global_net, delta_models, nets_list)
 
-        # freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
-        #
-        # # FedAVG 是聚合Bone + cls
-        # fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
-        #                           global_net=global_net, freq=freq, except_part=[], global_only=False)
-        # return freq
-
-    def update_global(self,global_net,delta_models,nets_list):
+    def update_global(self, global_net, delta_models, nets_list):
         state_dict = {}
 
         for name, param in global_net.state_dict().items():

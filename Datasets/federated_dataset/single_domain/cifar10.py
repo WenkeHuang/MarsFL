@@ -1,18 +1,11 @@
 from torchvision.datasets import CIFAR10
 import torchvision.transforms as transforms
-
 from Datasets.federated_dataset.single_domain.utils.single_domain_dataset import SingleDomainDataset
 from Datasets.utils.transforms import DeNormalize
-from utils.conf import multi_domain_data_path, single_domain_data_path
+from utils.conf import single_domain_data_path
 from PIL import Image
-
 from typing import Tuple
-
 import torchvision.transforms as T
-
-from torch.autograd import Variable
-import torch.nn.functional as F
-
 
 class MyCIFAR10(CIFAR10):
     """
@@ -59,18 +52,6 @@ class FedLeaCIFAR10(SingleDomainDataset):
             transforms.ToTensor(),
             normalization])
 
-        # transform_train = utils.Compose([
-        #     utils.ToTensor(),
-        #     utils.Lambda(lambda x: F.pad(
-        #         Variable(x.unsqueeze(0), requires_grad=False),
-        #         (4, 4, 4, 4), mode='reflect').data.squeeze()),
-        #     utils.ToPILImage(),
-        #     utils.ColorJitter(brightness=0),
-        #     utils.RandomCrop(32),
-        #     utils.RandomHorizontalFlip(),
-        #     utils.ToTensor(),
-        #     normalization
-        # ])
 
     def get_data_loaders(self):
         pri_aug = self.cfg.DATASET.aug

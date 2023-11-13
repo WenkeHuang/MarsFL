@@ -106,53 +106,7 @@ class FLDigits(MultiDomainDataset):
 
         self.train_eval_domain_ratio = {'MNIST': cfg.DATASET.train_eval_domain_ratio, 'USPS': cfg.DATASET.train_eval_domain_ratio,
                                         'SVHN': cfg.DATASET.train_eval_domain_ratio, 'SYN': cfg.DATASET.train_eval_domain_ratio}
-        # 56 32
-        # self.train_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.RandomCrop(56, padding=4),
-        #      utils.ToTensor(),
-        #      self.get_normalization_transform()
-        #      ]
-        # )
-        #
-        # self.one_channel_train_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.RandomCrop(56, padding=4),
-        #      utils.ToTensor(),
-        #      utils.Lambda(lambda x: x.repeat(3, 1, 1)),
-        #      self.get_normalization_transform()
-        #      ]
-        # )
-        #
-        # self.strong_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.RandomCrop(56, padding=4),
-        #      utils.RandAugment(num_ops=1,magnitude=1),
-        #      utils.ToTensor(),
-        #      self.get_normalization_transform()
-        #      ]
-        # )
-        #
-        # self.one_channel_strong_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.RandomCrop(56, padding=4),
-        #      utils.RandAugment(num_ops=1,magnitude=1),
-        #      utils.ToTensor(),
-        #      utils.Lambda(lambda x: x.repeat(3, 1, 1)),
-        #      self.get_normalization_transform()
-        #      ]
-        # )
-        #
-        # self.test_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.ToTensor(),
-        #      self.get_normalization_transform()])
-        #
-        # self.one_channel_test_transform = utils.Compose(
-        #     [utils.Resize((56, 56)),
-        #      utils.ToTensor(),
-        #      utils.Lambda(lambda x: x.repeat(3, 1, 1)),
-        #      self.get_normalization_transform()])
+
         self.train_transform = transforms.Compose(
             [transforms.Resize((32, 32)),
              transforms.RandomCrop(32, padding=4),
@@ -215,21 +169,12 @@ class FLDigits(MultiDomainDataset):
         train_transform = self.train_transform
         one_channel_train_transform = self.one_channel_train_transform
 
-        # if self.cfg.DATASET.aug == 'ASY':
-        #     # 构造非对称aug
-        #     train_val_transform = TwoCropsTransform(self.strong_transform, self.train_transform)
-        #     one_channel_train_val_transform = TwoCropsTransform(self.one_channel_strong_transform,
-        #                                                            self.one_channel_train_transform)
         if self.cfg.DATASET.aug == 'two_weak':
-            # 构造双弱aug
+
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
             one_channel_train_val_transform = TwoCropsTransform(self.one_channel_train_transform,
                                                                 self.one_channel_train_transform)
-        # elif self.cfg.DATASET.aug == 'two_strong':
-        #     # 构造双强aug
-        #     train_val_transform = TwoCropsTransform(self.strong_transform, self.strong_transform)
-        #     one_channel_train_val_transform = TwoCropsTransform(self.one_channel_strong_transform,
-        #                                                         self.one_channel_strong_transform)
+
         elif self.cfg.DATASET.aug == 'weak':
             train_val_transform = self.train_transform
             one_channel_train_val_transform = self.one_channel_train_transform

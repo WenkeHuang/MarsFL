@@ -59,9 +59,8 @@ class MyMNIST(torch.utils.data.Dataset):
 class PublicMNIST(PublicDataset):
     NAME = 'pub_minst'
 
-
     def __init__(self, args, cfg, **kwargs) -> None:
-        super().__init__(args, cfg,**kwargs)
+        super().__init__(args, cfg, **kwargs)
 
         self.strong_aug = transforms.Compose(
             [
@@ -78,25 +77,24 @@ class PublicMNIST(PublicDataset):
              transforms.Normalize((0.1307, 0.1307, 0.1307),
                                   (0.3081, 0.3081, 0.3081))])
 
-        self.pub_len=kwargs['pub_len']
-        self.public_batch_size=kwargs['public_batch_size']
-        self.aug=kwargs['pub_aug']
-
+        self.pub_len = kwargs['pub_len']
+        self.public_batch_size = kwargs['public_batch_size']
+        self.aug = kwargs['pub_aug']
 
     def get_data_loaders(self):
 
         if self.aug == 'two_weak':
-            # 构造双弱aug
+
             train_transform = TwoCropsTransform(self.weak_aug, self.weak_aug)
 
         elif self.aug == 'two_strong':
-            # 构造双强aug
+
             train_transform = TwoCropsTransform(self.strong_aug, self.strong_aug)
 
         else:
             train_transform = self.weak_aug
 
         train_dataset = MyMNIST(data_name='mnist', root=single_domain_data_path(),
-                               transform=train_transform)
+                                transform=train_transform)
 
         self.traindl = self.random_loaders(train_dataset, self.pub_len, self.public_batch_size)

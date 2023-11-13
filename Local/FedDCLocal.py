@@ -4,6 +4,8 @@ import torch.nn as nn
 from tqdm import tqdm
 import torch
 import numpy as np
+
+
 def get_mdl_params(model_list, n_par=None):
     if n_par == None:
         exp_mdl = model_list[0]
@@ -29,6 +31,7 @@ class FedDCLocal(LocalMethod):
         self.alpha_coef = cfg.Local[self.NAME].alpha_coef
         # self.mu = cfg.Local[self.NAME].mu
         self.max_norm = cfg.Local[self.NAME].max_norm
+
     def loc_update(self, **kwargs):
         online_clients_list = kwargs['online_clients_list']
         nets_list = kwargs['nets_list']
@@ -40,11 +43,10 @@ class FedDCLocal(LocalMethod):
         parameter_drifts = kwargs['parameter_drifts']
         delta_g_sum = kwargs['delta_g_sum']
         clnt_params_list = kwargs['clnt_params_list']
-        for i in online_clients_list:  # 遍历循环当前的参与者
-            self.train_net(i, nets_list[i], priloader_list[i],global_net,n_par,state_gadient_diffs,weight_list,parameter_drifts,delta_g_sum,clnt_params_list)
+        for i in online_clients_list:
+            self.train_net(i, nets_list[i], priloader_list[i], global_net, n_par, state_gadient_diffs, weight_list, parameter_drifts, delta_g_sum, clnt_params_list)
 
-
-    def train_net(self, index, net, train_loader,global_net,n_par,state_gadient_diffs,weight_list,parameter_drifts,delta_g_sum,clnt_params_list):
+    def train_net(self, index, net, train_loader, global_net, n_par, state_gadient_diffs, weight_list, parameter_drifts, delta_g_sum, clnt_params_list):
         net = net.to(self.device)
         net.train()
         if self.cfg.OPTIMIZER.type == 'SGD':
@@ -102,6 +104,3 @@ class FedDCLocal(LocalMethod):
         delta_g_sum += delta_g_cur
         state_gadient_diffs[index] = state_g
         clnt_params_list[index] = curr_model_par
-
-
-

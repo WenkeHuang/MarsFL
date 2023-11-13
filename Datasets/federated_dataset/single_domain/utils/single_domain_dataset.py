@@ -1,9 +1,7 @@
-import copy
 
 from torch.utils.data import DataLoader, SubsetRandomSampler
 from torchvision.transforms import transforms
 from yacs.config import CfgNode as CN
-from torchvision import datasets
 from abc import abstractmethod
 from argparse import Namespace
 from typing import Tuple

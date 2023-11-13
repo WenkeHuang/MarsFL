@@ -25,7 +25,7 @@ class CRFLLocal(LocalMethod):
         for name, param in global_net.named_parameters():
             target_params[name] = global_net.state_dict()[name].clone().detach().requires_grad_(False)
 
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], priloader_list[i])
 
             for name, data in nets_list[i].state_dict().items():

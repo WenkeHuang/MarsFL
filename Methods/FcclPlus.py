@@ -15,11 +15,11 @@ class FcclPlus(FederatedMethod):
     def ini(self):
         super().ini()
         for _, net in enumerate(self.nets_list):
-            self.prev_nets_list.append(copy.deepcopy(net)) # 初始化在loading global之前
+            self.prev_nets_list.append(copy.deepcopy(net))
 
     def local_update(self, priloader_list):
-        total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
-        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
+        total_clients = list(range(self.cfg.DATASET.parti_num))
+        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()
         self.local_model.loc_update(online_clients_list=self.online_clients_list, nets_list=self.nets_list, global_net=self.global_net,
                                     prev_nets_list=self.prev_nets_list, priloader_list=priloader_list)
         self.copy_nets2_prevnets()

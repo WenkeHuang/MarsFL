@@ -79,7 +79,6 @@ class MyPACS(data.Dataset):
         self.prob_domain_name = prob_domain_name
         self.use_fft = use_fft
 
-        # 找到其他数据集的路径
         if use_fft:
             self.all_prob_img_paths = []
             for i in range(len(self.prob_domain_name)):
@@ -191,16 +190,14 @@ class FLPACS(MultiDomainDataset):
         domain_testing_dataset_dict = {}
         domain_train_eval_dataset_dict = {}
 
-        # 是否使用两个数据相同的数据增强
         if self.cfg.DATASET.aug == 'two_weak':
-            # 构造非对称aug
+
             train_transform = TwoCropsTransform(self.train_transform, self.train_transform)
             train_val_transform = TwoCropsTransform(self.train_transform, self.train_transform)
         elif self.cfg.DATASET.aug == 'weak':
             train_transform = self.train_transform
             train_val_transform = self.train_transform
 
-        # 对于feddg 使用fft
         if 'FedDG' in self.cfg:
             use_fft = True
         else:
@@ -220,12 +217,6 @@ class FLPACS(MultiDomainDataset):
             domain_train_eval_dataset_dict[domain] = MyPACS(multi_domain_data_path() + 'PACS/', train='val', transform=train_val_transform, data_name=domain)
 
         self.partition_domain_loaders(client_domain_name_list, domain_training_dataset_dict, domain_testing_dataset_dict, domain_train_eval_dataset_dict)
-
-    # @staticmethod
-    # def get_transform():
-    #     transform = transforms.Compose(
-    #         [transforms.ToPILImage(), FLPACS.Nor_TRANSFORM])
-    #     return transform
 
     @staticmethod
     def get_normalization_transform():

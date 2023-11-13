@@ -45,9 +45,6 @@ class RLRSever(SeverMethod):
                 for i in range(len(nets_list))
             }
 
-        # n_params = len(parameters_to_vector(global_net.parameters()))
-        # lr_vector = torch.Tensor([self.server_lr] * n_params).to(self.args.device)
-
         freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
         lr_vector = self.compute_robustLR(update_dict)

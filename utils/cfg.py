@@ -2,7 +2,7 @@ from yacs.config import CfgNode as CN
 from utils.utils import log_msg
 
 
-# 简化cfg 只留有关的
+# simplify cfg
 def simplify_cfg(args, cfg):
     dump_cfg = CN()
     dump_cfg.DATASET = cfg.DATASET
@@ -50,9 +50,9 @@ CFG.DATASET.communication_epoch = 2
 CFG.DATASET.n_classes = 10
 
 CFG.DATASET.parti_num = 4
-CFG.DATASET.online_ratio = 1.0  # online 参与者的ratio
-CFG.DATASET.domain_ratio = 1.0  # domain 中采样的ratio
-CFG.DATASET.train_eval_domain_ratio = 0.01  # 聚合时每个域采样的ratio
+CFG.DATASET.online_ratio = 1.0
+CFG.DATASET.domain_ratio = 1.0
+CFG.DATASET.train_eval_domain_ratio = 0.01
 CFG.DATASET.backbone = "resnet18"
 CFG.DATASET.pretrained = False
 CFG.DATASET.aug = "weak"

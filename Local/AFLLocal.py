@@ -17,7 +17,7 @@ class AFLLocal(LocalMethod):
         test_loader = kwargs['test_loader']
 
         loss_dict = kwargs['loss_dict']
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], priloader_list[i])
             _, test_loss = self.local_validate(nets_list[i],test_loader[priloader_list[i].dataset.data_name])
             loss_dict[i] = test_loss

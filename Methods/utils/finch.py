@@ -187,28 +187,3 @@ def FINCH(data, initial_rank=None, req_clust=None, distance='cosine', ensure_ear
         req_c = None
 
     return c, num_clust, req_c
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data-path', required=True, help='Specify the path to your data csv file.')
-    parser.add_argument('--output-path', default=None, help='Specify the folder to write back the results.')
-    args = parser.parse_args()
-    data = np.genfromtxt(args.data_path, delimiter=",").astype(np.float32)
-    start = time.time()
-    c, num_clust, req_c = FINCH(data, initial_rank=None, req_clust=None, distance='cosine', ensure_early_exit=True, verbose=True)
-    print('Time Elapsed: {:2.2f} seconds'.format(time.time() - start))
-
-    # Write back
-    if args.output_path is not None:
-        print('Writing back the results on the provided path ...')
-        np.savetxt(args.output_path + '/c.csv', c, delimiter=',', fmt='%d')
-        np.savetxt(args.output_path + '/num_clust.csv', np.array(num_clust), delimiter=',', fmt='%d')
-        if req_c is not None:
-            np.savetxt(args.output_path + '/req_c.csv', req_c, delimiter=',', fmt='%d')
-    else:
-        print('Results are not written back as the --output-path was not provided')
-
-
-if __name__ == '__main__':
-    main()

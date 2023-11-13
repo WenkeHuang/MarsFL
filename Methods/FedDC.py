@@ -39,7 +39,7 @@ class FedDC(FederatedMethod):
         super().ini()
 
     def local_update(self, priloader_list):
-        total_clients = list(range(self.cfg.DATASET.parti_num))  # 获取所有参与者
+        total_clients = list(range(self.cfg.DATASET.parti_num))
         if self.first:
             clients_dl = [priloader_list[i] for i in range(self.cfg.DATASET.parti_num)]
             clients_len = [len(dl.sampler.indices) for dl in clients_dl]
@@ -47,7 +47,7 @@ class FedDC(FederatedMethod):
             freq = clients_len / clients_all
             self.weight_list = freq * len(self.nets_list)
             self.first = False
-        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()  # 随机选取online的参与者
+        self.online_clients_list = self.random_state.choice(total_clients, self.online_num, replace=False).tolist()
         self.delta_g_sum = np.zeros(self.n_par)
         self.local_model.loc_update(online_clients_list=self.online_clients_list, nets_list=self.nets_list, global_net=self.global_net,
                                     priloader_list=priloader_list,

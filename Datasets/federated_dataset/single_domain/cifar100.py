@@ -1,16 +1,18 @@
-from torchvision.datasets import CIFAR10, CIFAR100
+from torchvision.datasets import CIFAR100
 import torchvision.transforms as transforms
 
 from Datasets.federated_dataset.single_domain.utils.single_domain_dataset import SingleDomainDataset
 from Datasets.utils.transforms import DeNormalize
-from utils.conf import multi_domain_data_path, single_domain_data_path
+from utils.conf import single_domain_data_path
 from PIL import Image
 from typing import Tuple
+
 
 class MyCIFAR100(CIFAR100):
     """
     Overrides the CIFAR10 dataset to change the getitem function.
     """
+
     def __init__(self, root, train=True, transform=None,
                  target_transform=None, download=False) -> None:
         self.not_aug_transform = transforms.Compose([transforms.ToTensor()])
@@ -59,28 +61,21 @@ class FedLeaCIFAR100(SingleDomainDataset):
             train_transform = self.strong_transform
 
         train_dataset = MyCIFAR100(root=single_domain_data_path(), train=True,
-                                  download=False, transform=train_transform)
+                                   download=False, transform=train_transform)
         test_transform = transforms.Compose(
             [transforms.ToTensor(), self.get_normalization_transform()])
         test_dataset = CIFAR100(single_domain_data_path(), train=False,
-                               download=False, transform=test_transform)
+                                download=False, transform=test_transform)
         self.partition_label_skew_loaders(train_dataset, test_dataset)
-
-    # @staticmethod
-    # def get_transform():
-    #     transform = transforms.Compose(
-    #         [transforms.ToPILImage(), FedLeaCIFAR100.Nor_TRANSFORM])
-    #     return transform
 
     @staticmethod
     def get_normalization_transform():
         transform = transforms.Normalize((0.5070751592371323, 0.48654887331495095, 0.4409178433670343),
-                              (0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
+                                         (0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
         return transform
 
     @staticmethod
     def get_denormalization_transform():
         transform = DeNormalize((0.5070751592371323, 0.48654887331495095, 0.4409178433670343),
-                              (0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
+                                (0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
         return transform
-

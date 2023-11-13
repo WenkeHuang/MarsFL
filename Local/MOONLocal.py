@@ -23,7 +23,7 @@ class MOONLocal(LocalMethod):
         global_net = kwargs['global_net']
         prev_nets_list = kwargs['prev_nets_list']
 
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], global_net, prev_nets_list[i], priloader_list[i])
 
     def train_net(self, index, net, global_net, prev_net, train_loader):

@@ -58,7 +58,6 @@ class MyTinyImagenet(TinyImagenet):
         super(MyTinyImagenet, self).__init__(
             root, train, transform, target_transform, download)
 
-        # 只要部分label
         all_type = np.unique(self.targets)
         used_types = all_type[0:10]
         used_data = []
@@ -118,11 +117,9 @@ class PublicTyimagenet(PublicDataset):
 
     def get_data_loaders(self):
         if self.aug == 'two_weak':
-            # 构造双弱aug
             train_transform = TwoCropsTransform(self.weak_aug, self.weak_aug)
 
         elif self.aug == 'two_strong':
-            # 构造双强aug
             train_transform = TwoCropsTransform(self.strong_aug, self.strong_aug)
 
         else:

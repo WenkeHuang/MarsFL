@@ -19,13 +19,12 @@ class FederatedMethod(nn.Module):
     def __init__(self, nets_list: list, client_domain_list: list,
                  args, cfg) -> None:
         super(FederatedMethod, self).__init__()
-        self.nets_list = nets_list  # 存储本地网络参数
-        self.client_domain_list = client_domain_list  # 存储Domain-用于个性化性能测试
+        self.nets_list = nets_list
+        self.client_domain_list = client_domain_list
 
         self.args = args
         self.cfg = cfg
 
-        # 计算一次参与的客户端数量
         self.random_state = np.random.RandomState()
         self.online_num = np.ceil(self.cfg.DATASET.parti_num * self.cfg.DATASET.online_ratio).item()
         self.online_num = int(self.online_num)
@@ -33,11 +32,9 @@ class FederatedMethod(nn.Module):
         self.global_net = None
         self.device = get_device(device_id=self.args.device_id)
 
-        # 本地和全局模型更新
         self.local_model = get_local_method(args, cfg)
         self.sever_model = get_sever_method(args, cfg)
 
-        # 用于同构聚合的策略
         if args.structure == 'homogeneity':
             self.fed_aggregation = get_fed_aggregation(args)
         else:
@@ -45,24 +42,6 @@ class FederatedMethod(nn.Module):
 
         self.epoch_index = 0
         self.random_net = copy.deepcopy(self.nets_list[0]).to(self.device)
-        # 模型路径
-        # self.base_net_folder = os.path.join(net_path(), self.args.dataset, self.args.OOD,
-        #                                     self.args.averaging, self.args.method)
-        #
-        # create_if_not_exists(self.base_net_folder)
-        # para_group_dirs = os.listdir(self.base_net_folder)
-        # n_para = len(para_group_dirs)
-        # if self.args.csv_name == None:
-        #     path = os.path.join(self.base_net_folder, 'para' + str(n_para + 1))
-        #     k = 1
-        #     while os.path.exists(path):
-        #         path = os.path.join(self.base_net_folder, 'para' + str(n_para + k))
-        #         k = k + 1
-        # else:
-        #     path = os.path.join(self.base_net_folder, self.args.csv_name)
-
-        # self.net_folder = path
-        # create_if_not_exists(self.net_folder)
 
         self.net_to_device()
 
@@ -87,11 +66,6 @@ class FederatedMethod(nn.Module):
 
     def col_update(self, publoader):
         pass
-
-    # def save_checkpoint(self):
-    #     global_net_path = os.path.join(self.net_folder, f'global_net_{self.cfg.DATASET.backbone}_{self.epoch_index}.pth')
-    #     torch.save(self.global_net.state_dict(), global_net_path)
-    #     print('save global_net over')
 
     def update(self, priloader_list):
         pass

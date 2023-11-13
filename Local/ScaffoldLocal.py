@@ -59,7 +59,7 @@ class ScaffoldLocal(LocalMethod):
         global_control = kwargs['global_control']
         delta_models = kwargs['delta_models']
         delta_controls = kwargs['delta_controls']
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], priloader_list[i], global_net, local_controls, global_control, delta_models)
             self.update_local_control(i, local_controls, global_control, delta_models, delta_controls)
 

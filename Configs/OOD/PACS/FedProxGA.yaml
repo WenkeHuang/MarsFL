@@ -1,4 +1,0 @@
-DATASET:
-  use_two_crop: False
-FedProxGA:
-  mu: 0.01 # 0.1 0.01

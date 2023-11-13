@@ -1,9 +1,7 @@
-import copy
 
 import numpy as np
 import torch
 from torch import optim, nn
-import torch.nn.functional as F
 
 from Datasets.public_dataset import get_public_dataset
 from Methods.utils.sce_loss import SCELoss
@@ -117,10 +115,9 @@ class RHFLSever(SeverMethod):
                 optimizer.step()
 
         if self.args.structure == 'homogeneity':
-            # 获取参与者的聚合权重
+
             freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
-            # FedAVG聚合
             fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                       global_net=global_net, freq=freq, except_part=[], global_only=False)
             return freq

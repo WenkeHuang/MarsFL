@@ -75,17 +75,17 @@ class CsvWriter:
     def write_para(self) -> None:
         from yacs.config import CfgNode as CN
 
-        args = copy.deepcopy((self.args))  # 当前的args
+        args = copy.deepcopy((self.args))
         args = vars(args)
-        cfg = copy.deepcopy(self.cfg)  # 当前的cfg
+        cfg = copy.deepcopy(self.cfg)
 
         for cc in except_args:
-            if cc in args: del args[cc]  # 删掉当前args的无关元素
+            if cc in args: del args[cc]
         for key, value in args.items():
             args[key] = str(value)
-        paragroup_dirs = os.listdir(self.model_path)  # 获取所有存储的参数组
-        n_para = len(paragroup_dirs)  # 获取长度
-        final_check = False  # 假定不存在！
+        paragroup_dirs = os.listdir(self.model_path)
+        n_para = len(paragroup_dirs)
+        final_check = False
 
         if self.args.csv_name is not None:
 
@@ -103,9 +103,8 @@ class CsvWriter:
                 f.write(yaml.dump(self.cfg_to_dict(cfg)))
         else:
 
-            # 判断是否参数一致
             for para in paragroup_dirs:
-                exist_para_args = True  # 默认不存在对应的参数组 args!
+                exist_para_args = True
                 exist_para_cfg = True
                 dict_from_csv = {}
                 key_value_list = []
@@ -117,23 +116,21 @@ class CsvWriter:
                         key_value_list.append(rows)
                 for index, _ in enumerate(key_value_list[0]):
                     dict_from_csv[key_value_list[0][index]] = key_value_list[1][index]
-                if args != dict_from_csv:  # 如果对应不上
-                    exist_para_args = False  # 不存在对应的args！
+                if args != dict_from_csv:
+                    exist_para_args = False
                 cfg_path = para_path + '/cfg.yaml'
                 query_cfg = copy.deepcopy(cfg)
                 query_cfg.merge_from_file(cfg_path)
                 for name, value1 in cfg.items():
                     if isinstance(value1, CN):
                         if name not in query_cfg or self.cfg_to_dict(query_cfg[name]) != self.cfg_to_dict(value1):
-                            exist_para_cfg = False  # 存在不一样的
+                            exist_para_cfg = False
                 if exist_para_args == True and exist_para_cfg == True:
                     final_check = True
                     break
 
             if not final_check:
-                '''
-                定义存储的名字
-                '''
+
                 if self.args.csv_name is None:
                     path = os.path.join(self.model_path, 'para' + str(n_para + 1))
                     k = 1

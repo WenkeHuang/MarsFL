@@ -40,16 +40,13 @@ class FedProxGASever(SeverMethod):
         accs_before_agg = np.array(accs_before_agg)
         accs_after_agg = np.array(accs_after_agg)
 
-        # 准确度差值
         accs_diff = accs_after_agg - accs_before_agg
 
-        # 根据等权重修为基础做修正
         step_size = self.base_step_size - (epoch_index - 1) * self.step_size_decay
         step_size *= np.ones(online_num) / online_num
 
         norm_gap_array = accs_diff / np.max(np.abs(accs_diff))
 
-        # 更新
         self.agg_weight += norm_gap_array * step_size
         self.agg_weight = np.clip(self.agg_weight, 0, 1)
 
@@ -69,11 +66,10 @@ class FedProxGASever(SeverMethod):
         epoch_index = kwargs['epoch_index']
 
         accs_before_agg = []
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             acc_before_agg = self.get_local_test_acc(nets_list[i], train_eval_loaders[client_domain_list[i]])
             accs_before_agg.append(acc_before_agg)
 
-        # FedAVG 是聚合Bone + cls
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                   global_net=global_net, freq=self.agg_weight, except_part=[], global_only=False)
         accs_after_agg = []

@@ -17,7 +17,7 @@ class FedLCLocal(LocalMethod):
         nets_list = kwargs['nets_list']
         priloader_list = kwargs['priloader_list']
         net_cls_counts = kwargs['net_cls_counts']
-        for i in online_clients_list:  # 遍历循环当前的参与者
+        for i in online_clients_list:
             self.train_net(i, nets_list[i], priloader_list[i],net_cls_counts)
 
 

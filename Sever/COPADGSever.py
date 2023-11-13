@@ -24,21 +24,17 @@ class COPADGSever(SeverMethod):
         global_net = kwargs['global_net']
         nets_list = kwargs['nets_list']
 
-        # 更新客户端的头
         head_dict = {}
         for i in range(len(nets_list)):
             head_dict[i] = {}
             for j in range(len(nets_list)):
-                # 加入其他头 并且不要梯度
                 if i != j:
                     head = copy.deepcopy(nets_list[j].cls)
                     set_requires_grad(head, False)
                     head_dict[i][j] = head
 
-        # 获取参与者的聚合权重
         freq = fed_aggregation.weight_calculate(online_clients_list=online_clients_list, priloader_list=priloader_list)
 
-        # FedAVG 是聚合Bone + cls
         fed_aggregation.agg_parts(online_clients_list=online_clients_list, nets_list=nets_list,
                                   global_net=global_net, freq=freq, except_part=['cls'], global_only=False)
 
