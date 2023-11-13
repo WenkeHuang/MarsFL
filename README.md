@@ -1,4 +1,4 @@
-# A Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark
+# Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark
 > Wenke Huang, Mang Ye, Zekun Shi, Guancheng Wan, He Li, Bo Du, Qiang Yang
 > [Link](https://github.com/WenkeHuang/MarsFL)
 
