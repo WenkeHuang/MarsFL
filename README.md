@@ -111,3 +111,5 @@ Please kindly cite these papers in your publications if it helps your research:
 
 This repository is currently maintained by [Wenke Huang](mailto:wenkehuang@whu.edu.cn).
 
+*I hope all players have fun.*
+
