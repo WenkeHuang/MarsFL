@@ -43,12 +43,6 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 Please kindly cite these papers in your publications if it helps your research:
 ```bibtex
-@article{HFL_CSUR23,
-  title={Heterogeneous Federated Learning: State-of-the-art and Research Challenges},
-  author={Ye, Mang and Fang, Xiuwen and Du, Bo and Yuen, Pong C and Tao, Dacheng},
-  journal={CSUR},
-  year={2023}
-}
 @article{FLSurveyandBenchmarkforGenRobFair_arXiv23,
   title={A Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark},
   author={Wenke Huang and Mang Ye and Zekun Shi and Guancheng Wan and He Li and Bo Du and Qiang Yang},
@@ -60,6 +54,24 @@ Please kindly cite these papers in your publications if it helps your research:
     author={Wenke Huang and Mang Ye and Zekun Shi and Bo Du},
     year={2023},
     journal={TPAMI}
+}
+@article{RUCR_TIFS24,
+    title={Federated Learning with Long-Tailed Data via Representation Unification and Classifier Rectification},
+    author={Wenke Huang and Yuxia Liu and Mang Ye and Jun Chen and Bo Du},
+    booktitle={TIFS},
+    year={2024},
+}
+@article{AbrFun_SCIS2024,
+    author    = {Mang Ye and Wenke Huang and  Zekun Shi and He Li and Du Bo},
+    title     = {Revisiting Federated Learning with Label Skew: An Over-Confidence Perspective},
+    journal = {SCIS},
+    year      = {2024}
+}
+@article{HFL_CSUR23,
+  title={Heterogeneous Federated Learning: State-of-the-art and Research Challenges},
+  author={Ye, Mang and Fang, Xiuwen and Du, Bo and Yuen, Pong C and Tao, Dacheng},
+  journal={CSUR},
+  year={2023}
 }
 @inproceedings{DynamicPFL_NeurIPS23,
     title={Dynamic Personalized Federated Learning with Adaptive Differential Privacy},
