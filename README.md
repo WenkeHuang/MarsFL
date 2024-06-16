@@ -1,6 +1,7 @@
 # Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark
 > Wenke Huang, Mang Ye, Zekun Shi, Guancheng Wan, He Li, Bo Du, Qiang Yang
 > [Link](https://arxiv.org/abs/2311.06750)
+> *IEEE TPAMI, 2024*
 
 By [MARS](https://marswhu.github.io/index.html) Group at the [Wuhan University](https://www.whu.edu.cn/), led by [Prof. Mang Ye](https://marswhu.github.io/index.html).
 
