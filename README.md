@@ -10,9 +10,14 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 
 ## Our Works
-  - [Federated Learning Survey](#federated-learning-survey)
-  - [Heterogeneity Federated Learning](#heterogeneity-federated-learning)
-- [Robustness Federated Learning](#robustness-federated-learning)
+- [Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark](#federated-learning-for-generalization-robustness-fairness-a-survey-and-benchmark)
+  - [Abstract](#abstract)
+  - [Our Works](#our-works)
+    - [Federated Learning Survey](#federated-learning-survey)
+    - [Heterogeneity Federated Learning](#heterogeneity-federated-learning)
+    - [Robustness Federated Learning](#robustness-federated-learning)
+  - [Citation](#citation)
+  - [Contact](#contact)
 
 ### Federated Learning Survey
 
@@ -26,7 +31,7 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
   
 - **FPL** — [Rethinking Federated Learning with Domain Shift: A Prototype View](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Rethinking_Federated_Learning_With_Domain_Shift_A_Prototype_View_CVPR_2023_paper.pdf) *CVPR 2023* [[Code](https://github.com/WenkeHuang/RethinkFL)]
 
-- **FGSSL** — [Federated Graph Semantic and Structural Learning](https://marswhu.github.io/publications/files/FGSSL.pdf) *IJCAI 2023* [[Code](https://github.com/WenkeHuang/FGSSL)]
+- **FGSSL** — [Federated Graph Semantic and Structural Learning](https://marswhu.github.io/publications/files/FGSSL.pdf) *IJCAI 2023* [[Code](https://github.com/GuanchengWan/FGSSL)]
 
 - **FCCL** — [Learn from Others and Be Yourself in Heterogeneous Federated Learning](https://openaccess.thecvf.com/content/CVPR2022/papers/Huang_Learn_From_Others_and_Be_Yourself_in_Heterogeneous_Federated_Learning_CVPR_2022_paper.pdf) *CVPR 2022* [[Code](https://github.com/WenkeHuang/FCCL)]
 
