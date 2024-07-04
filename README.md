@@ -53,7 +53,7 @@ Please kindly cite these papers in your publications if it helps your research:
   title={A Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark},
   author={Wenke Huang and Mang Ye and Zekun Shi and Guancheng Wan and He Li and Bo Du and Qiang Yang},
   journal={TPAMI},
-  year={2023}
+  year={2024}
 }
 @article{FCCLPlus_TPAMI23,
     title={Generalizable Heterogeneous Federated Cross-Correlation and Instance Similarity Learning}, 
