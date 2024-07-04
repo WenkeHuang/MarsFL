@@ -49,10 +49,10 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 Please kindly cite these papers in your publications if it helps your research:
 ```bibtex
-@article{FLSurveyandBenchmarkforGenRobFair_arXiv23,
+@article{FLSurveyandBenchmarkforGenRobFair_TPAMI24,
   title={A Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark},
   author={Wenke Huang and Mang Ye and Zekun Shi and Guancheng Wan and He Li and Bo Du and Qiang Yang},
-  journal={arXiv},
+  journal={TPAMI},
   year={2023}
 }
 @article{FCCLPlus_TPAMI23,
