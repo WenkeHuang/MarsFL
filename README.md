@@ -1,6 +1,6 @@
 # Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark
 > Wenke Huang, Mang Ye, Zekun Shi, Guancheng Wan, He Li, Bo Du, Qiang Yang
-> [Link](https://arxiv.org/abs/2311.06750)
+> [Link]([https://arxiv.org/abs/2311.06750](https://ieeexplore.ieee.org/document/10571602))
 > *IEEE TPAMI, 2024*
 
 By [MARS](https://marswhu.github.io/index.html) Group at the [Wuhan University](https://www.whu.edu.cn/), led by [Prof. Mang Ye](https://marswhu.github.io/index.html).
@@ -21,7 +21,7 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 ### Federated Learning Survey
 
-- [A Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark]()
+- [Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark](https://ieeexplore.ieee.org/document/10571602) *TPAMI 2024*
  
 - [Heterogeneous Federated Learning: State-of-the-art and Research Challenges](https://arxiv.org/abs/2307.10616) *ACM Computing Surveys 2023* [[Code](https://github.com/marswhu/HFL_Survey?utm_source=catalyzex.com)]
 
@@ -36,6 +36,10 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 - **FCCL** — [Learn from Others and Be Yourself in Heterogeneous Federated Learning](https://openaccess.thecvf.com/content/CVPR2022/papers/Huang_Learn_From_Others_and_Be_Yourself_in_Heterogeneous_Federated_Learning_CVPR_2022_paper.pdf) *CVPR 2022* [[Code](https://github.com/WenkeHuang/FCCL)]
 
 ### Robustness Federated Learning
+
+- **SDEA** — [Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning](https://icml.cc/virtual/2024/poster/33274) *ICML 2024* [[Code](https://github.com/WenkeHuang/SDEA)]
+
+- **SDFC** — [Fisher Calibration for Backdoor-Robust Heterogeneous Federated Learning](https://marswhu.github.io/publications/files/ECCV_2024_BackdoorFL.pdf) *ECCV 2024* [[Code](https://github.com/zekunshi/SDFC)]
 
 - **DynamicPFL** — [Dynamic Personalized Federated Learning with Adaptive Differential Privacy](https://openreview.net/pdf?id=RteNLuc8D9) *NeurIPS 2023* [[Code](https://github.com/xiyuanyang45/DynamicPFL)]
 
@@ -54,6 +58,18 @@ Please kindly cite these papers in your publications if it helps your research:
   author={Wenke Huang and Mang Ye and Zekun Shi and Guancheng Wan and He Li and Bo Du and Qiang Yang},
   journal={TPAMI},
   year={2024}
+}
+@inproceedings{SDEA_ICML24,
+    title    = {Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning},
+    author    = {Wenke Huang and Zekun Shi and Mang Ye and He Li and Bo Du},
+    booktitle = {ICML},
+    year      = {2024}
+}
+@inproceedings{SDFC_ECCV24,
+    title    = {Fisher Calibration for Backdoor-Robust Heterogeneous Federated Learning},
+    author    = {Wenke Huang and Mang Ye and Zekun Shi and Bo Du and Dacheng, Tao},
+    booktitle = {ECCV},
+    year      = {2024}
 }
 @article{FCCLPlus_TPAMI23,
     title={Generalizable Heterogeneous Federated Cross-Correlation and Instance Similarity Learning}, 
