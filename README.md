@@ -59,6 +59,12 @@ Please kindly cite these papers in your publications if it helps your research:
     journal={TPAMI},
     year={2024}
 }
+@inproceedings{FDCR_NeurIPS24,
+    title    = {Parameter Disparities Dissection for Backdoor Defense in Heterogeneous Federated Learning},
+    author    = {Huang, Wenke and Ye, Mang and Shi, Zekun and Wan, Guancheng and Du, Bo},
+    booktitle = {NeurIPS},
+    year      = {2024}
+}
 @inproceedings{SDEA_ICML24,
     title    = {Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning},
     author    = {Wenke Huang and Zekun Shi and Mang Ye and He Li and Bo Du},
