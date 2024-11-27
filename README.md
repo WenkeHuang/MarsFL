@@ -23,12 +23,14 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 - [Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark](https://ieeexplore.ieee.org/document/10571602) *TPAMI 2024*
  
-- [Heterogeneous Federated Learning: State-of-the-art and Research Challenges](https://arxiv.org/abs/2307.10616) *ACM Computing Surveys 2023* [[Code](https://github.com/marswhu/HFL_Survey?utm_source=catalyzex.com)]
+- [Heterogeneous Federated Learning: State-of-the-art and Research Challenges](https://arxiv.org/abs/2307.10616) *ACM Computing Surveys 2023* [[Code](https://github.com/marswhu/HFL_Survey)]
 
 ### Heterogeneity Federated Learning
 
 - **FCCL+** — [Generalizable Heterogeneous Federated Cross-Correlation and Instance Similarity Learning](https://arxiv.org/pdf/2309.16286.pdf) *TPAMI 2023* [[Code](https://github.com/WenkeHuang/FCCL)]
-  
+
+- **FedAS** — [FedAS: Bridging Inconsistency in Personalized Federated Learning](https://openaccess.thecvf.com/content/CVPR2024/html/Yang_FedAS_Bridging_Inconsistency_in_Personalized_Federated_Learning_CVPR_2024_paper.html) *CVPR 2024* [[Code](https://github.com/xiyuanyang45/FedAS)]
+
 - **FPL** — [Rethinking Federated Learning with Domain Shift: A Prototype View](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Rethinking_Federated_Learning_With_Domain_Shift_A_Prototype_View_CVPR_2023_paper.pdf) *CVPR 2023* [[Code](https://github.com/WenkeHuang/RethinkFL)]
 
 - **FGSSL** — [Federated Graph Semantic and Structural Learning](https://marswhu.github.io/publications/files/FGSSL.pdf) *IJCAI 2023* [[Code](https://github.com/GuanchengWan/FGSSL)]
@@ -36,6 +38,8 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 - **FCCL** — [Learn from Others and Be Yourself in Heterogeneous Federated Learning](https://openaccess.thecvf.com/content/CVPR2022/papers/Huang_Learn_From_Others_and_Be_Yourself_in_Heterogeneous_Federated_Learning_CVPR_2022_paper.pdf) *CVPR 2022* [[Code](https://github.com/WenkeHuang/FCCL)]
 
 ### Robustness Federated Learning
+
+- **FDCR** — [Parameter Disparities Dissection for Backdoor Defense in Heterogeneous Federated Learning]([https://icml.cc/virtual/2024/poster/33274](https://openreview.net/pdf?id=g8wnC1E1OS) *NeurIPS 2024* [[Code](https://github.com/WenkeHuang/FDCR)]
 
 - **SDEA** — [Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning](https://icml.cc/virtual/2024/poster/33274) *ICML 2024* [[Code](https://github.com/WenkeHuang/SDEA)]
 
@@ -48,6 +52,10 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 - **RHFL** — [Robust Federated Learning With Noisy and Heterogeneous Clients](https://openaccess.thecvf.com/content/CVPR2022/papers/Fang_Robust_Federated_Learning_With_Noisy_and_Heterogeneous_Clients_CVPR_2022_paper.pdf) *CVPR 2022* [[Code](https://github.com/fangxiuwen/robust_fl)]
 
 - **FSMAFL** — [Few-Shot Model Agnostic Federated Learning](https://dl.acm.org/doi/10.1145/3503161.3548764) *ACMMM 2022* [[Code](https://github.com/FangXiuwen/FSMAFL)]
+
+### Fairness Federated Learning
+
+- **FedHEAL** — [Fair Federated Learning under Domain Skew with Local Consistency and Domain Diversity](https://openaccess.thecvf.com/content/CVPR2024/html/Chen_Fair_Federated_Learning_under_Domain_Skew_with_Local_Consistency_and_CVPR_2024_paper.html) *CVPR 2024* [[Code](https://github.com/yuhangchen0/FedHEAL)]
 
 ## Citation
 
