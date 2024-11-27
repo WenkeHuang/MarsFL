@@ -39,7 +39,7 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 ### Robustness Federated Learning
 
-- **FDCR** — [Parameter Disparities Dissection for Backdoor Defense in Heterogeneous Federated Learning]([https://icml.cc/virtual/2024/poster/33274](https://openreview.net/pdf?id=g8wnC1E1OS) *NeurIPS 2024* [[Code](https://github.com/WenkeHuang/FDCR)]
+- **FDCR** — [Parameter Disparities Dissection for Backdoor Defense in Heterogeneous Federated Learning](https://openreview.net/pdf?id=g8wnC1E1OS) *NeurIPS 2024* [[Code](https://github.com/WenkeHuang/FDCR)]
 
 - **SDEA** — [Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning](https://icml.cc/virtual/2024/poster/33274) *ICML 2024* [[Code](https://github.com/WenkeHuang/SDEA)]
 
@@ -83,6 +83,18 @@ Please kindly cite these papers in your publications if it helps your research:
     title    = {Fisher Calibration for Backdoor-Robust Heterogeneous Federated Learning},
     author    = {Wenke Huang and Mang Ye and Zekun Shi and Bo Du and Dacheng, Tao},
     booktitle = {ECCV},
+    year      = {2024}
+}
+@inproceedings{FedHEAL_CVPR2024,
+    author    = {Chen, Yuhang and Huang, Wenke and Ye, Mang},
+    title     = {Fair Federated Learning under Domain Skew with Local Consistency and Domain Diversity},
+    booktitle = {CVPR},
+    year      = {2024}
+}
+@inproceedings{FedAS_CVPR24,
+    author    = {Yang, Xiyuan and Huang, Wenke and Ye, Mang},
+    title     = {FedAS: Bridging Inconsistency in Personalized Fedearated Learning},
+    booktitle = {CVPR},
     year      = {2024}
 }
 @article{FCCLPlus_TPAMI23,
