@@ -1,4 +1,4 @@
-# Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark
+# Federated Learning for Generalization, Robustness, Fairness: A Survey and Benchmark <img src="logo.png" alt="Logo" width="30" style="vertical-align:middle;"/>
 > Wenke Huang, Mang Ye, Zekun Shi, Guancheng Wan, He Li, Bo Du, Qiang Yang
 > [Link]([https://arxiv.org/abs/2311.06750](https://ieeexplore.ieee.org/document/10571602))
 > *IEEE TPAMI, 2024*
