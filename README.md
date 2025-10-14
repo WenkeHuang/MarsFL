@@ -39,9 +39,11 @@ Federated learning has emerged as a promising paradigm for privacy-preserving co
 
 ### Robustness Federated Learning
 
+- **FedCEO** - [Clients Collaborate: Flexible Differentially Private Federated Learning with Guaranteed Improvement of Utility-Privacy Trade-off](https://openreview.net/pdf?id=C7dmhyTDrx) *ICML 2025* [[Code](https://github.com/6lyc/FedCEO_Collaborate-with-Each-Other)]
+
 - **FDCR** — [Parameter Disparities Dissection for Backdoor Defense in Heterogeneous Federated Learning](https://openreview.net/pdf?id=g8wnC1E1OS) *NeurIPS 2024* [[Code](https://github.com/WenkeHuang/FDCR)]
 
-- **SDEA** — [Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning](https://icml.cc/virtual/2024/poster/33274) *ICML 2024* [[Code](https://github.com/WenkeHuang/SDEA)]
+- **SDEA** — [Self-Driven Entropy Aggregation for Byzantine-Robust Heterogeneous Federated Learning](https://icml.cc/virtual/2024/poster/33274)  *ICML 2024* [[Code](https://github.com/WenkeHuang/SDEA)]
 
 - **SDFC** — [Fisher Calibration for Backdoor-Robust Heterogeneous Federated Learning](https://marswhu.github.io/publications/files/ECCV_2024_BackdoorFL.pdf) *ECCV 2024* [[Code](https://github.com/zekunshi/SDFC)]
 
